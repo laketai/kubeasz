@@ -1,0 +1,26 @@
+{% for host in groups['mysql_cluster'] %}
+echo '{{ host }} mysql-host{{ loop.index }}' >> /etc/hosts
+{% endfor %}
+
+# 首先得到初始的root密码
+systemctl start mysqld
+ORIGINAL_ROOT_PASSWORD=$(awk  '/temporary password/{print $NF}' /var/log/mysqld.log)
+ROOT_PASSWORD={{ MYSQL_PASSWORD }}
+# 这里将mysql的root密码修改为{{ MYSQL_PASSWORD }}，这个密码符合复杂度要求  如果需要可全文替换
+MYSQL_PWD="$ORIGINAL_ROOT_PASSWORD" mysql --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$ROOT_PASSWORD';"
+# 顺便允许mysql可在其它主机登录过
+MYSQL_PWD="$ROOT_PASSWORD" mysql --connect-expired-password -e "CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '$ROOT_PASSWORD';"
+MYSQL_PWD="$ROOT_PASSWORD" mysql --connect-expired-password -e "GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+
+# 通过mysqlsh即可轻松完成本机实例的配置
+cat << EOF > config_local_instance.js
+dba.configureLocalInstance('root@localhost:3306', {'password': '{{ MYSQL_PASSWORD }}', 'interactive': false})
+EOF
+mysqlsh --no-password --js --file=config_local_instance.js
+# 重启后才能生效
+systemctl restart mysqld
+# 再检查一下本地实例配置的状况
+cat << EOF > check_local_instance.js
+dba.checkInstanceConfiguration('root@localhost:3306', {'password': '{{ MYSQL_PASSWORD }}', 'interactive': false})
+EOF
+mysqlsh --no-password --js --file=check_local_instance.js

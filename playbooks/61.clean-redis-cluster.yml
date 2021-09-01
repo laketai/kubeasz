@@ -1,0 +1,5 @@
+- hosts: redis_cluster
+  task:
+    - name: 清理
+      shell: yum erase -y redis &&  rm -rf /etc/redis* /var/lib/redis/* /var/log/redis/* /data/redis-cluster/*
+      ignore_errors: yes

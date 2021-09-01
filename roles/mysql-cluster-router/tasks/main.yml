@@ -1,0 +1,4 @@
+- name: start mysql router
+  shell: mysqlrouter --bootstrap root:{{ MYSQL_PASSWORD }}@mysql-host1:3306 --user=mysqlrouter --force
+- name: init systemd
+  service: name=mysqlrouter state=started enabled=yes

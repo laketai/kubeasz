@@ -1,0 +1,5 @@
+- hosts: mysql_cluster
+  task:
+    - name: 清理
+      shell: yum erase -y mysql mysql-shell mysql-router-community && rm -rf /var/lib/mysql  /var/lib/mysqlrouter /var/log/mysqld.log /data/mysql /etc/mysqlrouter /var/log/mysqlrouter /etc/my.cnf.rpmsave
+      ignore_errors: yes

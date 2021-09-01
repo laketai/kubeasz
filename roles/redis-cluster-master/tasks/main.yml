@@ -1,0 +1,6 @@
+- name:
+  expect:
+    command: /usr/bin/redis-cli --cluster create --cluster-replicas 1 {{ REDIS_NODES }}
+    responses:
+      'yes': 'yes'
+    echo: yes

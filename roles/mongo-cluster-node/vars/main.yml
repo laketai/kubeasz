@@ -1,0 +1,3 @@
+---
+# vars file for mongo4_4
+port: 27017

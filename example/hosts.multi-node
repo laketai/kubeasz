@@ -14,6 +14,48 @@
 192.168.1.3
 192.168.1.4
 
+# mysql cluster node
+# 'MASTER_NODE': 'true' to install a master server;
+[mysql_cluster]
+192.168.1.1 hostname=mysql-host1 MASTER_DB=true
+192.168.1.2 hostname=mysql-host2 MASTER_DB=false
+192.168.1.3 hostname=mysql-host3 MASTER_DB=false
+
+[redis_cluster]
+192.168.1.1 MASTER_NODE=true
+192.168.1.2 MASTER_NODE=false
+192.168.1.3 MASTER_NODE=false
+
+[nacos_cluster]
+192.168.1.1
+192.168.1.2
+192.168.1.3
+
+[mongo_cluster_master]
+192.168.1.1
+192.168.1.2
+192.168.1.3
+
+[mongo_cluster_shard:children]
+mongo_shard1
+mongo_shard2
+
+# SHARD_NAME 必须与 group name 保值一致，否则无法对不同的 shard 分别初始化 repliset
+[mongo_shard1]
+192.168.1.1 SHARD_NAME=mongo_shard1
+192.168.1.2 SHARD_NAME=mongo_shard1
+192.168.1.3 SHARD_NAME=mongo_shard1
+
+[mongo_shard2]
+192.168.1.4 SHARD_NAME=mongo_shard2
+192.168.1.5 SHARD_NAME=mongo_shard2
+192.168.1.6 SHARD_NAME=mongo_shard2
+
+[rabbitmq_cluster]
+192.168.1.1 hostname=rabbitmq-host1 MASTER_QUEUE=true
+192.168.1.2 hostname=rabbitmq-host2 MASTER_QUEUE=false
+192.168.1.3 hostname=rabbitmq-host3 MASTER_QUEUE=false
+
 # [optional] harbor server, a private docker registry
 # 'NEW_INSTALL': 'true' to install a harbor server; 'false' to integrate with existed one
 [harbor]
@@ -24,11 +66,18 @@
 #192.168.1.6 LB_ROLE=backup EX_APISERVER_VIP=192.168.1.250 EX_APISERVER_PORT=8443
 #192.168.1.7 LB_ROLE=master EX_APISERVER_VIP=192.168.1.250 EX_APISERVER_PORT=8443
 
+[lb_node]
+#192.168.1.6 LB_ROLE=backup EX_APISERVER_VIP=192.168.1.250 EX_APISERVER_PORT=8443
+#192.168.1.7 LB_ROLE=master EX_APISERVER_VIP=192.168.1.250 EX_APISERVER_PORT=8443
+
 # [optional] ntp server for the cluster
 [chrony]
 #192.168.1.1
 
 [all:vars]
+# VIP
+EX_VIP=192.168.1.250
+
 # --------- Main Variables ---------------
 # Secure port for apiservers
 SECURE_PORT="6443"

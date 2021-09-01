@@ -1,0 +1,38 @@
+    upstream rabbitmq-cluster-node {
+{% for host in groups['rabbitmq_cluster'] %}
+        server {{ host }}:25672 max_fails=2 fail_timeout=3s;
+{% endfor %}
+    }
+
+    server {
+        listen 25672;
+        proxy_connect_timeout 1s;
+        proxy_timeout 525600m;
+        proxy_pass rabbitmq-cluster-node;
+    }
+
+    upstream rabbitmq-amqp-node {
+{% for host in groups['rabbitmq_cluster'] %}
+        server {{ host }}:5672 max_fails=2 fail_timeout=3s;
+{% endfor %}
+    }
+
+    server {
+        listen 5672;
+        proxy_connect_timeout 1s;
+        proxy_timeout 525600m;
+        proxy_pass rabbitmq-amqp-node;
+    }
+
+    upstream rabbitmq-http-node {
+{% for host in groups['rabbitmq_cluster'] %}
+        server {{ host }}:15672 max_fails=2 fail_timeout=3s;
+{% endfor %}
+    }
+
+    server {
+        listen 15672;
+        proxy_connect_timeout 1s;
+        proxy_timeout 525600m;
+        proxy_pass rabbitmq-http-node;
+    }

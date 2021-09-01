@@ -1,0 +1,42 @@
+# mongod.conf
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/ROUTERuration-options/
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path: /var/log/mongodb/mongod_router.log
+
+# how the process runs
+processManagement:
+  fork: true  # fork and run in background
+  pidFilePath: /var/run/mongodb/router/mongod.pid  # location of pidfile
+  timeZoneInfo: /usr/share/zoneinfo
+
+# network interfaces
+net:
+  port: {{ MONGOS_PORT }}
+  bindIp: 0.0.0.0  # Enter 0.0.0.0,:: to bind to all IPv4 and IPv6 addresses or, alternatively, use the net.bindIpAll setting.
+
+
+#security:
+
+#operationProfiling:
+
+#replication:
+
+{% set cluster_address=[] -%}
+{% for host in groups['mongo_cluster_master'] %}
+{% set _ = cluster_address.append("%s:%s" % (host, MONGO_CONFIG_PORT )) -%} 
+{% endfor %}
+
+sharding:
+  configDB:  rs_config/{{ cluster_address | join(',') }}
+
+## Enterprise-Only Options
+
+#auditLog:
+
+#snmp:

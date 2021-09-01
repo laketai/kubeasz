@@ -3,10 +3,15 @@
     path: /var/data
     state: directory
     mode: 0755
+- name: 创建 harbar data 目录
+  file:
+    path: '{{ HARBOR_DATA_VOLUME }}'
+    state: directory
+    mode: 0755
 
 # 注册变量 result，如果 /var/data 目录下存在 registry 目录说明已经安装过 harbor，则不进行安装
 - name: 注册变量 result
-  command: ls /var/data
+  command: ls '{{ HARBOR_DATA_VOLUME }}'
   register: result
 
 - block:

@@ -32,7 +32,7 @@
   when: '"kubernetes-dashboard" not in pod_info.stdout and dashboard_install == "yes"'
 
 - import_tasks: ingress.yml
-  when: '"traefik" not in pod_info.stdout and ingress_install == "yes"'
+  when: 'ingress_backend not in pod_info.stdout and ingress_install == "yes"'
 
 - import_tasks: prometheus.yml
   when: '"kube-prometheus-operator" not in pod_info.stdout and prom_install == "yes"'

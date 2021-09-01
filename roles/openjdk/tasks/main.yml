@@ -1,0 +1,13 @@
+- name: mkdir
+  file:
+    path: /opt/cbimeasz/openjdk
+    state: directory
+    mode: '0755'
+- name: copy rpms
+  copy: 
+    src: '{{ base_dir }}/down-ext/openjdk8'
+    dest: /opt/cbimeasz/openjdk/bin
+- name: install openjdk rpm
+  shell: yum localinstall /opt/cbimeasz/openjdk/bin/openjdk8/*.rpm -y
+  args:
+    warn: false

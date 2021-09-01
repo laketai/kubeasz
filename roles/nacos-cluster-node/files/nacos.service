@@ -1,0 +1,13 @@
+[Unit]
+Description=nacosapi
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/opt/nacos/bin/startup.sh
+ExecReload=
+ExecStop=/opt/nacos/bin/shutdown.sh
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

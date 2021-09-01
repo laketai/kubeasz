@@ -1,0 +1,4 @@
+---
+# vars file for mongo4_4
+MONGO_CONFIG_PORT: 27019
+MONGO_CONFIG_DATA_DIR: /data/mongo/config

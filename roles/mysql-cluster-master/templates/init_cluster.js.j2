@@ -1,0 +1,8 @@
+shell.connect('root@localhost:3306', '{{ MYSQL_PASSWORD }}')
+var cluster = dba.createCluster('mycluster')
+{% for host in groups['mysql_cluster'] %}
+{% if hostvars[host]['MASTER_DB']|bool == false %}
+cluster.addInstance('root@{{ host }}:3306', {'localAddress':'{{ hostvars[host]['hostname'] }}', 'password':'{{ MYSQL_PASSWORD }}', 'recoveryMethod': 'clone'})
+cluster.rescan()
+{% endif %}
+{% endfor %}

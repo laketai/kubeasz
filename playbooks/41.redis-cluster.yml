@@ -1,0 +1,4 @@
+- hosts: redis_cluster
+  roles:
+  - base
+  - redis-cluster-node

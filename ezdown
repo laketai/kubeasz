@@ -20,6 +20,7 @@ EXT_BIN_VER=1.0.0
 SYS_PKG_VER=0.4.2
 HARBOR_VER=v2.1.3
 REGISTRY_MIRROR=CN
+CBIM_EXT_BIN_VER=latest
 
 # images needed by k8s cluster
 calicoVer=v3.19.3
@@ -45,6 +46,7 @@ function usage() {
     -D         download all into "$BASE"
     -P         download system packages for offline installing
     -R         download Registry(harbor) offline installer
+    -T         download system extension packages for offline installing
     -S         start kubeasz in a container
     -d <ver>   set docker-ce version, default "$DOCKER_VER"
     -e <ver>   set kubeasz-ext-bin version, default "$EXT_BIN_VER"
@@ -332,6 +334,16 @@ function get_offline_image() {
     docker pull "easzlab/kubeasz:$KUBEASZ_VER" && \
     docker save -o "$imageDir/kubeasz_$KUBEASZ_VER.tar" "easzlab/kubeasz:$KUBEASZ_VER"
   fi
+  // cbim extension
+  if [[ ! -f "$imageDir/nginx-ingress-controller_0.30.0.tar" ]];then
+    docker pull "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.30.0" && \
+    docker save -o "$imageDir/nginx-ingress-controller_0.30.0.tar" "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.30.0"
+  fi
+
+  if [[ ! -f "$imageDir/defaultbackend-amd64_1.5.tar" ]];then
+    docker pull "mirrorgooglecontainers/defaultbackend-amd64:1.5" && \
+    docker save -o "$imageDir/defaultbackend-amd64_1.5.tar" "mirrorgooglecontainers/defaultbackend-amd64:1.5"
+  fi
 }
 
 function download_all() {
@@ -341,7 +353,8 @@ function download_all() {
   get_kubeasz && \
   get_k8s_bin && \
   get_ext_bin && \
-  get_offline_image
+  get_offline_image && \
+  mkdir -p "$BASE/down-ext" "$BASE/bin-ext"
 }
 
 function start_kubeasz_docker() {
@@ -387,6 +400,22 @@ function clean_container() {
  docker ps -a|awk 'NR>1{print $1}'|xargs docker rm -f 
 } 
 
+function get_cbim_ext_bin() {
+  mkdir -p "$BASE/down-ext" "$BASE/bin-ext"
+  [[ -f "$BASE/down-ext/mysql-cluster" ]] && { logger warn "extra package existed"; return 0; }
+
+  logger info "downloading extral binaries cbim-ext-bin:$CBIM_EXT_BIN_VER"
+  docker pull "cbimplat/cbim-ext-bin:$CBIM_EXT_BIN_VER" && \
+  logger debug "run a temporary container" && \
+  docker run -d --name temp_cbim_ext_bin "cbimplat/cbim-ext-bin:$CBIM_EXT_BIN_VER" && \
+  logger debug "cp extral binaries" && \
+  docker cp temp_cbim_ext_bin:/extra "$BASE/extra_cbim_bin_tmp" && \
+  /bin/mv -f "$BASE"/extra_cbim_bin_tmp/* "$BASE/down-ext" && \
+  logger debug "stop&remove temporary container" && \
+  docker rm -f temp_cbim_ext_bin && \
+  rm -rf "$BASE/extra_cbim_bin_tmp"
+}
+
 
 ### Main Lines ##################################################
 function main() {
@@ -400,7 +429,7 @@ function main() {
   [[ "$#" -eq 0 ]] && { usage >&2; exit 1; }
   
   ACTION=""
-  while getopts "CDPRSd:e:k:m:p:z:" OPTION; do
+  while getopts "CDPRSTd:e:k:m:p:z:" OPTION; do
       case "$OPTION" in
         C)
           ACTION="clean_container"
@@ -417,6 +446,9 @@ function main() {
         S)
           ACTION="start_kubeasz_docker"
           ;;
+        T)
+          ACTION="get_cbim_ext_bin"
+          ;;  
         d)
           DOCKER_VER="$OPTARG"
           ;;

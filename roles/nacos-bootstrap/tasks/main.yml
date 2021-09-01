@@ -1,0 +1,17 @@
+- name: mkdir
+  file:
+    path: /opt/cbimeasz/nacos
+    state: directory
+    mode: '0755'
+- name: copy sql
+  copy: 
+    src: init.sql
+    dest: /opt/cbimeasz/nacos/
+- name: mysql create db
+  shell: mysql -P 6446 -uroot -p{{ MYSQL_PASSWORD }} -e 'CREATE DATABASE IF NOT EXISTS nacos;'
+  ignore_errors: true
+
+- name: mysql init db
+  shell: mysql -P 6446 -uroot -p{{ MYSQL_PASSWORD }} -D nacos < /opt/cbimeasz/nacos/init.sql
+  ignore_errors: true
+  

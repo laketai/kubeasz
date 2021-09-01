@@ -1,0 +1,4 @@
+---
+# vars file for mongo4_4
+MONGO_SHARD_PORT: 27018
+MONGO_SHARD_DATA_DIR: /data/mongo/shard
