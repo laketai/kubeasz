@@ -12,7 +12,7 @@
   connection: local
   when: 'ingress_backend == "traefik"'
 
-#- block:
+#- block:    
 #    - block:
 #        - name: 尝试推送离线 nginx-ingress镜像（若执行失败，可忽略）
 #          copy: src={{ base_dir }}/down/{{ nginx_ingress_offline }} dest=/opt/kube/images/{{ nginx_ingress_offline }}
@@ -35,3 +35,54 @@
 #      connection: local
 #      run_once: true
 #  when: 'ingress_backend == "nginx-ingress"'
+
+
+- block:    
+    - block:
+      - name: Create target directory
+        file: path=/opt/kube/images state=directory mode=0755
+
+      - name: 尝试推送离线 nginx-ingress镜像（若执行失败，可忽略）
+        copy: src={{ base_dir }}/down/{{ nginx_ingress_offline }} dest=/opt/kube/images/{{ nginx_ingress_offline }}
+        when: 'nginx_ingress_offline in download_info.stdout'
+
+      - name: 获取nginx_ingress离线镜像推送情况
+        command: "ls /opt/kube/images"
+        register: image_info
+
+      - name: 导入 nginx_ingress的离线镜像（若执行失败，可忽略）
+        shell: "{{ bin_dir }}/docker load -i /opt/kube/images/{{ nginx_ingress_offline }}" 
+        when: 'nginx_ingress_offline in image_info.stdout and CONTAINER_RUNTIME == "docker"'
+
+      - name: 导入 nginx_ingress的离线镜像（若执行失败，可忽略）
+        shell: "{{ bin_dir }}/ctr -n=k8s.io images import /opt/kube/images/{{ nginx_ingress_offline }}"
+        when: 'nginx_ingress_offline in image_info.stdout and CONTAINER_RUNTIME == "containerd"'
+
+    - block:
+      - name: 尝试推送离线 defaultbackend_amd 镜像（若执行失败，可忽略）
+        copy: src={{ base_dir }}/down/{{ defaultbackend_amd_offline }} dest=/opt/kube/images/{{ defaultbackend_amd_offline }}
+        when: 'defaultbackend_amd_offline in download_info.stdout'
+
+      - name: 获取defaultbackend_amd离线镜像推送情况
+        command: "ls /opt/kube/images"
+        register: image_info
+
+      - name: 导入 defaultbackend_amd的离线镜像（若执行失败，可忽略）
+        shell: "{{ bin_dir }}/docker load -i /opt/kube/images/{{ defaultbackend_amd_offline }}"
+        when: 'defaultbackend_amd_offline in image_info.stdout and CONTAINER_RUNTIME == "docker"'
+
+      - name: 导入 defaultbackend_amd的离线镜像（若执行失败，可忽略）
+        shell: "{{ bin_dir }}/ctr -n=k8s.io images import /opt/kube/images/{{ defaultbackend_amd_offline }}"
+        when: 'defaultbackend_amd_offline in image_info.stdout and CONTAINER_RUNTIME == "containerd"'
+
+    - block:
+      - name: 创建 nginx_ingress chart 个性化设置
+        template: src=nginx-ingress/values.yaml.j2 dest={{ cluster_dir }}/yml/nginx-ingress-values.yaml
+
+      - name: helm 创建 nginx_ingress chart 1.34.2
+        shell: "{{ base_dir }}/bin/helm install -n kube-system nginx-ingress \
+                -f {{ cluster_dir }}/yml/nginx-ingress-values.yaml \
+                {{ base_dir }}/roles/cluster-addon/files/nginx-ingress-1.34.2.tgz"
+      run_once: true
+      connection: local
+  when: 'ingress_backend == "nginx-ingress"'

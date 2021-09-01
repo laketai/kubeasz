@@ -1,0 +1,7 @@
+#!/bin/sh
+{% set cluster_address=[] -%}
+{% for host in groups['redis_cluster'] %}
+{% set _ = cluster_address.append("%s:%s" % (host, REDIS_PORT )) -%} 
+{% endfor %}
+
+ruby /opt/cbimeasz/redis-cluster/bin/redis-trib.rb create --replicas 1 {{ cluster_address | join(' ') }}

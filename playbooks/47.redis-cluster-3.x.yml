@@ -1,0 +1,5 @@
+- hosts: redis_cluster
+  roles:
+  - base
+  - redis-3.x-cluster-node
+  - { role: redis-3.x-cluster-master, when: "MASTER_NODE|bool" }

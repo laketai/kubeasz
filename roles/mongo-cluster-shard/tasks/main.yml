@@ -1,0 +1,33 @@
+- name: mkdir
+  file:
+    path: "{{ MONGO_SHARD_DATA_DIR }}/{{ SHARD_NAME }}" 
+    state: directory
+    mode: '0755'
+    group: mongod
+    owner: mongod
+- name: 拷贝配置文件
+  template:
+    src: mongod.conf.j2
+    dest: /etc/{{ SHARD_NAME }}.conf
+
+- name: copy systemd conf
+  template:
+    src: mongod-shard.service
+    dest: "/usr/lib/systemd/system/{{ SHARD_NAME }}.service"
+- name: chmod
+  file:
+    path: "/usr/lib/systemd/system/{{ SHARD_NAME }}.service"
+    mode: 0755
+- name: start {{ SHARD_NAME }}
+  shell: systemctl daemon-reload
+  ignore_errors: yes
+- name: 设置开机启动
+  service: name={{ SHARD_NAME }} state=started enabled=yes  
+- block:
+  - name: 拷贝 rs init.js
+    template:
+      src: init-rs.js.j2
+      dest: /opt/cbimeasz/mongo-cluster/init-{{ SHARD_NAME }}-rs.js
+  - name: init rs
+    shell: mongosh --port {{ MONGO_SHARD_PORT }} -f /opt/cbimeasz/mongo-cluster/init-{{ SHARD_NAME }}-rs.js
+    ignore_errors: true

@@ -1,0 +1,44 @@
+- name: change name
+  raw: "echo {{hostname|quote}} > /etc/hostname"
+- name: 
+  shell: hostname {{hostname|quote}}
+- name: mkdir
+  file:
+    path: /opt/cbimeasz/mysql-cluster
+    state: directory
+    mode: '0755'
+- name: copy rpms
+  copy: 
+    src: '{{ base_dir }}/down-ext/mysql-cluster'
+    dest: /opt/cbimeasz/mysql-cluster/bin
+- name: install mysql rpm
+  shell: yum erase mariadb-libs -y && yum localinstall /opt/cbimeasz/mysql-cluster/bin/mysql-cluster/*.rpm -y
+  args:
+    warn: false
+- name: copy config
+  template: 
+    src: init-config.sh.j2 
+    dest: /opt/cbimeasz/mysql-cluster/init-config.sh
+- name: exec config script
+  shell: sh /opt/cbimeasz/mysql-cluster/init-config.sh
+  args:
+    warn: false
+
+- block:
+    - name: stop mysql
+      service: name=mysqld state=stopped
+    - name: mkdir
+      file:
+        path: '{{ MYSQL_DATA_DIR }}'
+        state: directory
+        mode: '0755'
+    - name: move mysql
+      shell: mv /var/lib/mysql {{ MYSQL_DATA_DIR }}/mysql && \
+            sed -i "s/\/var\/lib/{{ MYSQL_DATA_DIR_ESCAPE }}/g" /etc/my.cnf && \
+            mkdir -p /var/lib/mysql && \
+            chown mysql:mysql /var/lib/mysql \
+            ln -s {{ MYSQL_DATA_DIR }}/mysql/mysql.sock /var/lib/mysql/mysql.sock
+    - name: start mysql
+      service: name=mysqld state=started
+  ignore_errors: true
+  when: "MYSQL_DATA_DIR != ''"

@@ -189,9 +189,10 @@ dashboardVer: "__dashboard__"
 dashboardMetricsScraperVer: "__dash_metrics__"
 
 # ingress 自动安装
-ingress_install: "no"
-ingress_backend: "traefik"
+ingress_install: "yes"
+ingress_backend: "nginx-ingress"
 traefik_chart_ver: "__traefik_chart__"
+
 
 # prometheus 自动安装
 prom_install: "no"
@@ -212,7 +213,7 @@ nfs_path: "/data/nfs"
 # harbor version，完整版本号
 HARBOR_VER: "__harbor__"
 HARBOR_DOMAIN: "harbor.yourdomain.com"
-HARBOR_TLS_PORT: 8443
+HARBOR_TLS_PORT: "443"
 
 # if set 'false', you need to put certs named harbor.pem and harbor-key.pem in directory 'down'
 HARBOR_SELF_SIGNED_CERT: true
@@ -222,3 +223,32 @@ HARBOR_WITH_NOTARY: false
 HARBOR_WITH_TRIVY: false
 HARBOR_WITH_CLAIR: false
 HARBOR_WITH_CHARTMUSEUM: true
+HARBOR_DATA_VOLUME: /var/data
+
+############################
+# role:mysql-cluster
+############################
+# password 
+MYSQL_PASSWORD: Cbim2021-
+MYSQL_DATA_DIR: /data
+MYSQL_DATA_DIR_ESCAPE: \/data
+
+############################
+# role:redis-cluster
+############################
+REDIS_PORT: 6379
+REDIS_DATA_DIR: /data/redis-cluster
+
+############################
+# role:mongo-cluster
+############################
+MONGOS_PORT: 27017
+MONGO_CONFIG_PORT: 27019
+MONGO_CONFIG_DATA_DIR: /data/mongo/config
+MONGO_SHARD_PORT: 27018
+MONGO_SHARD_DATA_DIR: /data/mongo/shard
+
+############################
+# role:nacos-cluster
+############################
+NACOS_DATA_DIR: /data/nacos

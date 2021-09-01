@@ -1,0 +1,104 @@
+- name: change name
+  raw: "echo {{hostname|quote}} > /etc/hostname"
+- name: 
+  shell: hostname {{hostname|quote}}
+- name: mkdir
+  file:
+    path: /opt/cbimeasz/rabbitmq-cluster
+    state: directory
+    mode: '0755'
+- name: copy erlang rpms
+  copy: 
+    src: '{{ base_dir }}/down-ext/erlang'
+    dest: /opt/cbimeasz/rabbitmq-cluster/bin
+- name: install erlang rpm
+  shell: yum localinstall /opt/cbimeasz/rabbitmq-cluster/bin/erlang/*.rpm -y
+  args:
+    warn: false
+- name: copy rabbitmq rpms
+  copy: 
+    src: '{{ base_dir }}/down-ext/rabbitmq'
+    dest: /opt/cbimeasz/rabbitmq-cluster/bin
+- name: install rabbitmq rpm
+  shell: yum localinstall /opt/cbimeasz/rabbitmq-cluster/bin/rabbitmq/*.rpm -y
+  args:
+    warn: false
+- name: 创建数据目录
+  file:
+    path: '{{ RABBITMQ_DATA_DIR }}/mnesia'
+    state: directory
+    owner: 'rabbitmq'
+    group: 'rabbitmq'
+    mode: '0777'
+- name: 创建日志目录
+  file:
+    path: '{{ RABBITMQ_DATA_DIR }}/log'
+    state: directory
+    owner: 'rabbitmq'
+    group: 'rabbitmq'
+    mode: '0777'
+
+- name: set HOST_IPS of the rabbitmq cluster
+  set_fact: HOST_IPS="{% for host in groups['rabbitmq_cluster'] %}{{ host }} {{ hostvars[host]['hostname'] }}\n{% endfor %}"
+
+- name: write hosts
+  shell: echo "{{ HOST_IPS }}" >> /etc/hosts
+
+- name: copy rabbitmq-env.conf
+  template:
+    src: 'rabbitmq-env.conf.j2'
+    dest: '/etc/rabbitmq/rabbitmq-env.conf'
+
+- block:
+  - name: 生成 erlang.cookie 文件
+    service: name=rabbitmq-server state=started enabled=yes
+
+  - name: 获取 cookie 文件
+    fetch: 
+      src: /var/lib/rabbitmq/.erlang.cookie
+      dest: special/rabbitmq/.erlang.cookie
+      flat: yes
+  when: MASTER_QUEUE|bool
+
+- name: set MASTER_HOSTNAME of the rabbitmq cluster
+  set_fact: MASTER_HOSTNAME="{% for host in groups['rabbitmq_cluster'] %}{% if hostvars[host]['MASTER_QUEUE']|bool %}{{ hostvars[host]['hostname'] }}{% endif %}{% endfor %}"
+  #set_fact: MASTER_HOSTNAME="rabbitmq-host1"
+
+- debug: var="MASTER_HOSTNAME"
+
+- block:
+  - name: copy
+    copy:
+      src: special/rabbitmq/.erlang.cookie
+      dest: /var/lib/rabbitmq/.erlang.cookie
+      owner: rabbitmq
+      group: rabbitmq
+      mode: '0400'
+  - name: 开机启动
+    service: name=rabbitmq-server state=started enabled=yes
+  
+  - name: 加入集群
+    shell: rabbitmqctl stop_app && rabbitmqctl join_cluster rabbit@{{ MASTER_HOSTNAME }} && rabbitmqctl start_app
+    ignore_errors: true
+
+  when: MASTER_QUEUE|bool == false
+
+- block:
+  - name: 开启Rabbit管理插件
+    shell: rabbitmq-plugins enable rabbitmq_management
+
+  - name: 拷贝延时消息插件
+    copy:
+      src: 'plugin/rabbitmq_delayed_message_exchange-3.8.17.8f537ac.ez'
+      dest: '/usr/lib/rabbitmq/lib/rabbitmq_server-3.8.21/plugins'
+      force: yes
+      mode: 0644
+
+  - name: 开启延时消息插件
+    shell: rabbitmq-plugins enable rabbitmq_delayed_message_exchange
+
+  - name: 设置用户
+    shell: rabbitmqctl add_user {{ RABBITMQ_USER }} {{ RABBITMQ_PASSWD }} &&
+           rabbitmqctl set_user_tags {{ RABBITMQ_USER }} administrator &&
+           rabbitmqctl set_permissions -p / {{ RABBITMQ_USER }} '.*' '.*' '.*'
+    when: MASTER_QUEUE|bool

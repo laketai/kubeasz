@@ -1,0 +1,21 @@
+- name: mkdir
+  file:
+    path: /opt/cbimeasz/mongo-cluster
+    state: directory
+    mode: '0755'
+- name: copy rpms
+  copy: 
+    src: '{{ base_dir }}/down-ext/mongo'
+    dest: /opt/cbimeasz/mongo-cluster/bin
+- name: install mongo rpm
+  shell: yum localinstall /opt/cbimeasz/mongo-cluster/bin/mongo/*.rpm -y
+  args:
+    warn: false
+
+# - name: 拷贝配置文件
+#   template:
+#     src: mongod.conf
+#     dest: /etc/mongod.conf
+
+# - name: 设置开机启动
+#   service: name=mongod state=started enabled=yes

@@ -1,0 +1,26 @@
+- name: 拷贝配置文件
+  template:
+    src: mongos.conf.j2
+    dest: /etc/mongos.conf
+
+- name: copy systemd conf
+  template:
+    src: mongos.service
+    dest: /usr/lib/systemd/system/mongos.service
+- name: chmod
+  file:
+    path: /usr/lib/systemd/system/mongos.service
+    mode: 0755
+- name: start mongos
+  shell: systemctl daemon-reload
+  ignore_errors: yes
+- name: 设置开机启动
+  service: name=mongos state=started enabled=yes  
+- block:
+  - name: 拷贝 add-shard.js
+    template:
+      src: add-shard.js.j2
+      dest: /opt/cbimeasz/mongo-cluster/add-shard.js
+  - name: init rs
+    shell: mongosh --port {{ MONGOS_PORT }} -f /opt/cbimeasz/mongo-cluster/add-shard.js
+    ignore_errors: true

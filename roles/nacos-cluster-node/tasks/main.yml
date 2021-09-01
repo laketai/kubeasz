@@ -1,0 +1,38 @@
+- name: mkdir
+  file:
+    path: /opt/cbimeasz/nacos
+    state: directory
+    mode: '0755'
+- name: mkdir {{ NACOS_DATA_DIR }}
+  file:
+    path: '{{ NACOS_DATA_DIR }}''
+    state: directory
+    mode: '0777'    
+- name: copy rpms
+  copy: 
+    src: '{{ base_dir }}/down-ext/nacos/nacos-server.tar.gz'
+    dest: /opt/nacos-server.tar.gz
+- name: install nacos 
+  shell: cd /opt && tar zxf nacos-server.tar.gz
+- name: copy conf
+  template:
+    src: application.properties.j2
+    dest: /opt/nacos/conf/application.properties
+- name: copy cluster conf
+  template:
+    src: cluster.conf.j2
+    dest: /opt/nacos/conf/cluster.conf
+- name: copy systemd conf
+  copy:
+    src: nacos.service
+    dest: /usr/lib/systemd/system/nacos.service
+- name: chmod
+  file:
+    path: /usr/lib/systemd/system/nacos.service
+    mode: 0755
+- name: 开机启用 nacos d服务
+  shell: systemctl enable nacos
+  ignore_errors: true
+- name: start nacos
+  shell: systemctl daemon-reload && systemctl restart nacos 
+  ignore_errors: yes

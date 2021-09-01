@@ -1,0 +1,16 @@
+- name: stop mysql
+  systemd: 
+    name: mysqld
+    state: stopped
+- name: mkdir
+  file:
+    path: {{ PARENT_PATH }}
+    state: directory
+    mode: '0755'
+- name: move mysql
+  shell: mv /var/lib/mysql {{ PARENT_PATH }}/mysql && \
+         sed -i "s/\/var\/lib/{{ PARENT_PATH_ESCAPE }}/g" /etc/my.cnf && \
+         mkdir -p /var/lib/mysql && \
+         ln -s {{ PARENT_PATH }}/mysql/mysql.sock /var/lib/mysql/mysql.sock
+- name: start mysql
+  service: name=mysqld state=started

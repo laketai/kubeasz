@@ -1,0 +1,6 @@
+- hosts: mysql_cluster
+  roles:
+  - base
+  - mysql-cluster-node
+  - { role: mysql-cluster-master, when: "MASTER_DB|bool" }
+  - mysql-cluster-router

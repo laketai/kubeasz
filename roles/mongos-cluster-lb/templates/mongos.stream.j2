@@ -1,0 +1,12 @@
+    upstream mongos-cluster-node {
+{% for host in groups['mongo_cluster_master'] %}
+        server {{ host }}:27017  max_fails=2 fail_timeout=3s;
+{% endfor %}
+    }
+
+    server {
+        listen 27017;
+        proxy_connect_timeout 1s;
+        proxy_timeout 525600m;
+        proxy_pass nacos-cluster-node;
+    }

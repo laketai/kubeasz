@@ -1,0 +1,29 @@
+- name: mkdir
+  file:
+    path: /opt/cbimeasz/redis-cluster
+    state: directory
+    mode: '0755'
+- name: copy rpms
+  copy: 
+    src: '{{ base_dir }}/down-ext/redis'
+    dest: /opt/cbimeasz/redis-cluster/bin
+- name: install redis rpm
+  shell: yum localinstall /opt/cbimeasz/redis-cluster/bin/redis/*.rpm -y
+  args:
+    warn: false
+
+# 启动 redis server    
+- name: mkdir port
+  file:
+    path: '{{ REDIS_DATA_DIR }}/'
+    state: directory
+    mode: '0777'
+    group: redis
+    owner: redis
+- name: copy configfile1 to nodes
+  template:
+    src: redis.conf.j2
+    dest: /etc/redis.conf
+- name: start redis
+  service: name=redis state=started enabled=yes
+  ignore_errors: yes

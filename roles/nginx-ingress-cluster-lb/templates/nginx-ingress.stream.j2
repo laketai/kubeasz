@@ -1,0 +1,11 @@
+    upstream nginx-ingress {
+{% for host in groups['kube_node'] %}
+        server {{ host }}:32080 max_fails=2 fail_timeout=3s;
+{% endfor %}
+    }
+
+    upstream nginx-ingress-tls {
+{% for host in groups['kube_node'] %}
+        server {{ host }}:32443 max_fails=2 fail_timeout=3s;
+{% endfor %}
+    }
