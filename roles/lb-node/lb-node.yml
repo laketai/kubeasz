@@ -1,3 +1,0 @@
-- hosts: lb_node
-  roles:
-  - lb-node

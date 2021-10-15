@@ -1,9 +1,0 @@
-- hosts: mysql_cluster
-  roles:
-  - { role: nacos-bootstrap, when: "MASTER_DB|bool" }
-
-- hosts: nacos_cluster
-  roles:
-  - base
-  - openjdk
-  - nacos-cluster-node
