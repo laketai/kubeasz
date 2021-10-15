@@ -226,6 +226,7 @@ HARBOR_WITH_TRIVY: false
 HARBOR_WITH_CLAIR: false
 HARBOR_WITH_CHARTMUSEUM: true
 HARBOR_DATA_VOLUME: /var/data
+HARBOR_ADMIN_PASSWD: Cbim2021
 
 ############################
 # role:mysql-cluster
@@ -251,6 +252,87 @@ MONGO_SHARD_PORT: 27018
 MONGO_SHARD_DATA_DIR: /data/mongo/shard
 
 ############################
+# role:rabbitmq-cluster
+############################
+RABBITMQ_DATA_DIR: /data/rabbitmq
+RABBITMQ_USER: admin
+RABBITMQ_PASSWD: admin
+
+############################
 # role:nacos-cluster
 ############################
 NACOS_DATA_DIR: /data/nacos
+
+############################
+# common: all monitor service common vars
+############################
+# 远端存放安装包的临时目录
+REMOTE_PACKAGES_TMP_DIR: /tmp
+# 远端各个服务安装的基础目录
+REMOTE_INSTALL_DIR_HOME: /opt/monitor
+# 远端各个服务数据的基础目录
+REMOTE_DATA_DIR_HOME: /data/monitor/data
+# 远端各个服务日志的基础目录
+REMOTE_LOG_DIR_HOME: /data/monitor/log
+
+############################
+# 远端系统jdk部署目录
+# REMOTE_JAVA_HOME: /opt/openjdk
+# 远端系统服务配置文件存放路径
+REMOTE_SYSTEMD_SERVICE_DIR: /usr/lib/systemd/system
+
+############################
+# role: zookeeper
+############################
+ZOOKEEPER_JAVA_OPTS: "-Xms1g -Xmx1g"
+ZOOKEEPER_PORT: 2181
+ZOOKEEPER_ENABLE_ADMIN_SERVER: true
+ZOOKEEPER_ADMIN_SERVER_PORT: 28080
+
+############################
+# role: kafka
+############################
+KAFKA_JAVA_OPTS: "-Xms1g -Xmx1g"
+KAFKA_PORT: 9092
+KAFKA_JOLOKIA_MONITOR_PORT: 58778
+
+############################
+# role: elasticsearch 7
+############################
+ELASTICSEARCH_JVM_MEMORY: "2g"
+ELASTICSEARCH_PORT: 9200
+ELASTICSEARCH_INTERNAL_PORT: 9300
+ELASTICSEARCH_USER: 'elasticsearch'
+ELASTICSEARCH_PASS: 'Cbim2021'
+
+############################
+# role: elasticsearch 6
+############################
+ELASTICSEARCH6_JVM_MEMORY: "2g"
+ELASTICSEARCH6_PORT: 9200
+ELASTICSEARCH6_INTERNAL_PORT: 9300
+ELASTICSEARCH6_USER: 'elasticsearch'
+ELASTICSEARCH6_PASS: 'Cbim2021'
+
+############################
+# role: influxdb
+############################
+INFLUX_CACHE_MEMORY: "2g"
+INFLUX_PORT: 8086
+
+############################
+# role: skywalking
+############################
+OPA_JAVA_OPTS: "-Xms2g -Xmx2g"
+OPA_SERVER_PORT: 11800
+OPA_UI_PORT: 58080
+
+############################
+# role: telegraf
+############################
+MYSQL_MONITOR_USER: root
+MYSQL_MONITOR_PASSWORD: ${MYSQL_PASSWORD}
+
+############################
+# role: filebeat
+############################

@@ -1,0 +1,6 @@
+- hosts: zookeeper_cluster
+  vars_files:
+  - "vars/monitor.yml"
+  roles:
+  - openjdk
+  - zookeeper

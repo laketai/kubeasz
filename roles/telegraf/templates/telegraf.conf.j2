@@ -1,0 +1,27 @@
+# Global tags can be specified here in key="value" format.
+[global_tags]
+  # dc = "us-east-1" # will tag all metrics with dc=us-east-1
+  # rack = "1a"
+  # Environment variables can be used as tags, and throughout the config file
+  # user = "$USER"
+
+# Configuration for telegraf agent
+[agent]
+  interval = "30s"
+  round_interval = true
+  metric_batch_size = 1000
+  metric_buffer_limit = 10000
+  collection_jitter = "0s"
+  flush_interval = "10s"
+  flush_jitter = "0s"
+  precision = ""
+  logfile = "{{log_path}}/telegraf.log"
+
+  # Override default hostname, if empty use os.Hostname()
+{% if ansible_hostname == 'localhost' %}
+  hostname = "{{inventory_hostname}}"
+{% else %}
+  hostname = "{{ansible_hostname}}"
+{% endif %}
+  # If set to true, do no set the "host" tag in the telegraf agent.
+  omit_hostname = false

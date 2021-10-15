@@ -1,0 +1,4 @@
+- hosts: rabbitmq_cluster
+  roles:
+  - base
+  - rabbitmq-cluster-node

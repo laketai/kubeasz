@@ -22,7 +22,7 @@
 - hosts: 
   - kube_master
   - kube_node
-  - lb_node
+  - nginx_node
   tasks:
   - name: Define 'harbor_hostname', a domain name
     set_fact: harbor_hostname={{ HARBOR_DOMAIN }}

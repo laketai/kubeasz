@@ -482,7 +482,7 @@ dir {{ REDIS_DATA_DIR }}
 # starting the replication synchronization process, otherwise the master will
 # refuse the replica request.
 #
-# masterauth <master-password>
+masterauth {{ REDIS_PASSWD }}
 #
 # However this is not enough if you are using Redis ACLs (for Redis version
 # 6 or greater), and the default user is not capable of running the PSYNC
@@ -899,7 +899,7 @@ acllog-max-len 128
 # The requirepass is not compatable with aclfile option and the ACL LOAD
 # command, these will cause requirepass to be ignored.
 #
-# requirepass foobared
+requirepass {{ REDIS_PASSWD }}
 
 # New users are initialized with restrictive permissions by default, via the
 # equivalent of this ACL rule 'off resetkeys -@all'. Starting with Redis 6.2, it

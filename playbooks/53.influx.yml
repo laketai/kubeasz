@@ -1,0 +1,5 @@
+- hosts: influx_cluster
+  vars_files:
+  - "vars/monitor.yml"
+  roles:
+  - influx

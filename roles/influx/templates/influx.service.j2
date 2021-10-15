@@ -1,0 +1,14 @@
+[Unit]
+Description=Influx Service
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target
+
+[Service]
+Type=forking
+ExecStart={{install_path}}/{{unarchive_folder_name}}/influx-start.sh
+LimitNOFILE=65536
+KillMode=control-group
+PIDFile={{install_path}}/{{unarchive_folder_name}}/influxd.pid
+
+[Install]
+WantedBy=multi-user.target

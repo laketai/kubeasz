@@ -1,0 +1,12 @@
+[[outputs.kafka]]
+{% set cluster_address=[] -%}
+{% for host in groups['kafka_cluster'] %}
+{% set _ = cluster_address.append('"%s:%s"' % (host, KAFKA_PORT )) -%} 
+{% endfor %}
+  brokers = [{{ cluster_address | join(',') }}]
+  topic = "{{kafka_metric_topic}}"
+  routing_tag = "host"
+  required_acks = 1
+  data_format = "prometheus"
+  prometheus_export_timestamp = true
+  prometheus_string_as_label = false

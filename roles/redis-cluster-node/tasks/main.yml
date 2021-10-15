@@ -29,6 +29,6 @@
   ignore_errors: yes
 
 - name: 启动集群
-  shell: /usr/bin/redis-cli --cluster create --cluster-replicas 1 {{ REDIS_NODES }} --cluster-yes
+  shell: /usr/bin/redis-cli -a {{ REDIS_PASSWD }} --cluster create --cluster-replicas 1 {{ REDIS_NODES }} --cluster-yes
   ignore_errors: yes
   when: MASTER_NODE|bool

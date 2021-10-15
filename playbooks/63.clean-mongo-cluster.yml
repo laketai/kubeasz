@@ -1,10 +1,10 @@
 - hosts: mongo_cluster_master
-  task:
+  tasks:
     - name: 清理
-      shell: yum erase -y mongo* && rm -rf /var/lib/mongo /data/mongo/ /var/log/mongodb/ /var/run/mongodb
+      shell: systemctl stop mongo* && yum erase -y mongo* && rm -rf /var/lib/mongo /data/mongo/ /var/log/mongodb/ /var/run/mongodb /etc/mongo*
       ignore_errors: yes
 - hosts: mongo_cluster_shard
-  task:
+  tasks:
     - name: 清理
-      shell: yum erase -y mongo* && rm -rf /var/lib/mongo /data/mongo/ /var/log/mongodb/ /var/run/mongodb
+      shell: systemctl stop mongo* && yum erase -y mongo* && rm -rf /var/lib/mongo /data/mongo/ /var/log/mongodb/ /var/run/mongodb /etc/mongo*
       ignore_errors: yes

@@ -1,0 +1,16 @@
+[Unit]
+Description=Skywalking Server Service
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target
+
+[Service]
+Type=forking
+WorkingDirectory={{install_path}}/{{unarchive_folder_name}}
+LimitNOFILE=65535
+Environment=OAP_LOG_DIR={{log_path}}
+ExecStart={{install_path}}/{{unarchive_folder_name}}/bin/oapService.sh
+KillMode=control-group
+PIDFile={{install_path}}/{{unarchive_folder_name}}/skywalking-server.pid
+
+[Install]
+WantedBy=multi-user.target

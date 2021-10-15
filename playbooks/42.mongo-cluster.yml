@@ -1,0 +1,21 @@
+- hosts: localhost
+  roles:
+  - mongo-keyfile-prepare
+
+- hosts: mongo_cluster_master:mongo_cluster_shard
+  roles:
+  - base
+  - mongo-cluster-node
+
+- hosts: mongo_cluster_master
+  roles:
+  - mongo-cluster-config
+
+- hosts: mongo_cluster_shard
+  roles:
+  
+  - mongo-cluster-shard
+
+- hosts: mongo_cluster_master
+  roles:  
+  - mongos

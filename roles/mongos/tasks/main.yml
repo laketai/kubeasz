@@ -17,10 +17,19 @@
 - name: 设置开机启动
   service: name=mongos state=started enabled=yes  
 - block:
+  - name: 拷贝 add-user.js
+    template:
+      src: add-user.js.j2
+      dest: /opt/cbimeasz/mongo-cluster/add-user.js
+  - name: init rs
+    shell: mongosh --port {{ MONGOS_PORT }} -f /opt/cbimeasz/mongo-cluster/add-user.js
+    ignore_errors: true
+
   - name: 拷贝 add-shard.js
     template:
       src: add-shard.js.j2
       dest: /opt/cbimeasz/mongo-cluster/add-shard.js
   - name: init rs
-    shell: mongosh --port {{ MONGOS_PORT }} -f /opt/cbimeasz/mongo-cluster/add-shard.js
+    shell: mongosh -u cbim -p {{ MONGO_PASSWD }} --port {{ MONGOS_PORT }} -f /opt/cbimeasz/mongo-cluster/add-shard.js
     ignore_errors: true
+  when: MASTER_NODE|bool

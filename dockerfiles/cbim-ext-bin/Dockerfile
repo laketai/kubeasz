@@ -11,23 +11,6 @@ RUN yum install --downloadonly redis-3.2.12-2.el7.x86_64 --downloaddir=/extra/re
 
 RUN yum install --downloadonly ruby-2.0.0.648-36.el7 rubygems-2.0.14.1-36.el7 --downloaddir=/extra/ruby
 
-# ENV NGINX_VERSION=1.18.0
-
-# RUN yum install -y \
-#     gcc \
-#     make \
-#     openssl \
-#     openssl-devel \
-#     pcre \
-#     pcre-devel \
-#     zlib \
-#     zlib-devel \
-#     && curl -o nginx.tar.gz -SL http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
-#     && tar -xzf nginx.tar.gz -C /tmp/ \
-#     && cd /tmp/nginx-* \
-#     && ./configure --with-stream \
-#     && make && make install
-
 RUN yum install --downloadonly nginx-1.20.1-2.el7.x86_64 nginx-mod-stream-1.20.1-2.el7.x86_64 --downloaddir=/extra/nginx
 
 RUN yum install --downloadonly java-1.8.0-openjdk-devel-1.8.0.302.b08-0.el7_9.x86_64 --downloaddir=/extra/openjdk8
@@ -49,6 +32,19 @@ RUN mkdir -p /extra/erlang && wget https://github.com/rabbitmq/erlang-rpm/releas
 RUN mkdir -p /extra/rabbitmq && wget https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.21/rabbitmq-server-3.8.21-1.el8.noarch.rpm -O /extra/rabbitmq/rabbitmq-server-3.8.21-1.el8.noarch.rpm
 
 RUN yum install --downloadonly socat-1.7.3.2-2.el7.x86_64 --downloaddir=/extra/rabbitmq
+
+RUN mkdir -p /extra/zookeeper && wget https://archive.apache.org/dist/zookeeper/zookeeper-3.5.9/apache-zookeeper-3.5.9-bin.tar.gz -P /extra/zookeeper/
+RUN mkdir -p /extra/kafka && wget https://archive.apache.org/dist/kafka/2.7.0/kafka_2.13-2.7.0.tgz -P /extra/kafka/
+RUN mkdir -p /extra/elasticsearch && wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.12.1-linux-x86_64.tar.gz -P /extra/elasticsearch/
+RUN mkdir -p /extra/influx && wget https://dl.influxdata.com/influxdb/releases/influxdb-1.8.9_linux_amd64.tar.gz -P /extra/influx/
+RUN mkdir -p /extra/skywalking && wget https://archive.apache.org/dist/skywalking/8.5.0/apache-skywalking-apm-es7-8.5.0.tar.gz -P /extra/skywalking/
+RUN mkdir -p /extra/telegraf && wget https://dl.influxdata.com/telegraf/releases/telegraf-1.18.2_linux_amd64.tar.gz -P /extra/telegraf/
+RUN mkdir -p /extra/filebeat && wget https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.12.1-linux-x86_64.tar.gz -P /extra/filebeat/
+RUN mkdir -p /extra/jolokia && wget https://github.com/rhuss/jolokia/releases/download/v1.6.2/jolokia-1.6.2-bin.tar.gz -P /extra/jolokia/
+RUN mkdir -p /extra/elasticsearch && wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.4.3.tar.gz -P /extra/elasticsearch/
+
+RUN mkdir -p /extra/minio && wget https://dl.min.io/server/minio/release/linux-amd64/minio -P /extra/minio
+RUN mkdir -p /extra/rsync && yum install --downloadonly rsync-3.1.2-10.el7.x86_64 --downloaddir=/extra/rsync
 
 FROM alpine:3.12
 

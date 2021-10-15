@@ -1,0 +1,6 @@
+- hosts: skywalking_cluster
+  vars_files:
+  - "vars/monitor.yml"
+  roles:
+  - openjdk
+  - skywalking

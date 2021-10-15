@@ -1,0 +1,5 @@
+{% if NGINX_ROLE == 'master' %}
+{{ RSYNC_PASSWD }}
+{% else %}
+{{ RSYNC_USER }}:{{ RSYNC_PASSWD }}
+{% endif %}

@@ -1,0 +1,20 @@
+install_path:  "{{ REMOTE_INSTALL_DIR_HOME }}/kafka"
+data_path: "{{ REMOTE_DATA_DIR_HOME }}/kafka"
+log_path: "{{ REMOTE_LOG_DIR_HOME }}/kafka"
+temp_path: "{{ REMOTE_PACKAGES_TMP_DIR }}"
+packages_home: "{{base_dir}}/down-ext/kafka"
+package_filename: "{{DEPLOY.KAFKA.PACKAGE_FILENAME}}"
+unarchive_folder_name: "{{DEPLOY.KAFKA.UNARCHIVE_FOLDER_NAME}}"
+
+jolokia_packages_home: "{{base_dir}}/down-ext/jolokia"
+jolokia_package_filename: "{{DEPLOY.JOLOKIA.PACKAGE_FILENAME}}"
+jolokia_install_path:  "{{ REMOTE_INSTALL_DIR_HOME }}/jolokia"
+jolokia_unarchive_folder_name: "{{DEPLOY.JOLOKIA.UNARCHIVE_FOLDER_NAME}}"
+jolokia_package_filename_agent: "{{ REMOTE_INSTALL_DIR_HOME }}/jolokia/{{DEPLOY.JOLOKIA.UNARCHIVE_FOLDER_NAME}}/{{DEPLOY.JOLOKIA.PACKAGE_FILENAME_AGENT}}"
+
+jolokia_monitor_port: "{{ KAFKA_JOLOKIA_MONITOR_PORT }}"
+jmxremote_rmi_port: 9999
+java_net_preferIPv4Stack: true
+java_rmi_server_hostname: localhost
+
+java_opts: "{{ KAFKA_JAVA_OPTS }}"

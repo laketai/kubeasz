@@ -1,0 +1,1 @@
+MINIO_NODES: "{% for host in groups['minio_cluster'] %}{{ host }}:{{ REDIS_PORT }} {% endfor %}"

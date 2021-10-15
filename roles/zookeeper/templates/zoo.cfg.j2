@@ -1,0 +1,15 @@
+tickTime=2000
+initLimit=20
+syncLimit=10
+dataDir={{ data_path }}
+dataLogDir={{ data_path }}/logs
+clientPort={{ZOOKEEPER_PORT}}
+quorumListenOnAllIPs=true
+4lw.commands.whitelist=*
+{% for host in groups['zookeeper_cluster'] %}
+server.{{hostvars[host].myid}}={{host}}:2888:3888
+{% endfor %}
+
+# AdminServer
+admin.enableServer={{ ZOOKEEPER_ENABLE_ADMIN_SERVER }}
+admin.serverPort={{ ZOOKEEPER_ADMIN_SERVER_PORT }}

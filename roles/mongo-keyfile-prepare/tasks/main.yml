@@ -1,0 +1,12 @@
+- name: prepare some dirs
+  file: name={{ item }} state=directory
+  with_items:
+  - "{{ cluster_dir }}/mongo"
+
+- name: 读取 mongo keyfile
+  stat: path="{{ cluster_dir }}/mongo/keyfile"
+  register: p
+  
+- name: 创建 keyfile
+  shell: "cd {{ cluster_dir }}/mongo && openssl rand -base64 756 > keyfile"
+  when: p.stat.isreg is not defined

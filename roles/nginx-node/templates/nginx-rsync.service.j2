@@ -1,0 +1,13 @@
+[Unit]
+Description=rsync nginx configuration
+After=network.target
+
+[Service]
+Type=forking
+KillMode=process
+ExecStart=/usr/bin/rsync --daemon --config=/etc/rsyncd.conf
+ExecReload=
+ExecStop=/bin/kill -2 $MAINPID
+
+[Install]
+WantedBy=multi-user.target

@@ -7,3 +7,5 @@ HARBOR_HOSTNAME: "{% if HARBOR_DOMAIN != '' %}{{ HARBOR_DOMAIN }}{% else %}{{ in
 
 # harobr 默认安装选项
 HARBOR_INST_OPS: ""
+
+HARBOR_ADMIN_PASSWD: Cbim2021

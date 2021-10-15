@@ -1,0 +1,7 @@
+- hosts: nginx_node
+  roles:
+  - { role: mysql-cluster-lb, when: "groups['mysql_cluster'] is defined and groups['mysql_cluster']|length > 0" }
+  - { role: redis-cluster-lb, when: "groups['redis_cluster'] is defined and groups['redis_cluster']|length > 0" }
+  - { role: nacos-cluster-lb, when: "groups['nacos_cluster'] is defined and groups['nacos_cluster']|length > 0" }
+  - { role: mongos-cluster-lb, when: "groups['mongo_cluster_master'] is defined and groups['mongo_cluster_master']|length > 0" }
+  - { role: rabbitmq-cluster-lb, when: "groups['rabbitmq_cluster'] is defined and groups['rabbitmq_cluster']|length > 0" }

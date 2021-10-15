@@ -1,0 +1,7 @@
+db.getSiblingDB("admin").createUser(
+  {
+    user: "cbim",
+    pwd:  "{{ MONGO_PASSWD }}",     // or cleartext password
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" }, { "role" : "clusterAdmin", "db" : "admin" } ]
+  }
+)

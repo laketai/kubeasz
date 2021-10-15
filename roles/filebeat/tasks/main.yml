@@ -1,0 +1,9 @@
+# 1.部署基础探针服务
+- name: "deploy base collector"
+  include_tasks: base.yml
+  when: (service == 'filebeat')
+
+# 2.采集服务日志
+- name: config and collector {{ service }} los
+  include_tasks: collector.yml
+  when: (service != 'filebeat')

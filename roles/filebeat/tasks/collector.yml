@@ -1,0 +1,14 @@
+# 监控配置
+- name: "step_feeder_1 prepare the {{service}} monitor config:inputs.{{service}}.yml.tpl"
+  template:
+    backup: yes
+    src: inputs.d/inputs.{{service}}.yml.tpl
+    dest: "{{install_path}}/{{unarchive_folder_name}}/inputs.d/inputs.{{service}}.yml"
+
+# 开启监控采集
+- name: "step_feeder_2 enable and collector the {{service}} logs"
+  systemd:
+    name: "filebeat"
+    enabled: yes
+    daemon_reload: yes
+    state: restarted

@@ -1,0 +1,14 @@
+[Unit]
+Description=The plugin-driven server agent for reporting metrics into InfluxDB
+Documentation=https://github.com/influxdata/telegraf
+After=network.target
+
+[Service]
+ExecStart={{install_path}}/{{unarchive_folder_name}}/usr/bin/telegraf --config {{install_path}}/{{unarchive_folder_name}}/etc/telegraf/telegraf.conf --config-directory {{install_path}}/{{unarchive_folder_name}}/etc/telegraf/telegraf.d $TELEGRAF_OPTS
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartForceExitStatus=SIGPIPE
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target

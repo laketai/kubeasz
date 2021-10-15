@@ -1,0 +1,18 @@
+# 1.复制安装部署包到目标机器
+- name: "step_1a copy the ansible local install archive package {{jolokia_packages_home}}/{{jolokia_package_filename}} to remote {{ansible_hostname}}@{{temp_path}}"
+  copy:
+    src:  "{{jolokia_packages_home}}/{{jolokia_package_filename}}"
+    dest: "{{temp_path}}/"
+
+# 2.准备安装环境
+- name: "step_2a create the install path {{ jolokia_install_path }}"
+  file:
+    state: "directory"
+    path: "{{ jolokia_install_path }}"
+
+# 3.解压安装文件
+- name: "step_3a unarchive the install package {{temp_path}}/{{jolokia_package_filename}} to {{ jolokia_install_path }}"
+  unarchive:
+    copy: no
+    src: "{{temp_path}}/{{jolokia_package_filename}}"
+    dest: "{{ jolokia_install_path }}"
