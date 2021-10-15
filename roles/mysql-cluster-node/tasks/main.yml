@@ -32,13 +32,33 @@
         path: '{{ MYSQL_DATA_DIR }}'
         state: directory
         mode: '0755'
+        owner: mysql
+        group: mysql
     - name: move mysql
       shell: mv /var/lib/mysql {{ MYSQL_DATA_DIR }}/mysql && \
             sed -i "s/\/var\/lib/{{ MYSQL_DATA_DIR_ESCAPE }}/g" /etc/my.cnf && \
             mkdir -p /var/lib/mysql && \
-            chown mysql:mysql /var/lib/mysql \
+            chown mysql:mysql /var/lib/mysql && \
             ln -s {{ MYSQL_DATA_DIR }}/mysql/mysql.sock /var/lib/mysql/mysql.sock
     - name: start mysql
       service: name=mysqld state=started
   ignore_errors: true
   when: "MYSQL_DATA_DIR != ''"
+
+- block:
+  - name: copy config
+    template: 
+      src: init_cluster.js.j2 
+      dest:  /opt/cbimeasz/mysql-cluster/init_cluster.js
+  - name: exec config script
+    shell: mysqlsh --no-password --js --file=/opt/cbimeasz/mysql-cluster/init_cluster.js
+  when: MASTER_DB|bool
+
+- name: set MASTER_HOSTNAME of the mysql cluster
+  set_fact: MASTER_HOSTNAME="{% for host in groups['mysql_cluster'] %}{% if hostvars[host]['MASTER_DB']|bool %}{{ hostvars[host]['hostname'] }}{% endif %}{% endfor %}"
+
+- name: start mysql router
+  shell: mysqlrouter --bootstrap root:{{ MYSQL_PASSWORD }}@{{ MASTER_HOSTNAME }}:3306 --user=mysqlrouter --force
+- name: init systemd
+  service: name=mysqlrouter state=started enabled=yes
+

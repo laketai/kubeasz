@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+{{install_path}}/{{unarchive_folder_name}}/usr/bin/influxd -config {{install_path}}/{{unarchive_folder_name}}/etc/influxdb/influxdb.conf $INFLUXD_OPTS &
+PID=$!
+echo $PID > {{install_path}}/{{unarchive_folder_name}}/influxd.pid

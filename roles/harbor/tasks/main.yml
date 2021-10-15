@@ -16,7 +16,7 @@
 
 - block:
   - name: 生成 harbor 随机密码
-    shell: < /dev/urandom tr -dc 0-9A-Za-z-_ | head -c 16
+    shell: echo {{ HARBOR_ADMIN_PASSWD }}
     register: harbor_password_gen
   
   - debug: var="harbor_password_gen.stdout"

@@ -36,7 +36,15 @@ spring.datasource.platform=mysql
 db.num=1
 
 ### Connect URL of DB:
-db.url.0=jdbc:mysql://{{ EX_VIP }}:3366/nacos?characterEncoding=utf8&connectTimeout=10000&socketTimeout=30000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC
+{% set L4LB_VIP='' -%}
+{% if groups['nginx_node']|length > 0 %}
+{% set L4LB_VIP="{{ hostvars[groups['ex_lb'][0]]['EX_NGINX_VIP'] }}" -%}
+{% endif %}
+{% if groups['ex_lb']|length > 0 %}
+{% set L4LB_VIP="{{ hostvars[groups['ex_lb'][0]]['EX_APISERVER_VIP'] }}" -%}
+{% endif %}
+
+db.url.0=jdbc:mysql://{{ L4LB_VIP }}:3366/nacos?characterEncoding=utf8&connectTimeout=10000&socketTimeout=30000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC
 db.user.0=root
 db.password.0={{ MYSQL_PASSWORD }}
 

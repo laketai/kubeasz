@@ -1,0 +1,11 @@
+install_path:  "{{ REMOTE_INSTALL_DIR_HOME }}/influx"
+data_path: "{{ REMOTE_DATA_DIR_HOME }}/influx"
+log_path: "{{ REMOTE_LOG_DIR_HOME }}/influx"
+temp_path: "{{ REMOTE_PACKAGES_TMP_DIR }}"
+packages_home: "{{base_dir}}/down-ext/influx"
+package_filename: "{{DEPLOY.INFLUX.PACKAGE_FILENAME}}"
+unarchive_folder_name: "{{DEPLOY.INFLUX.UNARCHIVE_FOLDER_NAME}}"
+
+influxdb_port: "{{INFLUX_PORT}}"
+
+influxdb_cache_memory: "{{ INFLUX_CACHE_MEMORY }}"

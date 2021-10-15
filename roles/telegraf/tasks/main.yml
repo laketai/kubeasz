@@ -1,0 +1,9 @@
+# 1.部署基础探针服务
+- name: "deploy base collector"
+  include_tasks: base.yml
+  when: (service == 'telegraf')
+
+# 2.开启采集
+- name: "config and collector {{ service }} metrics"
+  include_tasks: monitor.yml
+  when: (service != 'telegraf')

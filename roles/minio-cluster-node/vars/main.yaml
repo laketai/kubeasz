@@ -1,0 +1,8 @@
+MINIO_ROOT_USER: cbim
+MINIO_ROOT_PASSWORD: Cbim2021
+MINIO_INSTALL_DIR: /usr/local/bin
+MINIO_CONSOLE_PORT: 9001
+MINIO_DISK_NUM: 4
+MINIO_DATA_DIR: /data/minio
+MINIO_NODES: "{% for host in groups['minio_cluster'] %}http://{{ host }}:9000{{ MINIO_DATA_DIR }}/data{1...{{ MINIO_DISK_NUM }}} {% endfor %}"
+MINIO_OPTS: "{{ MINIO_NODES }} --console-address ':{{ MINIO_CONSOLE_PORT }}'"

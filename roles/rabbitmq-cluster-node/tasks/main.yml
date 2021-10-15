@@ -56,7 +56,7 @@
   - name: 获取 cookie 文件
     fetch: 
       src: /var/lib/rabbitmq/.erlang.cookie
-      dest: special/rabbitmq/.erlang.cookie
+      dest: '{{ cluster_dir }}/.erlang.cookie'
       flat: yes
   when: MASTER_QUEUE|bool
 
@@ -69,7 +69,7 @@
 - block:
   - name: copy
     copy:
-      src: special/rabbitmq/.erlang.cookie
+      src: '{{ cluster_dir }}/.erlang.cookie'
       dest: /var/lib/rabbitmq/.erlang.cookie
       owner: rabbitmq
       group: rabbitmq

@@ -1,0 +1,12 @@
+[Unit]
+Description=Apache Zookeeper Service
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target
+
+[Service]
+Type=forking
+ExecStart={{install_path}}/{{unarchive_folder_name}}/bin/zkServer.sh start
+ExecStop={{install_path}}/{{unarchive_folder_name}}/bin/zkServer.sh stop
+
+[Install]
+WantedBy=multi-user.target

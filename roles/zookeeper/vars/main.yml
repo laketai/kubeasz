@@ -1,0 +1,9 @@
+install_path:  "{{ REMOTE_INSTALL_DIR_HOME }}/zookeeper"
+data_path: "{{ REMOTE_DATA_DIR_HOME }}/zookeeper"
+log_path: "{{ REMOTE_LOG_DIR_HOME }}/zookeeper"
+temp_path: "{{ REMOTE_PACKAGES_TMP_DIR }}"
+packages_home: "{{base_dir}}/down-ext/zookeeper"
+package_filename: "{{DEPLOY.ZOOKEEPER.PACKAGE_FILENAME}}"
+unarchive_folder_name: "{{DEPLOY.ZOOKEEPER.UNARCHIVE_FOLDER_NAME}}"
+
+java_opts: "{{ ZOOKEEPER_JAVA_OPTS }}"

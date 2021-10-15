@@ -1,0 +1,14 @@
+install_path:  "{{ REMOTE_INSTALL_DIR_HOME }}/es"
+data_path: "{{ REMOTE_DATA_DIR_HOME }}/es"
+log_path: "{{ REMOTE_LOG_DIR_HOME }}/es"
+temp_path: "{{ REMOTE_PACKAGES_TMP_DIR }}"
+packages_home: "{{base_dir}}/down-ext/elasticsearch"
+package_filename: "{{DEPLOY.ES.PACKAGE_FILENAME}}"
+unarchive_folder_name: "{{DEPLOY.ES.UNARCHIVE_FOLDER_NAME}}"
+
+es_port: "{{ELASTICSEARCH_PORT}}"
+es_internal_port: "{{ELASTICSEARCH_INTERNAL_PORT}}"
+es_user: "{{ELASTICSEARCH_USER}}"
+es_pass: "{{ ELASTICSEARCH_PASS | password_hash('sha512', 'salt') }}"
+
+java_opts: "{{ ELASTICSEARCH_JVM_MEMORY }}"

@@ -1,8 +1,8 @@
 {% set tmp_list=[] %}
 {% for host in groups['mongo_cluster_shard'] %}
-    {% set tmp=hostvars[host]['SHARD_NAME'] %}
-    {% set _ = tmp_list.append({ 'name': tmp, 'host' : "%s:%s" % (host, MONGO_SHARD_PORT) }) %}
+{% set tmp=hostvars[host]['SHARD_NAME'] %}
+{% set _ = tmp_list.append({ 'name': tmp, 'host' : "%s:%s" % (host, MONGO_SHARD_PORT) }) %}
 {% endfor %}
 {% for shard, items in tmp_list | groupby('name') %}
-    sh.addShard( "rs_{{ shard }}/{{ items|map(attribute='host')|join(',') }}");
+sh.addShard("rs_{{ shard }}/{{ items|map(attribute='host')|join(',') }}");
 {% endfor %}

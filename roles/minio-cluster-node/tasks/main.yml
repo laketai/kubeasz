@@ -1,0 +1,22 @@
+- name: copy minio
+  copy: 
+    src: '{{ base_dir }}/down-ext/minio/minio'
+    dest: '{{ MINIO_INSTALL_DIR }}/minio'
+    mode: '0755'
+- name: copy systemd conf
+  template:
+    src: minio.service.j2
+    dest: /usr/lib/systemd/system/minio.service
+- name: chmod
+  file:
+    path: /usr/lib/systemd/system/minio.service
+    mode: '0755'
+- name: 开机启用 minio 服务
+  shell: systemctl daemon-reload && systemctl enable minio
+  ignore_errors: yes
+- name: start minio
+  shell: systemctl restart minio 
+  ignore_errors: yes
+- name: 打开防火墙
+  shell: firewall-cmd --zone=public --add-port=9000/tcp --permanent && firewall-cmd --zone=public --add-port=9001/tcp --permanent && firewall-cmd --reload
+  ignore_errors: yes

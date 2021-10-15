@@ -1,5 +1,5 @@
 {% for host in groups['mysql_cluster'] %}
-echo '{{ host }} mysql-host{{ loop.index }}' >> /etc/hosts
+echo '{{ host }} {{ hostvars[host]['hostname'] }}' >> /etc/hosts
 {% endfor %}
 
 # 首先得到初始的root密码

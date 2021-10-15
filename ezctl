@@ -120,6 +120,14 @@ available steps:
     90  all                to run 01~07 all at once
     10  ex-lb              to install external loadbalance for accessing k8s from outside
     11  harbor             to install a new harbor server or to integrate with an existed one
+    40  mysql              to install mysql cluster
+    41  redis              to install redis cluster
+    42  mongo              to install mongo cluster
+    43  rabbitmq           to install rabbitmq cluster
+    44  minio              to install minio cluster
+    45  nginx              to install nginx and keepalived ha deploy
+    48  nacos              to install nacos cluster
+    49  udpate-nginx       to update nacos proxy configuration
 
 examples: ./ezctl setup test-k8s 01  (or ./ezctl setup test-k8s prepare)
 	  ./ezctl setup test-k8s 02  (or ./ezctl setup test-k8s etcd)
@@ -221,6 +229,30 @@ function setup() {
           ;;
       (11|harbor)
           PLAY_BOOK="11.harbor.yml"
+          ;;
+      (40|mysql)
+          PLAY_BOOK="40.mysql-cluster.yml"
+          ;;
+      (41|redis)
+          PLAY_BOOK="41.redis-cluster.yml"
+          ;;
+      (42|mongo)
+          PLAY_BOOK="42.mongo-cluster.yml"
+          ;;
+      (43|rabbitmq)
+          PLAY_BOOK="43.rabbitmq-cluster.yml"
+          ;;
+      (44|minio)
+          PLAY_BOOK="44.minio-cluster.yml"
+          ;;
+      (45|nginx)
+          PLAY_BOOK="45.nginx-node.yml"
+          ;;
+      (48|nacos)
+          PLAY_BOOK="48.nacos.yml"
+          ;;
+      (49|update-nginx)
+          PLAY_BOOK="49.update-nginx.yml"
           ;;
       (*)
           usage-setup

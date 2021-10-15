@@ -1,4 +1,8 @@
+- name: set MASTER_HOSTNAME of the mysql cluster
+  set_fact: MASTER_HOSTNAME="{% for host in groups['mysql_cluster'] %}{% if hostvars[host]['MASTER_DB']|bool %}{{ hostvars[host]['hostname'] }}{% endif %}{% endfor %}"
+
 - name: start mysql router
-  shell: mysqlrouter --bootstrap root:{{ MYSQL_PASSWORD }}@mysql-host1:3306 --user=mysqlrouter --force
+  shell: mysqlrouter --bootstrap root:{{ MYSQL_PASSWORD }}@{{ MASTER_HOSTNAME }}:3306 --user=mysqlrouter --force
+  
 - name: init systemd
   service: name=mysqlrouter state=started enabled=yes

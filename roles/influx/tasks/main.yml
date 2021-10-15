@@ -1,0 +1,75 @@
+# 1.复制安装部署包到目标机器
+- name: "step_1a copy the ansible local install archive package {{packages_home}}/{{package_filename}} to remote {{ansible_hostname}}@{{temp_path}}"
+  copy:
+    src:  "{{packages_home}}/{{package_filename}}"
+    dest: "{{temp_path}}/"
+
+# 2.准备安装环境
+- name: "step_2a create the install path {{install_path}}"
+  file:
+    state: "directory"
+    path: "{{install_path}}"
+- name: "step_2b create the data path {{data_path}}"
+  file:
+    state: "directory"
+    path: "{{data_path}}"
+- name: "step_2c create the log path {{log_path}}"
+  file:
+    state: "directory"
+    path: "{{log_path}}"
+
+# 3.解压安装文件
+- name: "step_3a unarchive the install package {{temp_path}}/{{package_filename}} to {{ install_path }}"
+  unarchive:
+    copy: no
+    src: "{{temp_path}}/{{package_filename}}"
+    dest: "{{ install_path }}"
+
+# 4.准备配置文件
+- name: "step_4a prepare the {{role}} config of {{install_path}}/{{unarchive_folder_name}}/etc/influxdb/influxdb.conf"
+  template:
+    backup: yes
+    src: influxdb.conf.j2
+    dest: "{{install_path}}/{{unarchive_folder_name}}/etc/influxdb/influxdb.conf"
+- name: "step_4b prepare the {{role}} config of {{install_path}}/{{unarchive_folder_name}}/influx-start.sh"
+  template:
+    backup: yes
+    src: influx-start.sh.j2
+    dest: "{{install_path}}/{{unarchive_folder_name}}/influx-start.sh"
+    mode: 0755
+
+# 5.准备端口
+- name: "step_5a permit the port {{influxdb_port}}"
+  firewalld:
+    port: "{{item}}"
+    permanent: yes
+    state: enabled
+  with_items:
+    - "{{influxdb_port}}/tcp"
+  #notify: firewalld reload
+- name: "step_5b firewalld reload"
+  command: firewall-cmd --reload
+  ignore_errors: yes
+
+# 6.启动服务
+- name: "step_6a register the service influx to systemd"
+  template:
+    backup: yes
+    mode: 0644
+    src: "influx.service.j2"
+    dest: "{{REMOTE_SYSTEMD_SERVICE_DIR}}/influx.service"
+- name: "step_6b restart service"
+  systemd:
+    name: "influx"
+    enabled: yes
+    daemon_reload: yes
+    state: restarted
+
+# 7.检查
+# - name: "step9a check the {{role}} 8086 port is ok"
+#   wait_for:
+#     host: "{{inventory_hostname}}"
+#     port: 8086
+#     state: started
+#     delay: 10
+#     timeout: 60

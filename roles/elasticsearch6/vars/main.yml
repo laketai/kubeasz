@@ -1,0 +1,14 @@
+install_path:  "{{ REMOTE_INSTALL_DIR_HOME }}/es6"
+data_path: "{{ REMOTE_DATA_DIR_HOME }}/es6"
+log_path: "{{ REMOTE_LOG_DIR_HOME }}/es6"
+temp_path: "{{ REMOTE_PACKAGES_TMP_DIR }}"
+packages_home: "{{base_dir}}/down-ext/elasticsearch"
+package_filename: "{{DEPLOY.ES6.PACKAGE_FILENAME}}"
+unarchive_folder_name: "{{DEPLOY.ES6.UNARCHIVE_FOLDER_NAME}}"
+
+es_port: "{{ELASTICSEARCH6_PORT}}"
+es_internal_port: "{{ELASTICSEARCH6_INTERNAL_PORT}}"
+es_user: "{{ELASTICSEARCH6_USER}}"
+es_pass: "{{ ELASTICSEARCH6_PASS | password_hash('sha512', 'salt') }}"
+
+java_opts: "{{ ELASTICSEARCH6_JVM_MEMORY }}"

@@ -1,0 +1,13 @@
+[Unit]
+Description=Apache Kafka Service
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target zookeeper.service
+
+[Service]
+Type=simple
+Environment=LOG_DIR={{ log_path }}/runtime_logs
+ExecStart={{install_path}}/{{unarchive_folder_name}}/bin/kafka-server-start.sh {{install_path}}/{{unarchive_folder_name}}/config/server.properties
+ExecStop={{install_path}}/{{unarchive_folder_name}}/bin/kafka-server-stop.sh
+
+[Install]
+WantedBy=multi-user.target

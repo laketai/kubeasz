@@ -1,0 +1,14 @@
+# 1.监控配置
+- name: "step_feeder_1 prepare the {{service}}  monitor config:inputs.{{service}}.conf"
+  template:
+    backup: yes
+    src: telegraf.d/inputs.{{service}}.conf.tpl
+    dest: "{{install_path}}/{{unarchive_folder_name}}/etc/telegraf/telegraf.d/inputs.{{service}}.conf"
+
+# 2.开启监控采集
+- name: "step_feeder_2 enable and collector the {{service}} metrics"
+  systemd:
+    name: "telegraf"
+    enabled: yes
+    daemon_reload: yes
+    state: reloaded

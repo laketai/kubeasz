@@ -1,0 +1,114 @@
+# 1.复制安装部署包到目标机器
+- name: "step_1a copy the ansible local install archive package {{packages_home}}/{{package_filename}} to remote {{ansible_hostname}}@{{temp_path}}"
+  copy:
+    src:  "{{packages_home}}/{{package_filename}}"
+    dest: "{{temp_path}}/"
+
+# 2.准备安装环境
+- name: "step_2a create the install path {{ install_path }}"
+  file:
+    state: "directory"
+    path: "{{ install_path }}"
+- name: "step_2b create the data path {{ data_path }}"
+  file:
+    state: "directory"
+    path: "{{ data_path }}"
+- name: "step_2c create the log path {{ log_path }}"
+  file:
+    state: "directory"
+    path: "{{ log_path }}"
+
+# 3.解压安装文件
+- name: "step_3a unarchive the install package {{temp_path}}/{{package_filename}} to {{ install_path }}"
+  unarchive:
+    copy: no
+    src: "{{temp_path}}/{{package_filename}}"
+    dest: "{{ install_path }}"
+
+# 4.准备配置文件
+- name: "step_4a prepare the system config of /etc/security/limits.conf"
+  template:
+    backup: yes
+    src: limits.conf.j2
+    dest: "/etc/security/limits.conf"
+- name: "step_4b prepare the system config of /etc/sysctl.conf"
+  template:
+    backup: yes
+    src: sysctl.conf.j2
+    dest: "/etc/sysctl.conf"
+- name: "step_4c change the system env vm.max_map_count=262144"
+  shell: "sysctl -w vm.max_map_count=262144"
+- name: "step_4d prepare the {{role}} config of {{install_path}}/{{unarchive_folder_name}}/config/elasticsearch.yml"
+  template:
+    backup: yes
+    src: elasticsearch.yml.j2
+    dest: "{{install_path}}/{{unarchive_folder_name}}/config/elasticsearch.yml"
+- name: "step_4e prepare the {{role}} config of {{install_path}}/{{unarchive_folder_name}}/config/jvm.options"
+  template:
+    backup: yes
+    src: jvm.options.j2
+    dest: "{{install_path}}/{{unarchive_folder_name}}/config/jvm.options"
+
+# 5.创建启动用户
+- name: "step_5a ensure group {{es_user}} exists"
+  group:
+    name: "{{es_user}}"
+    state: present
+- name: "step_5b ensure service run user {{es_user}} exists"
+  user:
+    name: "{{es_user}}"
+    groups: "{{es_user}}"
+    password: "{{es_pass}}"
+    generate_ssh_key: yes
+    append: yes
+
+# 6.更新文件权限
+- name: "step_6a grant the {{install_path}} permissions to {{es_user}}"
+  file:
+    dest: "{{install_path}}"
+    owner: "{{es_user}}"
+    group: "{{es_user}}"
+    recurse: yes
+  ignore_errors: yes
+- name: "step_6b grant the {{data_path}} permissions to {{es_user}}"
+  file:
+    dest: "{{data_path}}"
+    owner: "{{es_user}}"
+    group: "{{es_user}}"
+    recurse: yes
+  ignore_errors: yes
+- name: "step_6c grant the {{log_path}} permissions to {{es_user}}"
+  file:
+    dest: "{{log_path}}"
+    owner: "{{es_user}}"
+    group: "{{es_user}}"
+    recurse: yes
+  ignore_errors: yes
+
+# 7.准备端口
+- name: "step_7a permit the port {{es_port}},{{es_internal_port}}"
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  with_items:
+    - "{{es_port}}/tcp"
+    - "{{es_internal_port}}/tcp"
+  #notify: firewalld reload
+- name: "step_7b firewalld reload"
+  command: firewall-cmd --reload
+  ignore_errors: yes
+
+# 8.启动服务
+- name: "step_8a register the service elasticsearch6 to systemd"
+  template:
+    backup: yes
+    mode: 0644
+    src: "elasticsearch.service.j2"
+    dest: "{{REMOTE_SYSTEMD_SERVICE_DIR}}/elasticsearch6.service"
+- name: "step_8b restart service"
+  systemd:
+    name: "elasticsearch6"
+    enabled: yes
+    daemon_reload: yes
+    state: restarted

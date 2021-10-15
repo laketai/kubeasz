@@ -1,0 +1,94 @@
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: {{ log_path }}
+  name: filebeat.log
+  keepfiles: 7
+  permissions: 0644
+
+# ============================== Filebeat inputs ===============================
+filebeat.inputs:
+  # - type: log
+  #   enabled: true
+  #   paths:
+  #     - {{ log_path }}/filebeat.log
+  #   fields:
+  #     format: txt
+  #     type: filebeat_collector
+  #     hostname: {{ inventory_hostname }}
+  #     enabled: false
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/messages
+    fields:
+      format: txt
+      type: system_secure
+      template: SYSTEM_SECURE
+      hostname: {{ inventory_hostname }}
+      enabled: true
+
+# =========================== Filebeat config inputs ===========================
+filebeat.config.inputs:
+  enabled: true
+  path: ${path.config}/inputs.d/*.yml
+
+# ============================== Filebeat modules ==============================
+
+filebeat.config.modules:
+  # Glob pattern for configuration loading
+  path: ${path.config}/modules.d/*.yml
+  # Set to true to enable config reloading
+  reload.enabled: false
+
+# ======================= Elasticsearch template setting =======================
+
+setup.template.settings:
+  index.number_of_shards: 1
+
+# ---------------------------- Elasticsearch Output ----------------------------
+output.kafka:
+{% set cluster_address=[] -%}
+{% for host in groups['kafka_cluster'] %}
+{% set _ = cluster_address.append('"%s:%s"' % (host, KAFKA_PORT )) -%} 
+{% endfor %}
+  hosts: [{{ cluster_address | join(',') }}]
+  topic: '{{kafka_logging_topic}}'
+  partition.round_robin:
+    reachable_only: false
+  required_acks: 1
+  compression: gzip
+  max_message_bytes: 1000000
+
+# ================================= Processors =================================
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~
+  - rename:
+      fields:
+        - from: "log.file.path"
+          to: "source_path"
+        - from: "agent.hostname"
+          to: "agent_hostname"
+  - drop_fields:
+      fields:
+        - '@metadata'
+        - host
+        - ecs
+        - log
+        - agent
+        - input
+        - stream
+        - container
+        - kubernetes.pod.uid
+        - kubernetes.namespace_uid
+        - kubernetes.namespace_labels
+        - kubernetes.node.uid
+        - kubernetes.node.labels
+        - kubernetes.replicaset
+        - kubernetes.labels
+        - kubernetes.node.name
+      ignore_missing: true

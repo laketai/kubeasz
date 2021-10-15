@@ -1,5 +1,5 @@
 - hosts: nacos_cluster
-  task:
+  tasks:
     - name: 清理
       shell: echo 'hello world'
       ignore_errors: yes

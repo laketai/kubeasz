@@ -1,0 +1,23 @@
+
+# /etc/rsyncd: configuration file for rsync daemon mode
+uid = cbim
+gid = cbim
+use chroot = no
+max connections = 10
+strict mode = no
+pid file = /var/run/rsyncd.pid
+lock file = /var/run/rsync.lock
+log file = /var/log/rsyncd.log
+timeout = 900
+
+[nginx]
+path={{ RSYNC_DIRECTORY }}
+ignore errors
+read only = no
+list = no
+hosts allow = {{ NGINX_MASTER_HOST }}
+hosts deny = *
+uid = root
+gid = root
+auth users = cbim
+secrets file=/etc/rsyncd.passwd

@@ -1,0 +1,10 @@
+install_path:  "{{ REMOTE_INSTALL_DIR_HOME }}/telegraf"
+data_path: "{{ REMOTE_DATA_DIR_HOME }}/telegraf"
+log_path: "{{ REMOTE_LOG_DIR_HOME }}/telegraf"
+temp_path: "{{ REMOTE_PACKAGES_TMP_DIR }}"
+packages_home: "{{base_dir}}/down-ext/telegraf"
+package_filename: "{{DEPLOY.TELEGRAF.PACKAGE_FILENAME}}"
+unarchive_folder_name: "{{DEPLOY.TELEGRAF.UNARCHIVE_FOLDER_NAME}}"
+
+# kafka_metric_topic: "cbim-telegraf"
+kafka_metric_topic: "{{ DB_NAMESPACE }}-{{ KAFKA_TOPIC_OF_TELEGRAF }}"

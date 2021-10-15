@@ -1,0 +1,12 @@
+install_path:  "{{ REMOTE_INSTALL_DIR_HOME }}/skywalking"
+data_path: "{{ REMOTE_DATA_DIR_HOME }}/skywalking"
+log_path: "{{ REMOTE_LOG_DIR_HOME }}/skywalking"
+temp_path: "{{ REMOTE_PACKAGES_TMP_DIR }}"
+packages_home: "{{base_dir}}/down-ext/skywalking"
+package_filename: "{{DEPLOY.SKYWALKING.PACKAGE_FILENAME}}"
+unarchive_folder_name: "{{DEPLOY.SKYWALKING.UNARCHIVE_FOLDER_NAME}}"
+
+opa_server_port: "{{OPA_SERVER_PORT}}"
+opa_ui_port: "{{OPA_UI_PORT}}"
+
+opa_server_java_opts: "{{ OPA_JAVA_OPTS }}"

@@ -1,0 +1,14 @@
+[Unit]
+Description=Skywalking UI Service
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target
+
+[Service]
+Type=forking
+Environment=WEBAPP_LOG_DIR={{log_path}}
+ExecStart={{install_path}}/{{unarchive_folder_name}}/bin/webappService.sh
+KillMode=control-group
+PIDFile={{install_path}}/{{unarchive_folder_name}}/skywalking-webapp.pid
+
+[Install]
+WantedBy=multi-user.target

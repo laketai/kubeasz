@@ -31,3 +31,4 @@
   - name: init rs
     shell: mongosh --port {{ MONGO_SHARD_PORT }} -f /opt/cbimeasz/mongo-cluster/init-{{ SHARD_NAME }}-rs.js
     ignore_errors: true
+  when: MASTER_NODE|bool

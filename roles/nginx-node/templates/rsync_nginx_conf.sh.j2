@@ -1,0 +1,13 @@
+#!/bin/bash
+STATUS=`systemctl is-active nginx`
+if [[ $STATUS != "active" ]]
+then
+  echo "nginx service state error"
+else
+  echo "start rsync conf file"
+  {% for host in groups['nginx_node'] %}
+  {% if hostvars[host]['NGINX_ROLE'] == 'backup' %}
+  /usr/bin/rsync -avzh --delete --password-file=/etc/rsyncd.passwd {{ RSYNC_DIRECTORY }} cbim@{{ host }}::nginx
+  {% endif %}
+  {% endfor %}
+fi

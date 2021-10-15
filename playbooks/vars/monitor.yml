@@ -1,0 +1,43 @@
+############################
+# db prefix
+DB_NAMESPACE: cbim
+# final: {DB_NAMESPACE}-{TOPIC}
+KAFKA_TOPIC_OF_OPENMETRICS: 'openmetrics'
+KAFKA_TOPIC_OF_TELEGRAF: 'telegraf'
+KAFKA_TOPIC_OF_LOG: 'logging'
+
+############################
+# role: all monitor service offline pacakges
+############################
+DEPLOY:
+    ZOOKEEPER:
+        PACKAGE_FILENAME: "apache-zookeeper-3.5.9-bin.tar.gz"
+        UNARCHIVE_FOLDER_NAME: "apache-zookeeper-3.5.9-bin"
+    KAFKA:
+        PACKAGE_FILENAME: "kafka_2.13-2.7.0.tgz"
+        UNARCHIVE_FOLDER_NAME: "kafka_2.13-2.7.0"
+    ES:
+        PACKAGE_FILENAME: "elasticsearch-7.12.1-linux-x86_64.tar.gz"
+        UNARCHIVE_FOLDER_NAME: "elasticsearch-7.12.1"
+    ES6:
+        PACKAGE_FILENAME: "elasticsearch-6.4.3.tar.gz"
+        UNARCHIVE_FOLDER_NAME: "elasticsearch-6.4.3"
+    INFLUX:
+        PACKAGE_FILENAME: "influxdb-1.8.9_linux_amd64.tar.gz"
+        UNARCHIVE_FOLDER_NAME: "influxdb-1.8.9-1"
+    SKYWALKING:
+        PACKAGE_FILENAME: "apache-skywalking-apm-es7-8.5.0.tar.gz"
+        UNARCHIVE_FOLDER_NAME: "apache-skywalking-apm-bin-es7"
+    SKYWALKING_AGENT:
+        PACKAGE_FILENAME: "skywalking-agent.tar.gz"
+        UNARCHIVE_FOLDER_NAME: "skywalking-agent"
+    TELEGRAF:
+        PACKAGE_FILENAME: "telegraf-1.18.2_linux_amd64.tar.gz"
+        UNARCHIVE_FOLDER_NAME: "telegraf-1.18.2"
+    FILEBEAT:
+        PACKAGE_FILENAME: "filebeat-7.12.1-linux-x86_64.tar.gz"
+        UNARCHIVE_FOLDER_NAME: "filebeat-7.12.1-linux-x86_64"
+    JOLOKIA:
+        PACKAGE_FILENAME: "jolokia-1.6.2-bin.tar.gz"
+        UNARCHIVE_FOLDER_NAME: "jolokia-1.6.2"
+        PACKAGE_FILENAME_AGENT: "agents/jolokia-jvm.jar"

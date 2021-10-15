@@ -1,0 +1,58 @@
+- hosts: telegraf_nodes
+  vars_files:
+  - "vars/monitor.yml"
+  roles:
+  # base collector
+  - role: "telegraf"
+    vars:
+      service: "telegraf"
+  # zookeeper
+  - role: "telegraf"
+    vars:
+      service: "zookeeper"
+    when: ('zookeeper_cluster' in group_names ) and (inventory_hostname == groups['zookeeper_cluster'][0])
+    tags: "zookeepr"
+  # kafka
+  - role: "telegraf"
+    vars:
+      service: "kafka"
+    when: ('kafka_cluster' in group_names)
+    tags: "kafka"
+  # elasticsearch
+  - role: "telegraf"
+    vars:
+      service: "elasticsearch"
+    when: ('es_cluster' in group_names) and (inventory_hostname == groups['es_cluster'][0])
+    tags: "elasticsearch"
+  # redis
+  - role: "telegraf"
+    vars:
+      service: "redis"
+    when: ('redis_cluster' in group_names) and MASTER_NODE
+    tags: "redis"
+  # mongo db
+  - role: "telegraf"
+    vars:
+      service: "mongo"
+    when: ('mongo_cluster_master' in group_names) and (inventory_hostname == groups['mongo_cluster_master'][0])
+    tags: "mongo"
+  # mysql
+  - role: "telegraf"
+    vars:
+      service: "mysql"
+      msyql_user: "{{ MYSQL_MONITOR_USER }}"
+      mysql_pass: "{{ MYSQL_MONITOR_PASSWORD }}"
+    when: ('mysql_cluster' in group_names) and MASTER_DB
+    tags: "mysql"
+  # influxdb
+  - role: "telegraf"
+    vars:
+      service: "influxdb"
+    when: ('influx_cluster' in group_names)
+    tags: "influxdb"
+  # rabbit mq
+  - role: "telegraf"
+    vars:
+      service: "rabbitmq"
+    when: ('rabbitmq_cluster' in group_names)
+    tags: "rabbitmq"

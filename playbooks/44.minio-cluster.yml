@@ -1,0 +1,3 @@
+- hosts: minio_cluster
+  roles:
+  - minio-cluster-node

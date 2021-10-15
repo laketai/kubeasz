@@ -1,0 +1,49 @@
+install_path:  "{{ REMOTE_INSTALL_DIR_HOME }}/filebeat"
+data_path: "{{ REMOTE_DATA_DIR_HOME }}/filebeat"
+log_path: "{{ REMOTE_LOG_DIR_HOME }}/filebeat"
+temp_path: "{{ REMOTE_PACKAGES_TMP_DIR }}"
+packages_home: "{{base_dir}}/down-ext/filebeat"
+package_filename: "{{DEPLOY.FILEBEAT.PACKAGE_FILENAME}}"
+unarchive_folder_name: "{{DEPLOY.FILEBEAT.UNARCHIVE_FOLDER_NAME}}"
+
+kafka_logging_topic: "{{ DB_NAMESPACE }}-{{ KAFKA_TOPIC_OF_LOG }}"
+
+############ log path define ############
+# zookeeper
+zookeeper_log_path: "{{ REMOTE_LOG_DIR_HOME }}/zookeeper"
+
+# kafka
+kafka_log_path: "{{ REMOTE_LOG_DIR_HOME }}/kafka/runtime_logs"
+
+# elasticsearch
+es_log_path: "{{ REMOTE_LOG_DIR_HOME }}/es"
+es_gc_log_path: "{{ REMOTE_INSTALL_DIR_HOME }}/es/{{DEPLOY.ES.UNARCHIVE_FOLDER_NAME}}/logs"
+
+# telegraf
+telegraf_log_path: "{{ REMOTE_LOG_DIR_HOME }}/telegraf"
+
+# influx
+influx_log_path: "{{ REMOTE_LOG_DIR_HOME }}/influx"
+
+# skywalking
+skywalking_log_path: "{{ REMOTE_LOG_DIR_HOME }}/skywalking"
+
+# myql
+mysql_log_path: /var/log/mysql.log
+mysql_log_router_path: /var/log/mysqlrouter/mysqlrouter.log
+mysql_log_slow_path: /var/log/mysql_slow.log
+
+# rabbitmq
+rabbitmq_log_path: "/data/rabbitmq/log"
+
+# nacos
+
+# mongodb
+mongo_master_log_path: /var/log/mongodb
+mongo_shard_log_path: /var/log/mongodb
+
+# redis
+redis_log_path: /var/log/redis
+
+# harbor
+harbor_log_path: /var/log/harbor

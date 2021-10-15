@@ -5,7 +5,7 @@
     mode: '0755'
 - name: mkdir {{ NACOS_DATA_DIR }}
   file:
-    path: '{{ NACOS_DATA_DIR }}''
+    path: '{{ NACOS_DATA_DIR }}'
     state: directory
     mode: '0777'    
 - name: copy rpms

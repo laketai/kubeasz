@@ -11,11 +11,13 @@
   shell: yum localinstall /opt/cbimeasz/mongo-cluster/bin/mongo/*.rpm -y
   args:
     warn: false
+- name: 关闭默认启动
+  service: name=mongod state=stopped enabled=no 
 
-# - name: 拷贝配置文件
-#   template:
-#     src: mongod.conf
-#     dest: /etc/mongod.conf
-
-# - name: 设置开机启动
-#   service: name=mongod state=started enabled=yes
+- name: 复制 keyfile
+  copy:
+    src: '{{ cluster_dir }}/mongo/keyfile'
+    dest: '/etc/mongo.keyfile'  
+    owner: mongod
+    group: mongod
+    mode: '0400'

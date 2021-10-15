@@ -1,0 +1,80 @@
+- hosts: filebeat_nodes
+  vars_files:
+  - "vars/monitor.yml"
+  roles:
+  # base collector
+  - role: "filebeat"
+    vars:
+      service: "filebeat"
+  # zookeeper
+  - role: "filebeat"
+    vars:
+      service: "zookeeper"
+    when: ('zookeeper_cluster' in group_names )
+    tags: "zookeepr"
+  # kafka
+  - role: "filebeat"
+    vars:
+      service: "kafka"
+    when: ('kafka_cluster' in group_names )
+    tags: "kafka"
+  # es
+  - role: "filebeat"
+    vars:
+      service: "elasticsearch"
+    when: ('es_cluster' in group_names )
+    tags: "elasticsearch"
+  # influx
+  - role: "filebeat"
+    vars:
+      service: "influx"
+    when: ('influx_cluster' in group_names )
+    tags: "influx"
+  # skywalking
+  - role: "filebeat"
+    vars:
+      service: "skywalking"
+    when: ('skywalking_cluster' in group_names )
+    tags: "skywalking"
+  # telegraf
+  - role: "filebeat"
+    vars:
+      service: "telegraf"
+    when: ('telegraf_nodes' in group_names )
+    tags: "telegraf"
+  # mysql
+  - role: "filebeat"
+    vars:
+      service: "mysql"
+    when: ('mysql_cluster' in group_names )
+    tags: "mysql"
+  # redis
+  - role: "filebeat"
+    vars:
+      service: "redis"
+    when: ('redis_cluster' in group_names )
+    tags: "redis"
+  # rabbitmq
+  - role: "filebeat"
+    vars:
+      service: "rabbitmq"
+    when: ('rabbitmq_cluster' in group_names )
+    tags: "rabbitmq"
+  # mongo_master
+  - role: "filebeat"
+    vars:
+      service: "mongo_master"
+    when: ('mongo_cluster_master' in group_names )
+    tags: "mongo_master"
+  # mongo_shard
+  - role: "filebeat"
+    vars:
+      service: "mongo_shard"
+    when: ('mongo_cluster_shard' in group_names )
+    tags: "mongo_shard"
+  # harbor
+  - role: "filebeat"
+    vars:
+      service: "harbor"
+    when: ('harbor' in group_names )
+    tags: "harbor"
