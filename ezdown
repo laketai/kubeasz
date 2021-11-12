@@ -36,7 +36,7 @@ export ciliumVer=v1.4.1
 export kubeRouterVer=v0.3.1
 export kubeOvnVer=v1.5.3
 export promChartVer=12.10.6
-export traefikChartVer=9.12.3
+export traefikChartVer=10.3.0
 
 function usage() {
   echo -e "\033[33mUsage:\033[0m ezdown [options] [args]"
@@ -88,10 +88,10 @@ function download_docker() {
     logger warn "docker binaries already existed"
   else
     logger info "downloading docker binaries, version $DOCKER_VER"
-    if [[ -e /usr/bin/curl ]];then
-      curl -C- -O --retry 3 "$DOCKER_URL" || { logger error "downloading docker failed"; exit 1; }
+    if [[ -e /usr/bin/wget ]];then
+      wget -c --no-check-certificate "$DOCKER_URL" || { logger error "downloading docker failed"; exit 1; }
     else
-      wget -c "$DOCKER_URL" || { logger error "downloading docker failed"; exit 1; }
+      curl -k -C- -O --retry 3 "$DOCKER_URL" || { logger error "downloading docker failed"; exit 1; }
     fi
     /bin/mv -f "./docker-$DOCKER_VER.tgz" "$BASE/down"
   fi
@@ -358,7 +358,7 @@ function start_kubeasz_docker() {
   fi
 
   # create a link '/usr/bin/python' in Ubuntu1604
-  if [[ ! -e /usr/bin/python && -e /etc/debian_version ]]; then
+  if [[ ! -e /usr/bin/python && -e /usr/bin/python3 ]]; then
     logger debug "create a soft link '/usr/bin/python'"
     ln -s /usr/bin/python3 /usr/bin/python
   fi
