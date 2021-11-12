@@ -41,7 +41,7 @@ NAME           STATUS                     ROLES                  AGE       VERSI
 192.168.1.42   Ready                      node                   4h        v1.11.3
 192.168.1.43   Ready                      metallb-speaker,node   4h        v1.11.3
 192.168.1.44   Ready                      metallb-speaker,node   4h        v1.11.3
-$ kubectl get pod -n metallb-system 
+$ kubectl get pod -n metallb-system
 NAME                        READY     STATUS    RESTARTS   AGE
 controller-9c57dbd4-798nb   1/1       Running   0          4h
 speaker-9rjmk               1/1       Running   0          4h

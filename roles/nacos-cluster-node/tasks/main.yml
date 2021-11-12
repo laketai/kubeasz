@@ -1,18 +1,24 @@
+- name: open firewalld port
+  shell: firewall-cmd --zone=public --add-port=8848/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=9848/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=9849/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=7848/tcp --permanent && \
+         firewall-cmd --reload
 - name: mkdir
   file:
     path: /opt/cbimeasz/nacos
     state: directory
-    mode: '0755'
+    mode: "0755"
 - name: mkdir {{ NACOS_DATA_DIR }}
   file:
-    path: '{{ NACOS_DATA_DIR }}'
+    path: "{{ NACOS_DATA_DIR }}"
     state: directory
-    mode: '0777'    
+    mode: "0777"
 - name: copy rpms
-  copy: 
-    src: '{{ base_dir }}/down-ext/nacos/nacos-server.tar.gz'
+  copy:
+    src: "{{ base_dir }}/down-ext/nacos/nacos-server.tar.gz"
     dest: /opt/nacos-server.tar.gz
-- name: install nacos 
+- name: install nacos
   shell: cd /opt && tar zxf nacos-server.tar.gz
 - name: copy conf
   template:
@@ -30,9 +36,14 @@
   file:
     path: /usr/lib/systemd/system/nacos.service
     mode: 0755
-- name: 开机启用 nacos d服务
+- name: 开机启用 nacos 服务
   shell: systemctl enable nacos
   ignore_errors: true
 - name: start nacos
-  shell: systemctl daemon-reload && systemctl restart nacos 
+  shell: systemctl daemon-reload && systemctl restart nacos
   ignore_errors: yes
+- name: set crontab
+  cron:
+    name: clean crontab
+    special_time: daily
+    job: "/usr/bin/find {{ NACOS_DATA_DIR }}/logs/ -mtime +7 -name 'access_log.*' -print -delete"

@@ -1,5 +1,5 @@
 # Configuration file of Harbor
-hostname: {{ HARBOR_HOSTNAME }} 
+hostname: {{ HARBOR_HOSTNAME }}
 
 # https related config
 https:
@@ -84,7 +84,7 @@ log:
   # configs for logs in local storage
   local:
     # Log files are rotated log_rotate_count times before being removed. If count is 0, old versions are removed rather than rotated.
-    rotate_count: 3 
+    rotate_count: 3
     # Log files are rotated only if they grow bigger than log_rotate_size bytes. If size is followed by k, the size is assumed to be in kilobytes.
     # If the M is used, the size is in megabytes, and if G is used, the size is in gigabytes. So size 100, size 100k, size 100M and size 100G
     # are all valid.

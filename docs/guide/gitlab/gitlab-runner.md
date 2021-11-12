@@ -44,8 +44,8 @@ $ systemctl restart gitlab-runner
 ``` bash
 $ gitlab-runner register
 Runtime platform                                    arch=amd64 os=linux pid=3269 revision=8bb608ff version=11.7.0
-Running in system-mode.                            
-                                                   
+Running in system-mode.
+
 Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/):
 http://gitlab.test.com/       ### 这里输入gitlab URL
 Please enter the gitlab-ci token for this runner:

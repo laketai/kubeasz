@@ -36,7 +36,7 @@ Kubernetes Pod的网络是这样创建的：
 - [安装kube-router](network-plugin/kube-router.md)
 
 ### 参考
-- [kubernetes.io networking docs](https://kubernetes.io/docs/concepts/cluster-administration/networking/) 
+- [kubernetes.io networking docs](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
 - [feiskyer-kubernetes指南网络章节](https://github.com/feiskyer/kubernetes-handbook/blob/master/zh/network/network.md)
 
 

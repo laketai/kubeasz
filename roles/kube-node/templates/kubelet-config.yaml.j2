@@ -14,7 +14,7 @@ authorization:
   webhook:
     cacheAuthorizedTTL: 5m0s
     cacheUnauthorizedTTL: 30s
-cgroupDriver: {{ CGROUP_DRIVER }} 
+cgroupDriver: {{ CGROUP_DRIVER }}
 cgroupsPerQOS: true
 clusterDNS:
 {% if ENABLE_LOCAL_DNS_CACHE %}
@@ -24,7 +24,7 @@ clusterDNS:
 {% endif %}
 clusterDomain: {{ CLUSTER_DNS_DOMAIN }}
 configMapAndSecretChangeDetectionStrategy: Watch
-containerLogMaxFiles: 3 
+containerLogMaxFiles: 3
 containerLogMaxSize: 10Mi
 enforceNodeAllocatable:
 - pods
@@ -67,7 +67,7 @@ nodeStatusUpdateFrequency: 10s
 oomScoreAdj: -999
 podPidsLimit: -1
 port: 10250
-# disable readOnlyPort 
+# disable readOnlyPort
 readOnlyPort: 0
 {% if ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int > 16 %}
 resolvConf: /run/systemd/resolve/resolv.conf

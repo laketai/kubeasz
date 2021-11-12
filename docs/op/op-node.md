@@ -36,7 +36,7 @@ $ kubectl get pod -n kube-system
 
 ## 2.增加非标准ssh端口节点
 
-假设待添加节点192.168.2.1，ssh 端口 10022；配置免密登录 ssh-copy-id -p 10022 192.168.2.1，按提示输入密码，然后执行 
+假设待添加节点192.168.2.1，ssh 端口 10022；配置免密登录 ssh-copy-id -p 10022 192.168.2.1，按提示输入密码，然后执行
 
 ``` bash
 $ ezctl add-node test-k8s 192.168.2.1 ansible_ssh_port=10022

@@ -123,13 +123,13 @@ admin用户web登录后可以方便的创建项目，并指定项目属性(公�
 
 ``` bash
 docker login harbor.test.com
-Username: 
+Username:
 Password:
 Login Succeeded
 docker tag busybox:latest harbor.test.com/library/busybox:latest
 docker push harbor.test.com/library/busybox:latest
 The push refers to a repository [harbor.test.com/library/busybox]
-0271b8eebde3: Pushed 
+0271b8eebde3: Pushed
 latest: digest: sha256:91ef6c1c52b166be02645b8efee30d1ee65362024f7da41c404681561734c465 size: 527
 ```
 #### k8s中使用harbor
@@ -166,7 +166,7 @@ spec:
 其中 `harborKey1`可以用以下两种方式生成：
 
 + 1.使用 `kubectl create secret docker-registry harborkey1 --docker-server=harbor.test.com --docker-username=admin --docker-password=Harbor12345 --docker-email=team@test.com`
-+ 2.使用yaml配置文件生成 
++ 2.使用yaml配置文件生成
 
 ``` bash
 //harborkey1.yaml

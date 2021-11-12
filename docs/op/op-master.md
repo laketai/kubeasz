@@ -24,7 +24,7 @@ $ ezctl add-master test-k8s 192.168.1.11
 
 ``` bash
 # 在新节点master 服务状态
-$ systemctl status kube-apiserver 
+$ systemctl status kube-apiserver
 $ systemctl status kube-controller-manager
 $ systemctl status kube-scheduler
 

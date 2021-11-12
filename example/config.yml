@@ -231,7 +231,7 @@ HARBOR_ADMIN_PASSWD: Cbim2021
 ############################
 # role:mysql-cluster
 ############################
-# password 
+# password
 MYSQL_PASSWORD: Cbim2021-
 MYSQL_DATA_DIR: /data
 MYSQL_DATA_DIR_ESCAPE: \/data
@@ -240,7 +240,9 @@ MYSQL_DATA_DIR_ESCAPE: \/data
 # role:redis-cluster
 ############################
 REDIS_PORT: 6379
+REDIS_PASSWD: CbimRedis2021
 REDIS_DATA_DIR: /data/redis-cluster
+REDIS_CLUSTER_REPLICAS: 1
 
 ############################
 # role:mongo-cluster
@@ -250,18 +252,30 @@ MONGO_CONFIG_PORT: 27019
 MONGO_CONFIG_DATA_DIR: /data/mongo/config
 MONGO_SHARD_PORT: 27018
 MONGO_SHARD_DATA_DIR: /data/mongo/shard
+MONGO_PASSWD: Cbim2021
 
 ############################
 # role:rabbitmq-cluster
 ############################
 RABBITMQ_DATA_DIR: /data/rabbitmq
 RABBITMQ_USER: admin
-RABBITMQ_PASSWD: admin
+RABBITMQ_PASSWD: CbimRabbit@2021
 
 ############################
 # role:nacos-cluster
 ############################
 NACOS_DATA_DIR: /data/nacos
+NACOS_PASSWD: $2a$10$gUNl7VPer3Ktjp9Jf91ak.Vy5hRFMIc/PENNg3SCmkfm9B8E8n936
+
+############################
+# role:minio-cluster
+############################
+MINIO_ROOT_USER: cbim
+MINIO_ROOT_PASSWD: Cbim2021
+MINIO_INSTALL_DIR: /usr/local/bin
+MINIO_CONSOLE_PORT: 9001
+MINIO_DISK_NUM: 4
+MINIO_DATA_DIR: /data/minio
 
 ############################
 # common: all monitor service common vars

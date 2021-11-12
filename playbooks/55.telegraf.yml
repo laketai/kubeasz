@@ -28,7 +28,7 @@
   - role: "telegraf"
     vars:
       service: "redis"
-    when: ('redis_cluster' in group_names) and MASTER_NODE
+    when: ('redis_cluster' in group_names) and MASTER_REDIS_NODE
     tags: "redis"
   # mongo db
   - role: "telegraf"

@@ -25,7 +25,7 @@
 - name: 生成 CA 证书和私钥
   when: p.stat.isreg is not defined
   shell: "cd {{ cluster_dir }}/ssl && \
-	 {{ base_dir }}/bin/cfssl gencert -initca ca-csr.json | {{ base_dir }}/bin/cfssljson -bare ca" 
+	 {{ base_dir }}/bin/cfssl gencert -initca ca-csr.json | {{ base_dir }}/bin/cfssljson -bare ca"
 
 #----------- 创建配置文件: /root/.kube/config
 - import_tasks: create-kubectl-kubeconfig.yml

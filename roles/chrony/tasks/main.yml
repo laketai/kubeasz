@@ -7,7 +7,7 @@
 
 - name: apt 卸载 ntp
   shell: 'apt remove -y ntp'
-  when: 'ansible_distribution in ["Ubuntu","Debian"]' 
+  when: 'ansible_distribution in ["Ubuntu","Debian"]'
   ignore_errors: true
 
 - name: yum 卸载 ntp

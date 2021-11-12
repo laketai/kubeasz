@@ -39,14 +39,14 @@
             state: stopped
             enabled: no
           ignore_errors: true
-  
+
         # as k8s-network-plugins use host-network, '/var/run/docker/netns/default' must be umounted
         - name: umount docker filesystem-1
           mount: path=/var/run/docker/netns/default state=unmounted
-  
+
         - name: umount docker filesystem-2
           mount: path=/var/lib/docker/overlay state=unmounted
-  
+
         - name: umount docker filesystem-3
           shell: "echo /var/lib/docker/overlay2/*/merged|xargs umount || exit 0"
           args:

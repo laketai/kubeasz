@@ -7,7 +7,7 @@
   #servers = ["mongodb://127.0.0.1:27017"]
 {% set cluster_address=[] -%}
 {% for host in groups['mongo_cluster_master'] %}
-{% set _ = cluster_address.append('"mongodb://%s:%s"' % (host, MONGOS_PORT )) -%} 
+{% set _ = cluster_address.append('"mongodb://%s:%s"' % (host, MONGOS_PORT )) -%}
 {% endfor %}
   servers=[{{ cluster_address | join(',') }}]
 
@@ -21,7 +21,7 @@
 
   ## When true, collect per collection stats
   # gather_col_stats = false
-  
+
   ## When true, collect usage statistics for each collection
   ## (insert, update, queries, remove, getmore, commands etc...).
   # gather_top_stat = false

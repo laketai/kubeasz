@@ -60,7 +60,7 @@ docker exec -it kubeasz ezctl start-aio
 如果提示kubectl: command not found，退出重新ssh登录一下，环境变量生效即可
 
 ``` bash
-$ kubectl version         # 验证集群版本     
+$ kubectl version         # 验证集群版本
 $ kubectl get node        # 验证节点就绪 (Ready) 状态
 $ kubectl get pod -A      # 验证集群pod状态，默认已安装网络插件、coredns、metrics-server等
 $ kubectl get svc -A      # 验证集群服务状态

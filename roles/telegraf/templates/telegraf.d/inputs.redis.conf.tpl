@@ -11,13 +11,13 @@
   ## If no port is specified, 6379 is used
 {% set cluster_address=[] -%}
 {% for host in groups['redis_cluster'] %}
-{% set _ = cluster_address.append('"tcp://%s:%s"' % (host, REDIS_PORT )) -%} 
+{% set _ = cluster_address.append('"tcp://%s:%s"' % (host, REDIS_PORT )) -%}
 {% endfor %}
   servers=[{{ cluster_address | join(',') }}]
 
   ## Optional. Specify redis commands to retrieve values
   # [[inputs.redis.commands]]
-  #   # The command to run where each argument is a separate element 
+  #   # The command to run where each argument is a separate element
   #   command = ["get", "sample-key"]
   #   # The field to store the result in
   #   field = "sample-key-value"

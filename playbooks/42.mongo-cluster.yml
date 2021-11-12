@@ -13,9 +13,8 @@
 
 - hosts: mongo_cluster_shard
   roles:
-  
   - mongo-cluster-shard
 
 - hosts: mongo_cluster_master
-  roles:  
+  roles:
   - mongos

@@ -1,6 +1,6 @@
 # kube-router 网络组件
 
-kube-router是一个简单、高效的网络插件，它提供一揽子解决方案：  
+kube-router是一个简单、高效的网络插件，它提供一揽子解决方案：
 - 基于GoBGP 提供Pod 网络互联（Routing）
 - 使用ipsets优化的iptables 提供网络策略支持（Firewall/NetworkPolicy）
 - 基于IPVS/LVS 提供高性能服务代理（Service Proxy）(注：由于 k8s 新版本中 ipvs 已可用，因此这里不选择启用kube-router基于ipvs的service proxy)
@@ -28,16 +28,16 @@ kube-router是一个简单、高效的网络插件，它提供一揽子解决方
 # master上路由
 root@master1:~$ ip route
 ...
-172.20.1.0/24 via 192.168.1.2 dev ens3  proto 17 
-172.20.2.0/24 via 192.168.1.3 dev ens3  proto 17 
+172.20.1.0/24 via 192.168.1.2 dev ens3  proto 17
+172.20.2.0/24 via 192.168.1.3 dev ens3  proto 17
 ...
 
 # node3上路由
 root@node3:~$ ip route
-... 
-172.20.0.0/24 via 192.168.1.1 dev ens3  proto 17 
-172.20.1.0/24 via 192.168.1.2 dev ens3  proto 17 
-172.20.2.0/24 dev kube-bridge  proto kernel  scope link  src 172.20.2.1 
+...
+172.20.0.0/24 via 192.168.1.1 dev ens3  proto 17
+172.20.1.0/24 via 192.168.1.2 dev ens3  proto 17
+172.20.2.0/24 dev kube-bridge  proto kernel  scope link  src 172.20.2.1
 ...
 ```
 

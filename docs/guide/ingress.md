@@ -60,7 +60,7 @@ test-hello   ClusterIP   10.68.124.115   <none>        80/TCP    1m
 
 ``` bash
 # test-hello.ing.yaml内容
-apiVersion: networking.k8s.io/v1beta1 
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: test-hello
@@ -77,14 +77,14 @@ spec:
 + 集群内部尝试访问: `curl -H Host:hello.test.com 10.68.69.170(traefik-ingress-service的服务地址)` 能够看到欢迎页面 `Welcome to nginx!`；
 + 在集群外部尝试访问(假定集群一个NodeIP为 192.168.1.1): `curl -H Host:hello.test.com 192.168.1.1:23456`，也能够看到欢迎页面 `Welcome to nginx!`，说明ingress测试成功
 
-#### 为 traefik WEB 管理页面创建 ingress 规则 
+#### 为 traefik WEB 管理页面创建 ingress 规则
 
 `kubectl create -f /etc/ansible/manifests/ingress/traefik/traefik-ui.ing.yaml`
 
 ``` bash
 # traefik-ui.ing.yaml内容
 ---
-apiVersion: networking.k8s.io/v1beta1 
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: traefik-web-ui

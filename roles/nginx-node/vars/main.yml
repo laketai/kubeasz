@@ -1,4 +1,4 @@
 RSYNC_DIRECTORY: /etc/nginx/
 RSYNC_USER: cbim
 RSYNC_PASSWD: 123456
-NGINX_MASTER_HOST: "{% for host in groups['nginx_node'] %}{% if hostvars[host]['NGINX_ROLE'] == 'master' %}{{ host }}{% endif %}{% endfor %}"
+NGINX_MASTER_HOST: "{% for host in groups[GROUP_NAME] %}{% if hostvars[host]['NGINX_ROLE'] == 'master' %}{{ host }}{% endif %}{% endfor %}"

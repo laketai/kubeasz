@@ -59,7 +59,7 @@ FLANNEL_IPMASQ=true
 
 请阅读 `roles/flannel/templates/kube-flannel.yaml.j2` 内容，注意：
 
-+ 注意：本安装方式，flannel 通过 apiserver 接口读取 podCidr 信息，详见 https://github.com/coreos/flannel/issues/847；因此想要修改节点pod网段掩码，请前往`roles/kube-master/defaults/main.yml`设置 
++ 注意：本安装方式，flannel 通过 apiserver 接口读取 podCidr 信息，详见 https://github.com/coreos/flannel/issues/847；因此想要修改节点pod网段掩码，请前往`roles/kube-master/defaults/main.yml`设置
 + 配置相关RBAC 权限和 `service account`
 + 配置`ConfigMap`包含 CNI配置和 flannel配置(指定backend等)，和`hosts`文件中相关设置对应
 + `DaemonSet Pod`包含两个容器，一个容器运行flannel本身，另一个init容器部署cni 配置文件
@@ -112,12 +112,12 @@ default       busy-5956b54c8b-wwpkz   1/1       Running   0          9m        1
 
 # 查看路由
 # ip route
-default via 192.168.1.254 dev ens3 onlink 
-192.168.1.0/24 dev ens3  proto kernel  scope link  src 192.168.1.1 
-172.17.0.0/16 dev docker0  proto kernel  scope link  src 172.17.0.1 linkdown 
-172.20.0.0/24 via 192.168.1.3 dev ens3 
-172.20.1.0/24 via 192.168.1.2 dev ens3 
-172.20.2.0/24 dev cni0  proto kernel  scope link  src 172.20.2.1 
+default via 192.168.1.254 dev ens3 onlink
+192.168.1.0/24 dev ens3  proto kernel  scope link  src 192.168.1.1
+172.17.0.0/16 dev docker0  proto kernel  scope link  src 172.17.0.1 linkdown
+172.20.0.0/24 via 192.168.1.3 dev ens3
+172.20.1.0/24 via 192.168.1.2 dev ens3
+172.20.2.0/24 dev cni0  proto kernel  scope link  src 172.20.2.1
 ```
 在各节点上分别 ping 这三个POD IP地址，确保能通：
 

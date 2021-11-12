@@ -4,6 +4,6 @@
 
 - hosts: nacos_cluster
   roles:
-  - base
+  # - base
   - openjdk
   - nacos-cluster-node

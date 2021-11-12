@@ -21,7 +21,7 @@ NodeLocal DNSCache在集群的上运行一个dnsCache daemonset来提高clusterD
 
 经常遇到有人问某个kubeconfig(kubectl)泄露了怎么办？不同权限的kubeconfig怎么生成？这里利用cfssl签发自定义用户证书和k8s灵活的rbac权限绑定机制，ezctl 命令行封装了这个功能，非常方便、实用。
 
-详细使用参考 docs/op/kcfg-adm.md 
+详细使用参考 docs/op/kcfg-adm.md
 
 ### 更新 prometheus安装部署，自动集成安装
 

@@ -37,7 +37,7 @@ KubeSphere 作为一个**全栈的多租户容器平台**，不仅支持**安装
 
    ```yaml
    kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.0.0/kubesphere-installer.yaml
-   
+
    kubectl apply -f https://github.com/kubesphere/ks-installer/releases/download/v3.0.0/cluster-configuration.yaml
    ```
 

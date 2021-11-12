@@ -6,7 +6,7 @@
   ## If no port is specified, 2181 is used
 {% set cluster_address=[] -%}
 {% for host in groups['zookeeper_cluster'] %}
-{% set _ = cluster_address.append('"%s:%s"' % (host, ZOOKEEPER_PORT )) -%} 
+{% set _ = cluster_address.append('"%s:%s"' % (host, ZOOKEEPER_PORT )) -%}
 {% endfor %}
   servers=[{{ cluster_address | join(',') }}]
 

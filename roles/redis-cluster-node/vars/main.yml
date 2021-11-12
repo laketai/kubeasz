@@ -1,3 +1,4 @@
 REDIS_PORT: 6379
 REDIS_DATA_DIR: /data/redis-cluster
 REDIS_PASSWD: CbimRedis2021
+REDIS_BUS_PORT: '{{ REDIS_PORT|int + 10000 }}'

@@ -1,6 +1,10 @@
+- name: 打开防火墙
+  shell: firewall-cmd --zone=public --add-port={{ MONGO_CONFIG_PORT }}/tcp --permanent && \
+         firewall-cmd --reload
+  ignore_errors: yes
 - name: mkdir
   file:
-    path: "{{ MONGO_CONFIG_DATA_DIR }}" 
+    path: "{{ MONGO_CONFIG_DATA_DIR }}"
     state: directory
     mode: '0755'
     group: mongod
@@ -22,7 +26,7 @@
   shell: systemctl daemon-reload
   ignore_errors: yes
 - name: 设置开机启动
-  service: name=mongod-config state=started enabled=yes  
+  service: name=mongod-config state=started enabled=yes
 - block:
   - name: 拷贝 rs init.js
     template:

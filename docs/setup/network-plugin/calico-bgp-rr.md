@@ -141,10 +141,10 @@ EOF
 
 ```
 $ calicoctl get node -o wide
-NAME     ASN       IPV4              IPV6   
-k8s401   (64512)   192.168.1.1/24          
-k8s402   (64512)   192.168.1.2/24          
-k8s403   (64512)   192.168.1.3/24          
+NAME     ASN       IPV4              IPV6
+k8s401   (64512)   192.168.1.1/24
+k8s402   (64512)   192.168.1.2/24
+k8s403   (64512)   192.168.1.3/24
 k8s404   (64512)   192.168.1.4/24
 ```
 
@@ -191,7 +191,7 @@ $ calicoctl apply -f rr01.yml
 
 ## 查看增加 rr 之后的bgp 连接情况
 
-``` 
+```
 $ ansible all -m shell -a '/opt/kube/bin/calicoctl node status'
 192.168.1.4 | SUCCESS | rc=0 >>
 Calico process is running.

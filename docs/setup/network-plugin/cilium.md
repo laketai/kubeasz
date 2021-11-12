@@ -20,7 +20,7 @@
 
 ### 1.选择cilium网络后安装k8s(allinone)
 
-- 参考[快速指南](quickStart.md)，设置 ansible hosts 文件中变量 `CLUSTER_NETWORK="cilium"` 
+- 参考[快速指南](quickStart.md)，设置 ansible hosts 文件中变量 `CLUSTER_NETWORK="cilium"`
 
 ### 2.部署示例应用
 
@@ -50,25 +50,25 @@ service/kubernetes   ClusterIP   10.68.0.1       <none>        443/TCP   5h
 
 ``` bash
 $ kubectl exec -n kube-system cilium-6t5vx -- cilium endpoint list
-ENDPOINT   POLICY (ingress)   POLICY (egress)   IDENTITY   LABELS (source:key[=value])                                    IPv6                  IPv4           STATUS   
-           ENFORCEMENT        ENFORCEMENT                                                                                                                      
-643        Disabled           Disabled          31371      k8s:class=deathstar                                            f00d::ac14:0:0:283    172.20.0.246   ready   
-                                                           k8s:io.cilium.k8s.policy.serviceaccount=default                                                             
-                                                           k8s:io.kubernetes.pod.namespace=default                                                                     
-                                                           k8s:org=empire                                                                                              
-1011       Disabled           Disabled          31371      k8s:class=deathstar                                            f00d::ac14:0:0:3f3    172.20.0.63    ready   
-                                                           k8s:io.cilium.k8s.policy.serviceaccount=default                                                             
-                                                           k8s:io.kubernetes.pod.namespace=default                                                                     
-                                                           k8s:org=empire                                                                                              
-32030      Disabled           Disabled          5350       k8s:class=tiefighter                                           f00d::ac14:0:0:7d1e   172.20.0.201   ready   
-                                                           k8s:io.cilium.k8s.policy.serviceaccount=default                                                             
-                                                           k8s:io.kubernetes.pod.namespace=default                                                                     
-                                                           k8s:org=empire                                                                                              
-45943      Disabled           Disabled          14309      k8s:class=xwing                                                f00d::ac14:0:0:b377   172.20.0.189   ready   
-                                                           k8s:io.cilium.k8s.policy.serviceaccount=default                                                             
-                                                           k8s:io.kubernetes.pod.namespace=default                                                                     
-                                                           k8s:org=alliance                                                                                            
-52035      Disabled           Disabled          4          reserved:health                                                f00d::ac14:0:0:cb43   172.20.0.92    ready   
+ENDPOINT   POLICY (ingress)   POLICY (egress)   IDENTITY   LABELS (source:key[=value])                                    IPv6                  IPv4           STATUS
+           ENFORCEMENT        ENFORCEMENT
+643        Disabled           Disabled          31371      k8s:class=deathstar                                            f00d::ac14:0:0:283    172.20.0.246   ready
+                                                           k8s:io.cilium.k8s.policy.serviceaccount=default
+                                                           k8s:io.kubernetes.pod.namespace=default
+                                                           k8s:org=empire
+1011       Disabled           Disabled          31371      k8s:class=deathstar                                            f00d::ac14:0:0:3f3    172.20.0.63    ready
+                                                           k8s:io.cilium.k8s.policy.serviceaccount=default
+                                                           k8s:io.kubernetes.pod.namespace=default
+                                                           k8s:org=empire
+32030      Disabled           Disabled          5350       k8s:class=tiefighter                                           f00d::ac14:0:0:7d1e   172.20.0.201   ready
+                                                           k8s:io.cilium.k8s.policy.serviceaccount=default
+                                                           k8s:io.kubernetes.pod.namespace=default
+                                                           k8s:org=empire
+45943      Disabled           Disabled          14309      k8s:class=xwing                                                f00d::ac14:0:0:b377   172.20.0.189   ready
+                                                           k8s:io.cilium.k8s.policy.serviceaccount=default
+                                                           k8s:io.kubernetes.pod.namespace=default
+                                                           k8s:org=alliance
+52035      Disabled           Disabled          4          reserved:health                                                f00d::ac14:0:0:cb43   172.20.0.92    ready
 ```
 
 ### 3.检查初始状态
@@ -104,25 +104,25 @@ $ kubectl exec xwing -- curl -s -XPOST deathstar.default.svc.cluster.local/v1/re
 
 ``` bash
 # kubectl exec -n kube-system cilium-6t5vx -- cilium endpoint list
-ENDPOINT   POLICY (ingress)   POLICY (egress)   IDENTITY   LABELS (source:key[=value])                                    IPv6                  IPv4           STATUS   
-           ENFORCEMENT        ENFORCEMENT                                                                                                                      
-643        Enabled            Disabled          31371      k8s:class=deathstar                                            f00d::ac14:0:0:283    172.20.0.246   ready   
-                                                           k8s:io.cilium.k8s.policy.serviceaccount=default                                                             
-                                                           k8s:io.kubernetes.pod.namespace=default                                                                     
-                                                           k8s:org=empire                                                                                              
-1011       Enabled            Disabled          31371      k8s:class=deathstar                                            f00d::ac14:0:0:3f3    172.20.0.63    ready   
-                                                           k8s:io.cilium.k8s.policy.serviceaccount=default                                                             
-                                                           k8s:io.kubernetes.pod.namespace=default                                                                     
-                                                           k8s:org=empire                                                                                              
-32030      Disabled           Disabled          5350       k8s:class=tiefighter                                           f00d::ac14:0:0:7d1e   172.20.0.201   ready   
-                                                           k8s:io.cilium.k8s.policy.serviceaccount=default                                                             
-                                                           k8s:io.kubernetes.pod.namespace=default                                                                     
-                                                           k8s:org=empire                                                                                              
-45943      Disabled           Disabled          14309      k8s:class=xwing                                                f00d::ac14:0:0:b377   172.20.0.189   ready   
-                                                           k8s:io.cilium.k8s.policy.serviceaccount=default                                                             
-                                                           k8s:io.kubernetes.pod.namespace=default                                                                     
-                                                           k8s:org=alliance                                                                                            
-52035      Disabled           Disabled          4          reserved:health                                                f00d::ac14:0:0:cb43   172.20.0.92    ready   
+ENDPOINT   POLICY (ingress)   POLICY (egress)   IDENTITY   LABELS (source:key[=value])                                    IPv6                  IPv4           STATUS
+           ENFORCEMENT        ENFORCEMENT
+643        Enabled            Disabled          31371      k8s:class=deathstar                                            f00d::ac14:0:0:283    172.20.0.246   ready
+                                                           k8s:io.cilium.k8s.policy.serviceaccount=default
+                                                           k8s:io.kubernetes.pod.namespace=default
+                                                           k8s:org=empire
+1011       Enabled            Disabled          31371      k8s:class=deathstar                                            f00d::ac14:0:0:3f3    172.20.0.63    ready
+                                                           k8s:io.cilium.k8s.policy.serviceaccount=default
+                                                           k8s:io.kubernetes.pod.namespace=default
+                                                           k8s:org=empire
+32030      Disabled           Disabled          5350       k8s:class=tiefighter                                           f00d::ac14:0:0:7d1e   172.20.0.201   ready
+                                                           k8s:io.cilium.k8s.policy.serviceaccount=default
+                                                           k8s:io.kubernetes.pod.namespace=default
+                                                           k8s:org=empire
+45943      Disabled           Disabled          14309      k8s:class=xwing                                                f00d::ac14:0:0:b377   172.20.0.189   ready
+                                                           k8s:io.cilium.k8s.policy.serviceaccount=default
+                                                           k8s:io.kubernetes.pod.namespace=default
+                                                           k8s:org=alliance
+52035      Disabled           Disabled          4          reserved:health                                                f00d::ac14:0:0:cb43   172.20.0.92    ready
 ```
 
 查看具体策略内容 `kubectl describe cnp rule1`

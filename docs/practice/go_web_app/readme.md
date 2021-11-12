@@ -27,7 +27,7 @@ docker build -t hellogo:v1.0 .
 
 ## 本地测试应用
 
-- 1.单机运行 hellogo 容器应用 
+- 1.单机运行 hellogo 容器应用
 
 ```
 docker run -d --name hello -p3000:3000 hellogo:v1.0

@@ -1,8 +1,8 @@
 # a demon for containerize golang web apps
 #
 # @author:
-# @repo:    
-# @ref:     
+# @repo:
+# @ref:
 
 # stage 1: build src code to binary
 FROM golang:1.13-alpine3.10 as builder
@@ -22,4 +22,4 @@ RUN apk update && \
 
 COPY --from=builder /app/hellogo /hellogo
 
-CMD ["/hellogo"] 
+CMD ["/hellogo"]

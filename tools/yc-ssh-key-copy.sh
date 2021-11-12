@@ -20,7 +20,7 @@ fi
 username=$2
 password=$3
 
-# check sshkey file 
+# check sshkey file
 sshkey_file=~/.ssh/id_rsa.pub
 if ! test -e $sshkey_file; then
     expect -c "
@@ -41,7 +41,7 @@ ssh_key_copy()
     # delete history
     sed "/$1/d" -i ~/.ssh/known_hosts
 
-    # start copy 
+    # start copy
     expect -c "
     set timeout 100
     spawn ssh-copy-id $username@$1
@@ -69,7 +69,7 @@ for host in $hosts; do
     if test $? -eq 0; then
         hostaddr=$(cat /etc/hosts | grep -v '^#' | grep $host | awk '{print $1}')
         hostname=$(cat /etc/hosts | grep -v '^#' | grep $host | awk '{print $2}')
-        
+
         ssh_key_copy $hostaddr
         ssh_key_copy $hostname
     else

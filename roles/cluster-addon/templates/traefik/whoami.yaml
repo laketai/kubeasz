@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: whoami
   labels:
-    app: whoami 
+    app: whoami
 spec:
   ports:
   - name: web
@@ -16,10 +16,10 @@ spec:
 
 ---
 apiVersion: apps/v1
-kind: Deployment 
+kind: Deployment
 metadata:
   name: whoami
-spec:   
+spec:
   replicas: 2
   selector:
     matchLabels:
@@ -30,7 +30,7 @@ spec:
         app: whoami
     spec:
       containers:
-      - name: whoami 
+      - name: whoami
         image: emilevauge/whoami
         ports:
         - containerPort: 80

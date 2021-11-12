@@ -13,7 +13,7 @@ $ cat > .ci/gitlab-ci.yml << EOF
 variables:                                                               ### 定义全局变量 http://gitlab.test.com/help/ci/variables/README.md
   PROJECT_NS: '$CI_PROJECT_NAMESPACE-$CI_JOB_STAGE'                      # 定义项目命名空间，对应k8s的namespace
   APP_NAME: '$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG'                       # 使用项目名和git提交信息作为应用名
-  IMAGE_NAME: '$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME:$CI_PIPELINE_ID'   # 定义镜像名称 
+  IMAGE_NAME: '$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME:$CI_PIPELINE_ID'   # 定义镜像名称
 
 stages:                                                                  ### 定义ci各阶段
   - beta-build                                                           # beta环境编译打包
@@ -28,7 +28,7 @@ job_beta_build:
   stage: beta-build                                                      # beta环境编译打包
   tags:
     - build-shell                                                        # 定义带`build-shell`标签的runner可以运行该job
-  only:                                                                  # 定义只在如下分支或者tag运行该job 
+  only:                                                                  # 定义只在如下分支或者tag运行该job
     - master
     - develop
     - /^feature.*$/
@@ -41,7 +41,7 @@ job_beta_build:
   - export IMAGE=`echo $IMAGE_NAME | sed 's/\//-/g'`                     # 转换镜像名，例：mygroup/java/example:172 >> mygroup-java-example:172
   - cd dockerfiles && docker build -t $BETA_HARBOR/example/$IMAGE .      # 创建 docker 镜像
   - docker login -u $BETA_HARBOR_USR -p $BETA_HARBOR_PWD $BETA_HARBOR    # 登录到内部镜像仓库 harbor，并推送
-  - docker push $BETA_HARBOR/example/$IMAGE                                          
+  - docker push $BETA_HARBOR/example/$IMAGE
   - docker logout $BETA_HARBOR
 
 job_push_beta:                                                           ### 推送到beta环境，可以推送不同分支 develop, feature-1, ...>
@@ -150,7 +150,7 @@ job_push_prod_release:                                                   ### 部
   - cp -f .ci/app.yaml /opt/kube/$PROJECT_NS/$APP_NAME
   - kubectl --kubeconfig=/etc/.aliyun/config apply -f .ci/app.yaml
 
-1/3 rollback:                                                            ### 定义生产环境回退job  
+1/3 rollback:                                                            ### 定义生产环境回退job
   stage: prod-rollback
   tags:
     - prod-shell

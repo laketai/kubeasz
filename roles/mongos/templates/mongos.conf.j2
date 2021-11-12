@@ -30,7 +30,7 @@ security:
 
 {% set cluster_address=[] -%}
 {% for host in groups['mongo_cluster_master'] %}
-{% set _ = cluster_address.append("%s:%s" % (host, MONGO_CONFIG_PORT )) -%} 
+{% set _ = cluster_address.append("%s:%s" % (host, MONGO_CONFIG_PORT )) -%}
 {% endfor %}
 
 sharding:

@@ -31,7 +31,7 @@
       register: download_info
       connection: local
       run_once: true
-    
+
     - name: 尝试推送离线docker 镜像（若执行失败，可忽略）
       copy: src={{ base_dir }}/down/{{ item }} dest=/opt/kube/images/{{ item }}
       when: 'item in download_info.stdout'

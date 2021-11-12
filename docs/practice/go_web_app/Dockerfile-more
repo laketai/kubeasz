@@ -18,7 +18,7 @@ COPY ./ .
 ARG SSH_PKEY
 
 # 设置 git config 是为了拉区项目时使用ssh方式 git@gitlab.yourdomain.com:xxx/yyy.git
-# 
+#
 
 RUN git config --global url."git@gitlab.yourdomain.com:".insteadof "https://gitlab.yourdomain.com/" && \
    mkdir -p /root/.ssh && \

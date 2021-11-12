@@ -8,7 +8,7 @@
 
 项目中选定一个节点(`groups.chrony[0]`)作为集群内部其他节点的时间同步源，而这个节点本身从公网源同步；当然如果整个集群都无法访问公网，那么请手动校准这个节点的时间后，仍旧可以作为内部集群的时间源服务器。
 
-- 配置 chrony server，详见roles/chrony/templates/server.conf.j2 
+- 配置 chrony server，详见roles/chrony/templates/server.conf.j2
 
 - 配置 chrony client，详见roles/chrony/templates/client.conf.j2
 

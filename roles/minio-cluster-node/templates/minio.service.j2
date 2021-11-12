@@ -5,9 +5,9 @@ After=network.target
 [Service]
 Type=simple
 Environment="MINIO_ROOT_USER={{ MINIO_ROOT_USER }}"
-Environment="MINIO_ROOT_PASSWORD={{ MINIO_ROOT_PASSWORD }}"
+Environment="MINIO_ROOT_PASSWORD={{ MINIO_ROOT_PASSWD }}"
 Environment="MINIO_OPTS={{ MINIO_OPTS }}"
-ExecStart={{ MINIO_INSTALL_DIR }}/minio server $MINIO_OPTS 
+ExecStart={{ MINIO_INSTALL_DIR }}/minio server $MINIO_OPTS
 ExecReload=
 ExecStop=/bin/kill -2 $MAINPID
 PrivateTmp=true

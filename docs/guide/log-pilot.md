@@ -48,7 +48,7 @@ spec:
       emptyDir: {}
 EOF
 
-$ kubectl apply -f tomcat.yaml 
+$ kubectl apply -f tomcat.yaml
 ```
 
 - 5.在 kibana 创建 Index Pattern，验证日志已搜集，如上示例应用，应创建如下 index pattern

@@ -1,6 +1,13 @@
+- name: open firewalld port
+  shell: firewall-cmd --zone=public --add-port=3306/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=33060/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=33061/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=33062/tcp --permanent && \
+         firewall-cmd --reload
+
 - name: change name
   raw: "echo {{hostname|quote}} > /etc/hostname"
-- name: 
+- name:
   shell: hostname {{hostname|quote}}
 - name: mkdir
   file:
@@ -8,7 +15,7 @@
     state: directory
     mode: '0755'
 - name: copy rpms
-  copy: 
+  copy:
     src: '{{ base_dir }}/down-ext/mysql-cluster'
     dest: /opt/cbimeasz/mysql-cluster/bin
 - name: install mysql rpm
@@ -16,8 +23,8 @@
   args:
     warn: false
 - name: copy config
-  template: 
-    src: init-config.sh.j2 
+  template:
+    src: init-config.sh.j2
     dest: /opt/cbimeasz/mysql-cluster/init-config.sh
 - name: exec config script
   shell: sh /opt/cbimeasz/mysql-cluster/init-config.sh
@@ -47,8 +54,8 @@
 
 - block:
   - name: copy config
-    template: 
-      src: init_cluster.js.j2 
+    template:
+      src: init_cluster.js.j2
       dest:  /opt/cbimeasz/mysql-cluster/init_cluster.js
   - name: exec config script
     shell: mysqlsh --no-password --js --file=/opt/cbimeasz/mysql-cluster/init_cluster.js
@@ -56,6 +63,13 @@
 
 - name: set MASTER_HOSTNAME of the mysql cluster
   set_fact: MASTER_HOSTNAME="{% for host in groups['mysql_cluster'] %}{% if hostvars[host]['MASTER_DB']|bool %}{{ hostvars[host]['hostname'] }}{% endif %}{% endfor %}"
+
+- name: open firewalld port for mysql router
+  shell: firewall-cmd --zone=public --add-port=6446/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=6447/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=6448/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=6449/tcp --permanent && \
+         firewall-cmd --reload
 
 - name: start mysql router
   shell: mysqlrouter --bootstrap root:{{ MYSQL_PASSWORD }}@{{ MASTER_HOSTNAME }}:3306 --user=mysqlrouter --force

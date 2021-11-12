@@ -11,12 +11,12 @@ metadata:
   namespace: kube-system
 data:
   # Configure this with the location of your etcd cluster.
-  etcd_endpoints: "{{ ETCD_ENDPOINTS }}" 
+  etcd_endpoints: "{{ ETCD_ENDPOINTS }}"
   # If you're using TLS enabled etcd uncomment the following.
   # You must also populate the Secret below with these files.
   etcd_ca: "/calico-secrets/etcd-ca"
   etcd_cert: "/calico-secrets/etcd-cert"
-  etcd_key: "/calico-secrets/etcd-key"  
+  etcd_key: "/calico-secrets/etcd-key"
 
   # Typha is disabled.
   typha_service_name: "none"

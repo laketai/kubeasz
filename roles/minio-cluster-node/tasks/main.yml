@@ -1,5 +1,10 @@
+- name: 打开防火墙
+  shell: firewall-cmd --zone=public --add-port=9000/tcp --permanent && \
+         firewall-cmd --zone=public --add-port={{ MINIO_CONSOLE_PORT }}/tcp --permanent && \
+         firewall-cmd --reload
+  ignore_errors: yes
 - name: copy minio
-  copy: 
+  copy:
     src: '{{ base_dir }}/down-ext/minio/minio'
     dest: '{{ MINIO_INSTALL_DIR }}/minio'
     mode: '0755'
@@ -15,8 +20,5 @@
   shell: systemctl daemon-reload && systemctl enable minio
   ignore_errors: yes
 - name: start minio
-  shell: systemctl restart minio 
-  ignore_errors: yes
-- name: 打开防火墙
-  shell: firewall-cmd --zone=public --add-port=9000/tcp --permanent && firewall-cmd --zone=public --add-port=9001/tcp --permanent && firewall-cmd --reload
+  shell: systemctl restart minio
   ignore_errors: yes

@@ -4,7 +4,7 @@
     state: directory
     mode: '0755'
 - name: copy rpms
-  copy: 
+  copy:
     src: '{{ base_dir }}/down-ext/redis-6.x'
     dest: /opt/cbimeasz/redis-cluster/bin
 - name: install redis rpm
@@ -12,7 +12,12 @@
   args:
     warn: false
 
-# 启动 redis server    
+- name: open firewalld port
+  shell: firewall-cmd --zone=public --add-port={{ REDIS_PORT }}/tcp --permanent && \
+         firewall-cmd --zone=public --add-port={{ REDIS_BUS_PORT }}/tcp --permanent && \
+         firewall-cmd --reload
+
+# 启动 redis server
 - name: mkdir port
   file:
     path: '{{ REDIS_DATA_DIR }}/'
@@ -28,7 +33,12 @@
   service: name=redis state=started enabled=yes
   ignore_errors: yes
 
-- name: 启动集群
-  shell: /usr/bin/redis-cli -a {{ REDIS_PASSWD }} --cluster create --cluster-replicas 1 {{ REDIS_NODES }} --cluster-yes
+- name: 启动主从集群
+  shell: /usr/bin/redis-cli -a {{ REDIS_PASSWD }} --cluster create --cluster-replicas {{ REDIS_CLUSTER_REPLICAS }} {{ REDIS_NODES }} --cluster-yes
   ignore_errors: yes
-  when: MASTER_NODE|bool
+  when: "MASTER_REDIS_NODE|bool and REDIS_CLUSTER_REPLICAS is defined and REDIS_CLUSTER_REPLICAS|int > 0"
+
+- name: 启动集群 无从节点
+  shell: /usr/bin/redis-cli -a {{ REDIS_PASSWD }} --cluster create {{ REDIS_NODES }} --cluster-yes
+  ignore_errors: yes
+  when: "MASTER_REDIS_NODE|bool and (REDIS_CLUSTER_REPLICAS is not defined or REDIS_CLUSTER_REPLICAS|int == 0)"

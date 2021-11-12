@@ -1,6 +1,6 @@
 # 01-创建证书和环境准备
 
-本步骤主要完成: 
+本步骤主要完成:
 
 - (optional) role:os-harden，可选系统加固，符合linux安全基线，详见[upstream](https://github.com/dev-sec/ansible-collection-hardening/tree/master/roles/os_hardening)
 - (optional) role:chrony，[可选集群节点时间同步](../guide/chrony.md)
@@ -130,7 +130,7 @@ Role:
 Subjects:
   Kind   Name            Namespace
   ----   ----            ---------
-  Group  system:masters  
+  Group  system:masters
 ```
 
 #### 生成 admin 用户证书
@@ -187,7 +187,7 @@ Role:
 Subjects:
   Kind  Name               Namespace
   ----  ----               ---------
-  User  system:kube-proxy  
+  User  system:kube-proxy
 ```
 
 #### 生成 system:kube-proxy 用户证书

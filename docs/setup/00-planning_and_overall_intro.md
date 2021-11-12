@@ -68,7 +68,7 @@ yum install python -y
 curl -O https://bootstrap.pypa.io/pip/2.7/get-pip.py
 python get-pip.py
 python -m pip install --upgrade "pip < 21.0"
- 
+
 # pip安装ansible(国内如果安装太慢可以直接用pip阿里云加速)
 pip install ansible -i https://mirrors.aliyun.com/pypi/simple/
 ```
@@ -115,7 +115,7 @@ ezctl new k8s-01
 然后根据提示配置'/etc/kubeasz/clusters/k8s-01/hosts' 和 '/etc/kubeasz/clusters/k8s-01/config.yml'：根据前面节点规划修改hosts 文件和其他集群层面的主要配置选项；其他集群组件等配置项可以在config.yml 文件中修改。
 
 - 4.3 开始安装
-如果你对集群安装流程不熟悉，请阅读项目首页 **安装步骤** 讲解后分步安装，并对 **每步都进行验证**  
+如果你对集群安装流程不熟悉，请阅读项目首页 **安装步骤** 讲解后分步安装，并对 **每步都进行验证**
 
 ``` bash
 # 一键安装

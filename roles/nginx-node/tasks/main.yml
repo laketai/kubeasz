@@ -33,20 +33,20 @@
     state: directory
     mode: '0755'
 - name: copy rpms
-  copy: 
+  copy:
     src: '{{ base_dir }}/down-ext/nginx'
     dest: /opt/cbimeasz/nginx/bin
 - name: install nginx rpm
   shell: yum localinstall -y /opt/cbimeasz/nginx/bin/nginx/*.rpm
 
 - name: copy nginx.conf 配置
-  copy: 
+  copy:
     src: nginx.conf
     dest: /etc/nginx/nginx.conf
-- name: copy apiserver.stream
-  template:
-    src: apiserver.stream.j2
-    dest: /etc/nginx/conf.d/apiserver.stream
+
+- name: 关闭防火墙
+  service: name=firewalld state=stopped enabled=no
+  ignore_errors: true
 
 - name: 开机启用nginx服务
   shell: systemctl enable nginx
@@ -65,53 +65,53 @@
   delay: 3
   tags: restart_lb
 
+- block:
+  - name: 下载二进制文件keepalived
+    copy: src={{ base_dir }}/bin/keepalived dest=/usr/local/sbin/keepalived mode=0755
 
-- name: 下载二进制文件keepalived
-  copy: src={{ base_dir }}/bin/keepalived dest=/usr/local/sbin/keepalived mode=0755
+  - name: 配置 keepalived 主节点
+    template: src=keepalived-master.conf.j2 dest=/etc/keepalived/keepalived.conf
+    when: NGINX_ROLE == "master"
+    tags: restart_lb
 
-- name: 配置 keepalived 主节点
-  template: src=keepalived-master.conf.j2 dest=/etc/keepalived/keepalived.conf
-  when: NGINX_ROLE == "master"
-  tags: restart_lb
+  - name: 配置 keepalived 备节点
+    template: src=keepalived-backup.conf.j2 dest=/etc/keepalived/keepalived.conf
+    when: NGINX_ROLE == "backup"
+    tags: restart_lb
 
-- name: 配置 keepalived 备节点
-  template: src=keepalived-backup.conf.j2 dest=/etc/keepalived/keepalived.conf
-  when: NGINX_ROLE == "backup"
-  tags: restart_lb
+  - name: 创建keepalived的systemd unit文件
+    template: src=keepalived.service.j2 dest=/etc/systemd/system/keepalived.service
+    tags: restart_lb
 
-- name: 创建keepalived的systemd unit文件
-  template: src=keepalived.service.j2 dest=/etc/systemd/system/keepalived.service
-  tags: restart_lb
+  - name: 开机启用keepalived服务
+    shell: systemctl enable keepalived
+    ignore_errors: true
 
-- name: 开机启用keepalived服务
-  shell: systemctl enable keepalived
-  ignore_errors: true
+  - name: 开启keepalived服务
+    shell: systemctl daemon-reload && systemctl restart keepalived
+    ignore_errors: true
+    tags: restart_lb
 
-- name: 开启keepalived服务
-  shell: systemctl daemon-reload && systemctl restart keepalived
-  ignore_errors: true
-  tags: restart_lb
+  - name: 以轮询的方式等待keepalived服务启动
+    shell: "systemctl status keepalived.service|grep Active"
+    register: svc_status
+    until: '"running" in svc_status.stdout'
+    retries: 3
+    delay: 3
+    tags: restart_lb
 
-- name: 以轮询的方式等待keepalived服务启动
-  shell: "systemctl status keepalived.service|grep Active"
-  register: svc_status
-  until: '"running" in svc_status.stdout'
-  retries: 3
-  delay: 3
-  tags: restart_lb
-
-- name: mkdir
-  file:
-    path: /opt/cbimeasz/rsync
-    state: directory
-    mode: '0755'
-- name: copy rpms
-  copy: 
-    src: '{{ base_dir }}/down-ext/rsync'
-    dest: /opt/cbimeasz/rsync/bin
-- name: install rsync rpm
-  shell: yum localinstall -y /opt/cbimeasz/rsync/bin/rsync/*.rpm
-
+  - name: mkdir
+    file:
+      path: /opt/cbimeasz/rsync
+      state: directory
+      mode: '0755'
+  - name: copy rpms
+    copy:
+      src: '{{ base_dir }}/down-ext/rsync'
+      dest: /opt/cbimeasz/rsync/bin
+  - name: install rsync rpm
+    shell: yum localinstall -y /opt/cbimeasz/rsync/bin/rsync/*.rpm
+  when: NGINX_ROLE is defined
 
 - block:
   - name: copy conf
@@ -139,14 +139,14 @@
     shell: systemctl daemon-reload && systemctl enable nginx-rsync
     ignore_errors: yes
   - name: start nginx-rsync
-    shell: systemctl restart nginx-rsync 
+    shell: systemctl restart nginx-rsync
     ignore_errors: yes
   - name: set crontab task
     cron:
       name: rsync crontab
       special_time: hourly
       job: nginx -s reload
-  when: NGINX_ROLE != 'master'
+  when: NGINX_ROLE is defined and NGINX_ROLE == 'backup'
 
 - block:
   - name: mkdir
@@ -170,7 +170,7 @@
     cron:
       name: rsync crontab
       special_time: hourly
-      job: /opt/rsync/rsync_nginx_conf.sh  
+      job: /opt/rsync/rsync_nginx_conf.sh
   - name: reload nginx
     service: name=nginx state=reloaded enabled=yes
-  when: NGINX_ROLE == 'master'
+  when: NGINX_ROLE is defined and NGINX_ROLE == 'master'
