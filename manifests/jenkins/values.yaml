@@ -128,7 +128,7 @@ Master:
   PodAnnotations: {}
 
   Ingress:
-    ApiVersion: networking.k8s.io/v1beta1 
+    ApiVersion: networking.k8s.io/v1beta1
     Annotations:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
@@ -197,7 +197,7 @@ NetworkPolicy:
   # Enable creation of NetworkPolicy resources.
   Enabled: false
   # For Kubernetes v1.7, use 'networking.k8s.io/v1'
-  ApiVersion: networking.k8s.io/v1 
+  ApiVersion: networking.k8s.io/v1
 
 ## Install Default RBAC roles and bindings
 rbac:

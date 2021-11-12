@@ -37,7 +37,7 @@ https://www.toutiao.com/c/user/token/MS4wLjABAAAA0YFomuMNm87NNysXeUsQdI0Tt3gOgz8
 
 ### 其他
 
-- fix:增加/删除节点时ansible hosts文件更新错误 
+- fix:增加/删除节点时ansible hosts文件更新错误
 - fix:kube-scheduler healthz/metrics listening setting
 - fix:restart ex-lb when master nodes change
 - fix:多条默认路由网卡自动识别问题

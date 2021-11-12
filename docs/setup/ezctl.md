@@ -62,7 +62,7 @@ Use "ezctl help <command>" for more information about a given command.
 
 #### 举例创建、安装新集群流程
 
-- 1.首先创建集群配置实例 
+- 1.首先创建集群配置实例
 
 ``` bash
 ~# ezctl new k8s-01
@@ -85,7 +85,7 @@ ezctl setup k8s-01 all
 # ezctl setup k8s-01 02
 # ezctl setup k8s-01 03
 # ezctl setup k8s-01 04
-... 
+...
 ```
 
 - 3.重复步骤1，2可以创建、管理多个k8s集群（建议ezctl使用独立的部署节点）

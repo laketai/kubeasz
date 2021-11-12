@@ -3,7 +3,7 @@
 `EFK` 插件是`k8s`项目的一个日志解决方案，它包括三个组件：[Elasticsearch](), [Fluentd](), [Kibana]()；Elasticsearch 是日志存储和日志搜索引擎，Fluentd 负责把`k8s`集群的日志发送给 Elasticsearch, Kibana 则是可视化界面查看和检索存储在 ES 中的数据。
 - 建议在熟悉本文档内容后使用[Log-Pilot + ES + Kibana 日志方案](log-pilot.md)
 
-### 准备 
+### 准备
 
 参考官方[部署文档](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch)的基础上使用本项目`manifests/efk/`部署，以下为几点主要的修改：
 
@@ -58,7 +58,7 @@ Kibana is running at https://192.168.1.10:8443/api/v1/namespaces/kube-system/ser
 
 #### 配置 NFS
 
-+ 准备一个nfs服务器，如果没有可以参考[nfs-server](nfs-server.md)创建。 
++ 准备一个nfs服务器，如果没有可以参考[nfs-server](nfs-server.md)创建。
 + 配置nfs服务器的共享目录，即修改`/etc/exports`（根据实际网段替换`192.168.1.*`），修改后重启`systemctl restart nfs-server`。
 
 ``` bash
@@ -82,7 +82,7 @@ $ kubectl delete -f /etc/ansible/manifests/efk/es-without-pv/
 $ kubectl apply -f /etc/ansible/manifests/efk/
 $ kubectl apply -f /etc/ansible/manifests/efk/es-static-pv/
 ```
-+ 目录`es-static-pv` 下首先是利用 NFS服务预定义了三个 PV资源，然后在 `es-statefulset.yaml`定义中使用 `volumeClaimTemplates` 去匹配使用预定义的 PV资源；注意 PV参数：`accessModes` `storageClassName` `storage`容量大小必须两边匹配。 
++ 目录`es-static-pv` 下首先是利用 NFS服务预定义了三个 PV资源，然后在 `es-statefulset.yaml`定义中使用 `volumeClaimTemplates` 去匹配使用预定义的 PV资源；注意 PV参数：`accessModes` `storageClassName` `storage`容量大小必须两边匹配。
 
 #### 验证安装
 
@@ -134,7 +134,7 @@ es0  es1  es2
 #### 使用动态 PV安装 EFK
 
 - 首先根据[集群存储](../setup/08-cluster-storage.md)创建nfs-client-provisioner
-- 然后按实际需求修改 `es-dynamic-pv/es-statefulset.yaml` 文件中 volumeClaimTemplates 设置的 storage: 4Gi 大小   
+- 然后按实际需求修改 `es-dynamic-pv/es-statefulset.yaml` 文件中 volumeClaimTemplates 设置的 storage: 4Gi 大小
 
 ``` bash
 # 如果之前已经安装了默认的EFK或者静态PV EFK，请用以下命令先删除它
@@ -216,7 +216,7 @@ $ kubectl apply -f /etc/ansible/manifests/efk/es-index-rotator/
 - 查看 cronjob
 
 ```
-$ kubectl get cronjob -n kube-system 
+$ kubectl get cronjob -n kube-system
 NAME               SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
 es-index-rotator   3 1 */1 * *   False     0        19h             20h
 ```
@@ -227,7 +227,7 @@ $ kubectl get pod -n kube-system |grep es-index-rotator
 es-index-rotator-1557507780-7xb89             0/1     Completed   0          19h
 
 # 查看日志，可以了解日志清理情况
-$ kubectl logs -n kube-system es-index-rotator-1557507780-7xb89 es-index-rotator 
+$ kubectl logs -n kube-system es-index-rotator-1557507780-7xb89 es-index-rotator
 ```
 HAVE FUN!
 

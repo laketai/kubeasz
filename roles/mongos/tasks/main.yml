@@ -1,3 +1,7 @@
+- name: 打开防火墙
+  shell: firewall-cmd --zone=public --add-port={{ MONGOS_PORT }}/tcp --permanent && \
+         firewall-cmd --reload
+  ignore_errors: yes
 - name: 拷贝配置文件
   template:
     src: mongos.conf.j2
@@ -11,11 +15,28 @@
   file:
     path: /usr/lib/systemd/system/mongos.service
     mode: 0755
+
+- name: 开机启用 mongos 服务
+  shell: systemctl enable mongos
+  ignore_errors: true
+
 - name: start mongos
-  shell: systemctl daemon-reload
+  shell: systemctl daemon-reload && systemctl restart mongos
   ignore_errors: yes
-- name: 设置开机启动
-  service: name=mongos state=started enabled=yes  
+
+- name: 轮询等待 mongos 服务运行
+  shell: "systemctl is-active mongos.service"
+  register: mongos_status
+  until: '"active" in mongos_status.stdout'
+  retries: 3
+  delay: 10
+  ignore_errors: true
+
+- name: start mongos
+  shell: systemctl daemon-reload && systemctl restart mongos
+  ignore_errors: yes
+  when: '"active" not in mongos_status.stdout'
+
 - block:
   - name: 拷贝 add-user.js
     template:
@@ -32,4 +53,4 @@
   - name: init rs
     shell: mongosh -u cbim -p {{ MONGO_PASSWD }} --port {{ MONGOS_PORT }} -f /opt/cbimeasz/mongo-cluster/add-shard.js
     ignore_errors: true
-  when: MASTER_NODE|bool
+  when: MASTER_MONGO_NODE|bool

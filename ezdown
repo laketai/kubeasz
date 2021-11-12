@@ -1,6 +1,6 @@
 #!/bin/bash
 #--------------------------------------------------
-# This script is used for: 
+# This script is used for:
 # 1. to download the scripts/binaries/images needed for installing a k8s cluster with kubeasz
 # 2. to run kubeasz in a container (optional)
 # @author:   gjmzj
@@ -47,6 +47,7 @@ function usage() {
     -P         download system packages for offline installing
     -R         download Registry(harbor) offline installer
     -T         download system extension packages for offline installing
+    -I         download ansible packages for offline installing
     -S         start kubeasz in a container
     -d <ver>   set docker-ce version, default "$DOCKER_VER"
     -e <ver>   set kubeasz-ext-bin version, default "$EXT_BIN_VER"
@@ -99,13 +100,13 @@ function download_docker() {
   tar zxf "$BASE/down/docker-$DOCKER_VER.tgz" -C "$BASE/down" && \
   /bin/cp -f "$BASE"/down/docker/* "$BASE/bin" && \
   /bin/mv -f "$BASE"/down/docker/* /opt/kube/bin && \
-  ln -sf /opt/kube/bin/docker /bin/docker 
+  ln -sf /opt/kube/bin/docker /bin/docker
 }
 
 function install_docker() {
   # check if a container runtime is already installed
   systemctl status docker|grep Active|grep -q running && { logger warn "docker is already running."; return 0; }
- 
+
   logger debug "generate docker service file"
   cat > /etc/systemd/system/docker.service << EOF
 [Unit]
@@ -215,7 +216,7 @@ function get_kubeasz() {
 
 function get_k8s_bin() {
   [[ -f "$BASE/bin/kubelet" ]] && { logger warn "kubernetes binaries existed"; return 0; }
-  
+
   logger info "downloading kubernetes: $K8S_BIN_VER binaries"
   docker pull easzlab/kubeasz-k8s-bin:"$K8S_BIN_VER" && \
   logger debug "run a temporary container" && \
@@ -286,7 +287,7 @@ function get_offline_image() {
   fi
   if [[ ! -f "$imageDir/k8s-dns-node-cache_$dnsNodeCacheVer.tar" ]];then
     docker pull "easzlab/k8s-dns-node-cache:$dnsNodeCacheVer" && \
-    docker save -o "$imageDir/k8s-dns-node-cache_$dnsNodeCacheVer.tar" "easzlab/k8s-dns-node-cache:$dnsNodeCacheVer" 
+    docker save -o "$imageDir/k8s-dns-node-cache_$dnsNodeCacheVer.tar" "easzlab/k8s-dns-node-cache:$dnsNodeCacheVer"
   fi
   if [[ ! -f "$imageDir/dashboard_$dashboardVer.tar" ]];then
     docker pull "kubernetesui/dashboard:$dashboardVer" && \
@@ -317,7 +318,6 @@ function get_offline_image() {
     docker pull "easzlab/kubeasz:$KUBEASZ_VER" && \
     docker save -o "$imageDir/kubeasz_$KUBEASZ_VER.tar" "easzlab/kubeasz:$KUBEASZ_VER"
   fi
-  // cbim extension
   if [[ ! -f "$imageDir/nginx-ingress-controller_0.30.0.tar" ]];then
     docker pull "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.30.0" && \
     docker save -o "$imageDir/nginx-ingress-controller_0.30.0.tar" "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.30.0"
@@ -337,7 +337,7 @@ function download_all() {
   get_k8s_bin && \
   get_ext_bin && \
   get_offline_image && \
-  mkdir -p "$BASE/down-ext" "$BASE/bin-ext"
+  mkdir -p "$BASE/down-ext" "$BASE/bin-ext" "$BASE/prepare"
 }
 
 function start_kubeasz_docker() {
@@ -363,7 +363,7 @@ function start_kubeasz_docker() {
     ln -s /usr/bin/python3 /usr/bin/python
   fi
 
-  # 
+  #
   docker load -i "$BASE/down/kubeasz_$KUBEASZ_VER.tar"
 
   # run kubeasz docker container
@@ -380,12 +380,12 @@ function start_kubeasz_docker() {
 
 function clean_container() {
  logger info "clean all running containers"
- docker ps -a|awk 'NR>1{print $1}'|xargs docker rm -f 
-} 
+ docker ps -a|awk 'NR>1{print $1}'|xargs docker rm -f
+}
 
 function get_cbim_ext_bin() {
   mkdir -p "$BASE/down-ext" "$BASE/bin-ext"
-  [[ -f "$BASE/down-ext/mysql-cluster" ]] && { logger warn "extra package existed"; return 0; }
+  [[ -d "$BASE/down-ext/mysql-cluster" ]] && { logger warn "extra package existed"; return 0; }
 
   logger info "downloading extral binaries cbim-ext-bin:$CBIM_EXT_BIN_VER"
   docker pull "cbimplat/cbim-ext-bin:$CBIM_EXT_BIN_VER" && \
@@ -400,6 +400,23 @@ function get_cbim_ext_bin() {
 }
 
 
+function get_centos_ansible_installer() {
+  mkdir -p "$BASE/prepare"
+  [[ -d "$BASE/prepare/ansible" ]] && { logger warn "extra package existed"; return 0; }
+
+  logger info "downloading extral binaries ansible-bin:$CBIM_EXT_BIN_VER"
+  docker pull "cbimplat/centos-ansible-installer:$CBIM_EXT_BIN_VER" && \
+  logger debug "run a temporary container" && \
+  docker run -d --name temp_centos_ansible_installer "cbimplat/centos-ansible-installer:$CBIM_EXT_BIN_VER" && \
+  logger debug "cp extral binaries" && \
+  docker cp temp_centos_ansible_installer:/extra "$BASE/extra_ansible_installer_tmp" && \
+  /bin/mv -f "$BASE"/extra_ansible_installer_tmp/* "$BASE/prepare" && \
+  logger debug "stop&remove temporary container" && \
+  docker rm -f temp_centos_ansible_installer && \
+  rm -rf "$BASE/extra_ansible_installer_tmp"
+}
+
+
 ### Main Lines ##################################################
 function main() {
   BASE="/etc/kubeasz"
@@ -408,11 +425,11 @@ function main() {
   readlink /proc/$$/exe|grep -q "dash" && { logger error "you should use bash shell, not sh"; exit 1; }
   # check if use with root
   [[ "$EUID" -ne 0 ]] && { logger error "you should run this script as root"; exit 1; }
-  
+
   [[ "$#" -eq 0 ]] && { usage >&2; exit 1; }
-  
+
   ACTION=""
-  while getopts "CDPRSTd:e:k:m:p:z:" OPTION; do
+  while getopts "CDPRSITd:e:k:m:p:z:" OPTION; do
       case "$OPTION" in
         C)
           ACTION="clean_container"
@@ -431,7 +448,10 @@ function main() {
           ;;
         T)
           ACTION="get_cbim_ext_bin"
-          ;;  
+          ;;
+        I)
+          ACTION="get_centos_ansible_installer"
+          ;;
         d)
           DOCKER_VER="$OPTARG"
           ;;
@@ -456,10 +476,10 @@ function main() {
           ;;
       esac
   done
-  
+
   [[ "$ACTION" == "" ]] && { logger error "illegal option"; usage; exit 1; }
-  
-  # excute cmd "$ACTION" 
+
+  # excute cmd "$ACTION"
   logger info "Action begin: $ACTION"
   ${ACTION} || { logger error "Action failed: $ACTION"; return 1; }
   logger info "Action successed: $ACTION"

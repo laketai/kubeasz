@@ -1,6 +1,6 @@
 # 07-安装集群主要插件
 
-目前挑选一些常用、必要的插件自动集成到安装脚本之中:  
+目前挑选一些常用、必要的插件自动集成到安装脚本之中:
 - [自动脚本](../../roles/cluster-addon/tasks/main.yml)
 - 配置开关
   - 参照[配置指南](config_guide.md)，生成后在`roles/cluster-addon/defaults/main.yml`配置

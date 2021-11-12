@@ -1,0 +1,5 @@
+- hosts: rabbitmq_cluster
+  tasks:
+    - name: 清理
+      shell: systemctl stop rabbitmq* && yum erase -y rabbitmq* && rm -rf /var/lib/rabbitmq /data/rabbitmq/ /var/log/rabbitmq/ /var/run/rabbitmq
+      ignore_errors: yes

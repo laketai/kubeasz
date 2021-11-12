@@ -10,6 +10,6 @@
     when: "inventory_hostname not in groups['kube_node']"
     ignore_errors: true
 
-  - name: Setting master role name 
+  - name: Setting master role name
     shell: "{{ bin_dir }}/kubectl label node {{ inventory_hostname }} kubernetes.io/role=master --overwrite"
     ignore_errors: true

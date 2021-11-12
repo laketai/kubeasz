@@ -6,7 +6,7 @@
     when: "groups['kube_master']|length < 2 and NODE_TO_DEL in groups['kube_master']"
 
   - name: run kubectl drain @{{ NODE_TO_DEL }}
-    shell: "{{ base_dir }}/bin/kubectl drain {{ NODE_TO_DEL }} --ignore-daemonsets --delete-emptydir-data --force" 
+    shell: "{{ base_dir }}/bin/kubectl drain {{ NODE_TO_DEL }} --ignore-daemonsets --delete-emptydir-data --force"
     #ignore_errors: true
 
   - name: clean node {{ NODE_TO_DEL }}

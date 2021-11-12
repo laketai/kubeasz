@@ -1,6 +1,14 @@
+- name: 打开防火墙
+  shell: firewall-cmd --zone=public --add-port=5672/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=4369/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=15672/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=25672/tcp --permanent && \
+         firewall-cmd --zone=public --add-port=35672-35682/tcp --permanent && \
+         firewall-cmd --reload
+  ignore_errors: yes
 - name: change name
   raw: "echo {{hostname|quote}} > /etc/hostname"
-- name: 
+- name:
   shell: hostname {{hostname|quote}}
 - name: mkdir
   file:
@@ -8,7 +16,7 @@
     state: directory
     mode: '0755'
 - name: copy erlang rpms
-  copy: 
+  copy:
     src: '{{ base_dir }}/down-ext/erlang'
     dest: /opt/cbimeasz/rabbitmq-cluster/bin
 - name: install erlang rpm
@@ -16,7 +24,7 @@
   args:
     warn: false
 - name: copy rabbitmq rpms
-  copy: 
+  copy:
     src: '{{ base_dir }}/down-ext/rabbitmq'
     dest: /opt/cbimeasz/rabbitmq-cluster/bin
 - name: install rabbitmq rpm
@@ -54,7 +62,7 @@
     service: name=rabbitmq-server state=started enabled=yes
 
   - name: 获取 cookie 文件
-    fetch: 
+    fetch:
       src: /var/lib/rabbitmq/.erlang.cookie
       dest: '{{ cluster_dir }}/.erlang.cookie'
       flat: yes
@@ -76,7 +84,7 @@
       mode: '0400'
   - name: 开机启动
     service: name=rabbitmq-server state=started enabled=yes
-  
+
   - name: 加入集群
     shell: rabbitmqctl stop_app && rabbitmqctl join_cluster rabbit@{{ MASTER_HOSTNAME }} && rabbitmqctl start_app
     ignore_errors: true

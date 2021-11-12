@@ -17,7 +17,7 @@ CNCF 一致性认证项目(https://github.com/cncf/k8s-conformance) 可以很方
 
 ## kubeasz 技术上完全通过一致性测试
 
-Cheers! 
+Cheers!
 
 使用kubeasz 3.0.0 版本，k8s v1.20.2（其他kubeasz版本应该也类似），开始测试时候在网络上走了一些弯路，后面还是很顺利的通过测试，测试结果：
 

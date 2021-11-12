@@ -1,7 +1,7 @@
 rs.initiate(
   {
     _id: "rs_{{ SHARD_NAME }}",
-    members: [    
+    members: [
     {% for host in groups[SHARD_NAME] %}
       { _id : {{ loop.index0 }}, host : "{{ host }}:{{ MONGO_SHARD_PORT }}" },
     {% endfor %}

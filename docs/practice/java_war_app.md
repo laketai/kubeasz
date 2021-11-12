@@ -15,7 +15,7 @@
 - 在内部gitlab创建项目，上传应用java代码，同时在项目根目录下新加如下目录和文件，配置相应的 gitlab-runner 和 环境变量参数
 
 ``` bash
-├── .app.yaml		# k8s deployment 部署模板文件 
+├── .app.yaml		# k8s deployment 部署模板文件
 ├── config.yaml		# k8s configmap 配置模板文件
 ├── dockerfiles
 │   └── Dockerfile	# Dockerfile 文件

@@ -174,7 +174,7 @@ WantedBy=multi-user.target
 
 + --leader-elect=true 部署多台机器组成的 master 集群时选举产生一个处于工作状态的 kube-controller-manager 进程
 
-### 在master 节点安装 node 服务: kubelet kube-proxy 
+### 在master 节点安装 node 服务: kubelet kube-proxy
 
 项目master 分支使用 DaemonSet 方式安装网络插件，如果master 节点不安装 kubelet 服务是无法安装网络插件的，如果 master 节点不安装网络插件，那么通过`apiserver` 方式无法访问 `dashboard` `kibana`等管理界面，[ISSUES #130](https://github.com/easzlab/kubeasz/issues/130)
 
@@ -211,11 +211,11 @@ journalctl -u kube-scheduler
 
 ``` bash
 NAME                 STATUS    MESSAGE              ERROR
-scheduler            Healthy   ok                   
-controller-manager   Healthy   ok                   
-etcd-0               Healthy   {"health": "true"}   
-etcd-2               Healthy   {"health": "true"}   
-etcd-1               Healthy   {"health": "true"} 
+scheduler            Healthy   ok
+controller-manager   Healthy   ok
+etcd-0               Healthy   {"health": "true"}
+etcd-2               Healthy   {"health": "true"}
+etcd-1               Healthy   {"health": "true"}
 ```
 
 [后一篇](05-install_kube_node.md)

@@ -38,5 +38,5 @@ MASTER_CERT_HOSTS:
 ## 2.执行新证书生成并重启apiserver
 
 ``` bash
-$ ezctl setup ${集群名} 04 -t change_cert,restart_master 
+$ ezctl setup ${集群名} 04 -t change_cert,restart_master
 ```

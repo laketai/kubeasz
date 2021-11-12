@@ -1,7 +1,7 @@
 [[outputs.kafka]]
 {% set cluster_address=[] -%}
 {% for host in groups['kafka_cluster'] %}
-{% set _ = cluster_address.append('"%s:%s"' % (host, KAFKA_PORT )) -%} 
+{% set _ = cluster_address.append('"%s:%s"' % (host, KAFKA_PORT )) -%}
 {% endfor %}
   brokers = [{{ cluster_address | join(',') }}]
   topic = "{{kafka_metric_topic}}"

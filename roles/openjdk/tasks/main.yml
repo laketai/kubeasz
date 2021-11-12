@@ -4,7 +4,7 @@
     state: directory
     mode: '0755'
 - name: copy rpms
-  copy: 
+  copy:
     src: '{{ base_dir }}/down-ext/openjdk8'
     dest: /opt/cbimeasz/openjdk/bin
 - name: install openjdk rpm

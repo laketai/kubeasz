@@ -1,4 +1,4 @@
-# K8S 集群存储 
+# K8S 集群存储
 
 ## 前言
 在kubernetes(k8s)中对于存储的资源抽象了两个概念，分别是PersistentVolume(PV)、PersistentVolumeClaim(PVC)。
@@ -50,7 +50,7 @@ spec:
 nfs_provisioner_install: "yes"			# 修改为yes
 nfs_provisioner_namespace: "kube-system"
 nfs_provisioner_ver: "v4.0.1"
-nfs_storage_class: "managed-nfs-storage"	
+nfs_storage_class: "managed-nfs-storage"
 nfs_server: "192.168.31.244"			# 修改为实际nfs server地址
 nfs_path: "/data/nfs"				# 修改为实际的nfs共享目录
 
@@ -59,7 +59,7 @@ nfs_path: "/data/nfs"				# 修改为实际的nfs共享目录
 - 2.创建 nfs provisioner
 
 ``` bash
-$ ezctl setup ${集群名} 07 
+$ ezctl setup ${集群名} 07
 
 # 执行成功后验证
 $ kubectl get pod --all-namespaces |grep nfs-client

@@ -51,7 +51,7 @@ $ kubectl logs monitoring-influxdb-884893134-3vb6n -n kube-system
 
 ``` bash
 # 查看node 节点资源使用情况
-$ kubectl top node	
+$ kubectl top node
 # 查看各pod 的资源使用情况
 $ kubectl top pod --all-namespaces
 ```
@@ -78,7 +78,7 @@ monitoring-grafana is running at https://x.x.x.x:6443/api/v1/namespaces/kube-sys
 kubectl get svc -n kube-system|grep grafana
 monitoring-grafana        NodePort    10.68.135.50    <none>        80:5855/TCP		11m
 ```
-然后用浏览器访问 http://NodeIP:5855 
+然后用浏览器访问 http://NodeIP:5855
 
 
 ## 第二部分：heapster 之监控数据持久化

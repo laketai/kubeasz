@@ -13,7 +13,7 @@
 ``` bash
 $ kubectl run nginx --image=nginx --replicas=3 --port=80 --expose
 # 验证测试nginx服务
-$ kubectl get pod -o wide 
+$ kubectl get pod -o wide
 NAME                     READY     STATUS    RESTARTS   AGE       IP               NODE
 nginx-7587c6fdb6-p2fpz   1/1       Running   0          55m       172.20.125.2     10.0.96.7
 nginx-7587c6fdb6-pbw7c   1/1       Running   0          55m       172.20.124.2     10.0.96.6

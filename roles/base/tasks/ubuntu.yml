@@ -12,7 +12,7 @@
 
 # # 安装基础软件包
 # - name: 安装 ubuntu/debian基础软件
-#   apt: 
+#   apt:
 #     name:
 #       - bash-completion     # bash命令补全工具，需要重新登录服务器生效
 #       - conntrack           # network connection cleanup 用到

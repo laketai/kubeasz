@@ -31,7 +31,7 @@ $ ETCDCTL_API=3 etcdctl --write-out=table snapshot status backup.db
 
 ``` bash
 # 登录任意etcd节点验证etcd集群状态
-$ export ETCDCTL_API=3 
+$ export ETCDCTL_API=3
 $ etcdctl member list
 
 # 验证所有etcd节点服务状态和日志

@@ -1,7 +1,7 @@
 ## 1、前言
 在当下微服务架构盛行的时代，用户希望应用程序时时刻刻都是可用，为了满足不断变化的新业务，需要不断升级更新应用程序，有时可能需要频繁的发布版本。实现"零停机"、“零感知”的持续集成(Continuous Integration)和持续交付/部署(Continuous Delivery)应用程序，一直都是软件升级换代不得不面对的一个难题和痛点，也是一种追求的理想方式，也是DevOps诞生的目的。
 ## 2、滚动发布
-把一次完整的发布过程，合理地分成多个批次，每次发布一个批次，**成功后**，再发布下一个批次，最终完成所有批次的发布。在整个滚动过程期间，保证始终有可用的副本在运行，从而平滑的发布新版本，实现**零停机(without an outage)**、用户**零感知**，是一种非常主流的发布方式。由于其自动化程度比较高，通常需要复杂的发布工具支撑，而k8s可以完美的胜任这个任务。 
+把一次完整的发布过程，合理地分成多个批次，每次发布一个批次，**成功后**，再发布下一个批次，最终完成所有批次的发布。在整个滚动过程期间，保证始终有可用的副本在运行，从而平滑的发布新版本，实现**零停机(without an outage)**、用户**零感知**，是一种非常主流的发布方式。由于其自动化程度比较高，通常需要复杂的发布工具支撑，而k8s可以完美的胜任这个任务。
 ## 3、k8s滚动更新机制
 **k8s创建副本应用程序的最佳方法就是部署(Deployment)，部署自动创建副本集(ReplicaSet)，副本集可以精确地控制每次替换的Pod数量，从而可以很好的实现滚动更新**。具体来说，k8s每次使用一个新的副本控制器(replication controller)来替换已存在的副本控制器，从而始终使用一个新的Pod模板来替换旧的pod模板。
 >大致步骤如下：
@@ -61,7 +61,7 @@ root@kube-aio:~# kubectl describe pod busy-665cdb7b-44jnt |grep Image
 ``` bash
 # 回滚发布
 root@kube-aio:~# kubectl rollout undo deployments/busy
-deployment.apps "busy" 
+deployment.apps "busy"
 
 # 回滚完成
 root@kube-aio:~# kubectl rollout status deployments/busy
@@ -84,10 +84,10 @@ k8s精确地控制着整个发布过程，分批次有序地进行着滚动更�
 >* **`maxSurge` 滚动更新过程中运行操作期望副本数的最大pod数，可以为绝对数值(eg：5)，但不能为0；也可以为百分数(eg：10%)。**
 >* **`maxUnavailable`  滚动更新过程中不可用的最大pod数，可以为绝对数值(eg：5)，但不能为0；也可以为百分数(eg：10%)。**
 
-如果未指定这两个可选参数，则k8s会使用默认配置：  
+如果未指定这两个可选参数，则k8s会使用默认配置：
 ``` bash
 root@kube-aio:~# kubectl get deploy busy -o yaml
-apiVersion: apps/v1 
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
@@ -123,7 +123,7 @@ busy      10        10        10           10          1h
 
 # 再做一遍回退
 root@kube-aio:~# kubectl rollout undo deploy busy
-deployment.apps "busy" 
+deployment.apps "busy"
 
 # 更新过程1
 root@kube-aio:~# kubectl get deploy busy
@@ -145,10 +145,10 @@ root@kube-aio:~# kubectl get deploy busy
 NAME      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 busy      10        10        10           10          1h
 ```
->* `DESIRED`    最终期望处于READY状态的副本数   
->* `CURRENT`   当前的副本总数    
->* `UP-TO-DATE`   当前完成更新的副本数   
->* `AVAILABLE`   当前可用的副本数     
+>* `DESIRED`    最终期望处于READY状态的副本数
+>* `CURRENT`   当前的副本总数
+>* `UP-TO-DATE`   当前完成更新的副本数
+>* `AVAILABLE`   当前可用的副本数
 
 当前的副本总数：10(DESIRED) + 1(maxSurge) = 11，所以CURRENT为11。
 当前可用的副本数：10(DESIRED) - 1(maxUnavailable) = 9，所以AVAILABLE为9。

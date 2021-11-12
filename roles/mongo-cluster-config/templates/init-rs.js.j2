@@ -2,7 +2,7 @@ rs.initiate(
   {
     _id: "rs_config",
     configsvr: true,
-    members: [    
+    members: [
     {% for host in groups['mongo_cluster_master'] %}
       { _id : {{ loop.index0 }}, host : "{{ host }}:{{ MONGO_CONFIG_PORT }}" },
     {% endfor %}

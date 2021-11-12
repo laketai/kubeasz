@@ -3,25 +3,25 @@ title: "Istio 1.1.7 安装　"
 date: 2019-05-19T19:44:00+08:00
 ---
 
-#### Service Mesh(服务网格)  
+#### Service Mesh(服务网格)
 
---- 
+---
 Kubernetes 已经给我们带来了诸多的好处。但是仍有些需求比如 A/B 测试、金丝雀发布、限流、访问控制,端到端认证等需要运维人员进一步去解决。
 
 Istio 是完全开源的服务网格,提供了一套完整的解决方案，可以透明地分层到现有的分布式应用程序上。对开发人员几乎无感的同时获得超能力。
 
 如果想要现有的服务支持 Istio，只需要在当前的环境中部署一个特殊的 sidecar 代理，即可。
 
-##### 前提   
+##### 前提
 
----- 
+----
 
-- 安装 Kubernetes 集群 1.9+ 
-- [安装 Helm](./helm.md)   
+- 安装 Kubernetes 集群 1.9+
+- [安装 Helm](./helm.md)
 
 ##### 准备
 
----- 
+----
 
 进入 [Istio release](https://github.com/istio/istio/releases) 页面下载最新版安装包并解压到当前目录,
 
@@ -44,12 +44,12 @@ drwxr-xr-x  7 root root  4096 May 15 08:59 tools
 - bin/istioctl 客户端工具
 - istio.VERSION 配置文件
 
-#### 安装 
----- 
+#### 安装
+----
 
 注意事项
 
-- Node 节点内存不能低于 4G，否则相关容器可能启动失败  
+- Node 节点内存不能低于 4G，否则相关容器可能启动失败
 - Istio 默认使用‘负载均衡器’服务对象类型。对于裸机安装没有负载均衡器的情况下，安装需指定‘NodePort’类型。
 
 
@@ -178,7 +178,7 @@ istio 的samples目录中有很多示例。我们现在使用samples/sleep/sleep
 cd istio-1.1.7/
 kubectl apply -f samples/sleep/sleep.yaml
 
-kubectl get pod 
+kubectl get pod
 NAME                            READY   STATUS    RESTARTS   AGE
 sleep-7549f66447-wv8cl          1/1     Running   0          1m
 ```
@@ -190,8 +190,8 @@ kubectl label namespace default istio-injection=enabled
 kubectl get namespace -L istio-injection
 NAME           STATUS   AGE     ISTIO-INJECTION
 default        Active   1h    enabled
-istio-system   Active   3d22h   
-kube-public    Active   4d2h    
+istio-system   Active   3d22h
+kube-public    Active   4d2h
 kube-system    Active   4d2h
 ```
 接下来删除上面创建的pod，观察下有什么变化。
@@ -200,7 +200,7 @@ kube-system    Active   4d2h
 kubectl delete pod sleep-7549f66447-wv8cl
 pod "sleep-7549f66447-wv8cl" deleted
 
-kubectl get pod 
+kubectl get pod
 NAME                            READY   STATUS    RESTARTS   AGE
 sleep-7549f66447-x4td6          2/2     Running   0          37s
 ```
@@ -214,18 +214,18 @@ sleep-7549f66447-x4td6          2/2     Running   0          37s
    sleep:
     Container ID:   docker://
     Image:         pstauffer/curl
-    .... 
-   
+    ....
+
    istio-proxy:
     Container ID:   docker://
     Image:         docker.io/istio/proxyv2:1.1.7
     ....
-    
+
 ```
 多出了一个 `istio-proxy` 容器及其对应的存储卷
 
 
-#### 卸载istio 
+#### 卸载istio
 
 ---
 

@@ -28,7 +28,7 @@ $ kubectl apply -f /etc/ansible/manifests/ingress/traefik/tls/traefik-controller
 # 创建示例应用
 $ kubectl run test-hello --image=nginx:alpine --port=80 --expose
 # hello-tls-ingress 示例
-apiVersion: networking.k8s.io/v1beta1 
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: hello-tls-ingress
@@ -55,7 +55,7 @@ $ kubectl create secret tls traefik-cert --key=tls.key --cert=tls.crt
 验证 traefik-ingress svc
 
 ``` bash
-$ kubectl get svc -n kube-system traefik-ingress-service 
+$ kubectl get svc -n kube-system traefik-ingress-service
 NAME                      TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)                                     AGE
 traefik-ingress-service   NodePort   10.68.250.253   <none>        80:23456/TCP,443:23457/TCP,8080:35941/TCP   66m
 ```
@@ -81,7 +81,7 @@ kubernetes-dashboard      NodePort    10.68.211.168   <none>        443:39308/TC
 配置 dashboard ingress：`kubectl apply -f /etc/ansible/manifests/ingress/traefik/tls/k8s-dashboard.ing.yaml` 内容如下：
 
 ```
-apiVersion: networking.k8s.io/v1beta1 
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name:  kubernetes-dashboard

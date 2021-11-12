@@ -4,7 +4,7 @@
 
 本项目提供多种网络插件可选，如果需要安装calico，请在/etc/ansible/hosts文件中设置变量 `CLUSTER_NETWORK="calico"`，更多的calico设置在`roles/calico/defaults/main.yml`文件定义。
 
-- calico-node需要在所有master节点和node节点安装 
+- calico-node需要在所有master节点和node节点安装
 
 ``` bash
 roles/calico/
@@ -138,8 +138,8 @@ IPv4 BGP status
 
 ``` bash
 netstat -antlp|grep ESTABLISHED|grep 179
-tcp        0      0 192.168.1.66:179        192.168.1.35:41316      ESTABLISHED 28479/bird      
-tcp        0      0 192.168.1.66:179        192.168.1.34:40243      ESTABLISHED 28479/bird      
+tcp        0      0 192.168.1.66:179        192.168.1.35:41316      ESTABLISHED 28479/bird
+tcp        0      0 192.168.1.66:179        192.168.1.34:40243      ESTABLISHED 28479/bird
 tcp        0      0 192.168.1.66:179        192.168.1.63:48979      ESTABLISHED 28479/bird
 ```
 

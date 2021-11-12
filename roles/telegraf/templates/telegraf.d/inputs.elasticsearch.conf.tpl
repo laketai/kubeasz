@@ -4,7 +4,7 @@
   ## servers = ["http://user:pass@localhost:9200"]
 {% set cluster_address=[] -%}
 {% for host in groups['es_cluster'] %}
-{% set _ = cluster_address.append('"http://%s:%s"' % (host, ELASTICSEARCH_PORT )) -%} 
+{% set _ = cluster_address.append('"http://%s:%s"' % (host, ELASTICSEARCH_PORT )) -%}
 {% endfor %}
   servers=[{{ cluster_address | join(',') }}]
 

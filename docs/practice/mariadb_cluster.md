@@ -51,7 +51,7 @@ master:
     annotations: {}
     accessModes:
     - ReadWriteOnce
-    size: 5Gi        # 设置存储容量 
+    size: 5Gi        # 设置存储容量
 
 slave:
   replicas: 1

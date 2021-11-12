@@ -4,7 +4,7 @@
     state: directory
     mode: '0755'
 - name: copy rpms
-  copy: 
+  copy:
     src: '{{ base_dir }}/down-ext/mongo'
     dest: /opt/cbimeasz/mongo-cluster/bin
 - name: install mongo rpm
@@ -12,12 +12,12 @@
   args:
     warn: false
 - name: 关闭默认启动
-  service: name=mongod state=stopped enabled=no 
+  service: name=mongod state=stopped enabled=no
 
 - name: 复制 keyfile
   copy:
     src: '{{ cluster_dir }}/mongo/keyfile'
-    dest: '/etc/mongo.keyfile'  
+    dest: '/etc/mongo.keyfile'
     owner: mongod
     group: mongod
     mode: '0400'

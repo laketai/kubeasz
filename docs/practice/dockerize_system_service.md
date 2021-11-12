@@ -21,7 +21,7 @@ listen apiservers
         option tcplog
         option dontlognull
         option dontlog-normal
-        balance roundrobin 
+        balance roundrobin
         server 192.168.1.1 192.168.1.1:6443 check inter 10s fall 2 rise 2 weight 1
         server 192.168.1.2 192.168.1.2:6443 check inter 10s fall 2 rise 2 weight 1
 ```

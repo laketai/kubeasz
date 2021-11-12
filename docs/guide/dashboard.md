@@ -40,7 +40,7 @@ kubectl logs -n kube-system kubernetes-dashboard-698d4c759b-67gzg
 
 因为dashboard 作为k8s 原生UI，能够展示各种资源信息，甚至可以有修改、增加、删除权限，所以有必要对访问进行认证和控制，为演示方便这里使用 `https://NodeIP:NodePort` 方式访问 dashboard，支持两种登录方式：Kubeconfig、令牌(Token)
 
-**注意：** 使用chrome浏览器访问 `https://NodeIP:NodePort` 可能提示安全风险无法访问，可以换firefox浏览器设置安全例外，继续访问。 
+**注意：** 使用chrome浏览器访问 `https://NodeIP:NodePort` 可能提示安全风险无法访问，可以换firefox浏览器设置安全例外，继续访问。
 
 - Token令牌方式登录（admin）
 

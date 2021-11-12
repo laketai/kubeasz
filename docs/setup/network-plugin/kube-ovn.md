@@ -37,7 +37,7 @@ roles/kube-ovn
     ├── crd.yaml.j2	        # crd 模板
     ├── kube-ovn.yaml.j2	# kube-ovn yaml 模板
     └── ovn.yaml.j2		    # ovn yaml 模板
-    
+
 ```
 
 安装成功后，可以验证所有 k8s 集群功能正常，查看集群的 pod 网络如下：

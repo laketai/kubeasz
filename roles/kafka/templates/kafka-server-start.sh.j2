@@ -16,7 +16,7 @@
 {% if REMOTE_JAVA_HOME is defined and REMOTE_JAVA_HOME|length %}
 export JAVA_HOME={{ REMOTE_JAVA_HOME }}
 {% endif %}
-export KAFKA_JMX_OPTS="$KAFKA_JMX_OPTS 
+export KAFKA_JMX_OPTS="$KAFKA_JMX_OPTS
 -javaagent:{{ jolokia_package_filename_agent }}=port={{jolokia_monitor_port}},host=* \
 -Dcom.sun.management.jmxremote=true \
 -Dcom.sun.management.jmxremote.authenticate=false \

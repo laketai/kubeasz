@@ -4,7 +4,7 @@
 
 ## 安装docker服务
 
-### 创建docker的systemd unit文件 
+### 创建docker的systemd unit文件
 
 ``` bash
 [Unit]
@@ -95,7 +95,7 @@ $ docker-tag library/ubuntu
 "trusty-20171117"
 "xenial"
 ...
-``` 
+```
 + 需要先apt安装轻量JSON处理程序 `jq`
 
 ### 验证

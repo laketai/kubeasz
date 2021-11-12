@@ -1,6 +1,10 @@
+- name: 打开防火墙
+  shell: firewall-cmd --zone=public --add-port={{ MONGO_SHARD_PORT }}/tcp --permanent && \
+         firewall-cmd --reload
+  ignore_errors: yes
 - name: mkdir
   file:
-    path: "{{ MONGO_SHARD_DATA_DIR }}/{{ SHARD_NAME }}" 
+    path: "{{ MONGO_SHARD_DATA_DIR }}/{{ SHARD_NAME }}"
     state: directory
     mode: '0755'
     group: mongod
@@ -22,7 +26,7 @@
   shell: systemctl daemon-reload
   ignore_errors: yes
 - name: 设置开机启动
-  service: name={{ SHARD_NAME }} state=started enabled=yes  
+  service: name={{ SHARD_NAME }} state=started enabled=yes
 - block:
   - name: 拷贝 rs init.js
     template:
@@ -31,4 +35,4 @@
   - name: init rs
     shell: mongosh --port {{ MONGO_SHARD_PORT }} -f /opt/cbimeasz/mongo-cluster/init-{{ SHARD_NAME }}-rs.js
     ignore_errors: true
-  when: MASTER_NODE|bool
+  when: MASTER_MONGO_NODE|bool

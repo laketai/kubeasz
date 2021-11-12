@@ -4,7 +4,7 @@ down/*
 # binaries directory
 bin/*
 
-# k8s storage manifests 
+# k8s storage manifests
 manifests/storage/*
 !manifests/storage/test.yaml
 !manifests/storage/local-storage/
@@ -15,3 +15,8 @@ manifests/storage/*
 
 # cluster instances
 clusters/
+
+
+down-ext/*
+prepare/*
+.editorconfig

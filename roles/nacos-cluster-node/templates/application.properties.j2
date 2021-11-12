@@ -38,10 +38,10 @@ db.num=1
 ### Connect URL of DB:
 {% set L4LB_VIP='' -%}
 {% if groups['nginx_node']|length > 0 %}
-{% set L4LB_VIP="{{ hostvars[groups['ex_lb'][0]]['EX_NGINX_VIP'] }}" -%}
+{% set L4LB_VIP=hostvars[groups['nginx_node'][0]]['EX_NGINX_VIP'] -%}
 {% endif %}
-{% if groups['ex_lb']|length > 0 %}
-{% set L4LB_VIP="{{ hostvars[groups['ex_lb'][0]]['EX_APISERVER_VIP'] }}" -%}
+{% if groups['l4lb_node'] is defined and groups['l4lb_node']|length > 0 %}
+{% set L4LB_VIP=hostvars[groups['l4lb_node'][0]]['EX_NGINX_VIP'] -%}
 {% endif %}
 
 db.url.0=jdbc:mysql://{{ L4LB_VIP }}:3366/nacos?characterEncoding=utf8&connectTimeout=10000&socketTimeout=30000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC

@@ -6,7 +6,7 @@
 
 Please make PRs / Issues here from now on
 
-We will keep the changes in sync as best we can, but we will be notifying people to submit PRs here from now on instead. If you have any questions, feel free to get in touch with either of the maintainers. 
+We will keep the changes in sync as best we can, but we will be notifying people to submit PRs here from now on instead. If you have any questions, feel free to get in touch with either of the maintainers.
 ----------------------------------------
 
 [Redis](http://redis.io/) is an advanced key-value cache and store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.

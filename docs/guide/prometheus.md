@@ -1,5 +1,5 @@
 # Prometheus
-随着`heapster`项目停止更新并慢慢被`metrics-server`取代，集群监控这项任务也将最终转移。`prometheus`的监控理念、数据结构设计其实相当精简，包括其非常灵活的查询语言；但是对于初学者来说，想要在k8s集群中实践搭建一套相对可用的部署却比较麻烦，由此还产生了不少专门的项目（如：[prometheus-operator](https://github.com/coreos/prometheus-operator)），本文介绍使用`helm chart`部署集群的prometheus监控。  
+随着`heapster`项目停止更新并慢慢被`metrics-server`取代，集群监控这项任务也将最终转移。`prometheus`的监控理念、数据结构设计其实相当精简，包括其非常灵活的查询语言；但是对于初学者来说，想要在k8s集群中实践搭建一套相对可用的部署却比较麻烦，由此还产生了不少专门的项目（如：[prometheus-operator](https://github.com/coreos/prometheus-operator)），本文介绍使用`helm chart`部署集群的prometheus监控。
 - `helm`已成为`CNCF`独立托管项目，预计会更加流行起来
 
 ## 前提
@@ -22,7 +22,7 @@ kubeasz 集成安装
 
 ## 验证安装
 
-``` bash 
+``` bash
 # 查看相关pod和svc
 $ kubectl get pod,svc -n monitor
 NAME                                                         READY   STATUS    RESTARTS   AGE
@@ -54,7 +54,7 @@ service/prometheus-prometheus-node-exporter       ClusterIP   10.68.64.56     <n
 
 - 修改`prom-alertsmanager.yaml`文件中邮件告警为有效的配置内容，并使用 helm upgrade更新安装
 - 手动临时关闭 master 节点的 kubelet 服务，等待几分钟看是否有告警邮件发送
- 
+
 ``` bash
 # 在 master 节点运行
 $ systemctl stop kubelet
@@ -102,5 +102,5 @@ $ helm upgrade --tls monitor -f prom-settings.yaml -f prom-alertsmanager.yaml -f
 
 - 继续了解prometheus查询语言和配置文件
 - 继续了解prometheus告警规则，编写适合业务应用的告警规则
-- 继续了解grafana的dashboard编写，本项目参考了部分[feisky的模板](https://grafana.com/orgs/feisky/dashboards)  
+- 继续了解grafana的dashboard编写，本项目参考了部分[feisky的模板](https://grafana.com/orgs/feisky/dashboards)
 如果对以上部分有心得总结，欢迎分享贡献在项目中。

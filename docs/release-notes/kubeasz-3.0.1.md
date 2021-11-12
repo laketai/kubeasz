@@ -12,7 +12,7 @@ kubeasz 用户可以确认集群各项功能符合预期，既符合k8s设计标
 
 https://www.toutiao.com/c/user/token/MS4wLjABAAAA0YFomuMNm87NNysXeUsQdI0Tt3gOgz8WG_0B3MzxsmI/?tab=article
 
-### 更新harbor 安装流程 
+### 更新harbor 安装流程
 重写 harbor 安装流程，利用easzlab/harbor-offline:v2.1.3 仓库加速离线安装文件下载，增加可选安装组件。
 
 
@@ -25,7 +25,7 @@ https://www.toutiao.com/c/user/token/MS4wLjABAAAA0YFomuMNm87NNysXeUsQdI0Tt3gOgz8
 
 ### 集群安装
 
-- 修复默认集群内部dns域名后缀 
+- 修复默认集群内部dns域名后缀
 - 调整etcd集群配置参数
 - 更新kube-scheduler部署使用配置文件 kube-scheduler-config.yaml
 - 更新集群存储插件 nfs-provisioner

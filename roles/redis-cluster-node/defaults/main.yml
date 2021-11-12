@@ -1,1 +1,1 @@
-REDIS_NODES: "{% for host in groups['redis_cluster'] %}{{ host }}:{{ REDIS_PORT }} {% endfor %}"
+REDIS_NODES: "{% for host in groups['redis_cluster'] %}'{{ host }}:{{ REDIS_PORT }}' {% endfor %}"

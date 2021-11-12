@@ -1,6 +1,6 @@
 # WARNNING:  this playbook will clean the node {{ NODE_TO_DEL }}
 
-- hosts: localhost 
+- hosts: localhost
   tasks:
   - fail: msg="you CAN NOT delete the last member of kube_master!"
     when: "groups['kube_master']|length < 2 and NODE_TO_DEL in groups['kube_master']"

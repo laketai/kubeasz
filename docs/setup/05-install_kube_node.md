@@ -101,7 +101,7 @@ WantedBy=multi-user.target
 systemctl status kubelet	# 查看状态
 systemctl status kube-proxy
 journalctl -u kubelet		# 查看日志
-journalctl -u kube-proxy 
+journalctl -u kube-proxy
 ```
 运行 `kubectl get node` 可以看到类似
 

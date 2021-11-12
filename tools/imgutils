@@ -56,7 +56,7 @@ function save_to_disk() {
   else
     DOCKER_IMAGES=$(docker images|grep "$REPO_PATTERN"|awk '{print $1":"$2}')
   fi
-  
+
   # trim the last '/' in "$IMAGE_DIR"
   IMAGE_DIR=$(echo "$IMAGE_DIR"|sed 's/\/$//g')
   mkdir -p "$IMAGE_DIR"
@@ -73,13 +73,13 @@ function load_from_disk() {
   [[ -d "$IMAGE_DIR" ]] || { logger error "Invald directory $IMAGE_DIR"; exit 1; }
   # trim the last '/' in "$IMAGE_DIR"
   IMAGE_DIR=$(echo "$IMAGE_DIR"|sed 's/\/$//g')
-  
+
   if [[ "$REPO_PATTERN" == "" ]];then
     DOCKER_PACKS="$IMAGE_DIR/*.tar"
   else
     DOCKER_PACKS="$IMAGE_DIR/*$REPO_PATTERN*.tar"
   fi
- 
+
   for pack in ${DOCKER_PACKS};do
     logger info "loading $pack..."
     docker load -i "$pack"
@@ -140,7 +140,7 @@ function main() {
   [[ "$EUID" -ne 0 ]] && { logger error "you should run this script as root"; exit 1; }
   # check num of args
   [[ "$#" -eq 0 ]] && { usage >&2; exit 1; }
-  
+
   export IMAGE_DIR="/tmp/docker/images"
   export REPO_PATTERN=""
   export ACTION=""
@@ -168,10 +168,10 @@ function main() {
           ;;
       esac
   done
-  
+
   [[ "$ACTION" == "" ]] && { logger error "illegal option"; usage; exit 1; }
-  
-  # excute cmd "$ACTION" 
+
+  # excute cmd "$ACTION"
   logger debug "Action begin: $ACTION"
   ${ACTION} || { logger error "Action failed: $ACTION"; return 1; }
   logger debug "Action successed: $ACTION"

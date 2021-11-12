@@ -9,8 +9,8 @@
   ignore_errors: true
 
 - name: 安装基础软件包
-  yum: 
-    name: 
+  yum:
+    name:
       - bash-completion     # bash命令补全工具，需要重新登录服务器生效
       - conntrack-tools     # ipvs 模式需要
       - ipset               # ipvs 模式需要

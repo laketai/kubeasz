@@ -80,7 +80,7 @@ subjects:
 - apiGroup: rbac.authorization.k8s.io
   kind: User
   name: admin
-```  
+```
 - 2.2 设置用户readonly 的RBAC 权限，如下运行配置文件 `kubectl create -f ui-read-rbac.yaml`
 
 ``` bash

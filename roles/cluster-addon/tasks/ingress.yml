@@ -12,16 +12,16 @@
   connection: local
   when: 'ingress_backend == "traefik"'
 
-#- block:    
+#- block:
 #    - block:
 #        - name: 尝试推送离线 nginx-ingress镜像（若执行失败，可忽略）
 #          copy: src={{ base_dir }}/down/{{ nginx_ingress_offline }} dest=/opt/kube/images/{{ nginx_ingress_offline }}
 #          when: 'nginx_ingress_offline in download_info.stdout'
-#    
+#
 #        - name: 获取nginx_ingress离线镜像推送情况
 #          command: "ls /opt/kube/images"
 #          register: image_info
-#    
+#
 #        - name: 导入 nginx_ingress的离线镜像（若执行失败，可忽略）
 #          shell: "{{ bin_dir }}/docker load -i /opt/kube/images/{{ nginx_ingress_offline }}"
 #          when: 'nginx_ingress_offline in image_info.stdout and CONTAINER_RUNTIME == "docker"'
@@ -37,7 +37,7 @@
 #  when: 'ingress_backend == "nginx-ingress"'
 
 
-- block:    
+- block:
     - block:
       - name: Create target directory
         file: path=/opt/kube/images state=directory mode=0755
@@ -51,7 +51,7 @@
         register: image_info
 
       - name: 导入 nginx_ingress的离线镜像（若执行失败，可忽略）
-        shell: "{{ bin_dir }}/docker load -i /opt/kube/images/{{ nginx_ingress_offline }}" 
+        shell: "{{ bin_dir }}/docker load -i /opt/kube/images/{{ nginx_ingress_offline }}"
         when: 'nginx_ingress_offline in image_info.stdout and CONTAINER_RUNTIME == "docker"'
 
       - name: 导入 nginx_ingress的离线镜像（若执行失败，可忽略）
