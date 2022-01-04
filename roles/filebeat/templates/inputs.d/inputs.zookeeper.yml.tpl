@@ -3,15 +3,13 @@
     - "{{ zookeeper_log_path }}/zookeeper--*.log"
   fields:
     format: txt
-    type: zookeeper_server_log
+    logName: platform/cbim/middleware/zookeeper/logs/server_log
     hostname: {{ inventory_hostname }}
-    enabled: false
 
 - type: log
   paths:
     - "{{ zookeeper_log_path }}/zookeeper--*.out"
   fields:
     format: txt
-    type: zookeeper_runtime_log
+    logName: platform/cbim/middleware/zookeeper/logs/runtime_log
     hostname: {{ inventory_hostname }}
-    enabled: false

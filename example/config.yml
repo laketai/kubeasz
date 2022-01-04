@@ -189,9 +189,9 @@ dashboardVer: "__dashboard__"
 dashboardMetricsScraperVer: "__dash_metrics__"
 
 # ingress 自动安装
-ingress_install: "no"
-ingress_backend: "nginx-ingress"
-traefik_chart_ver: "__traefik_chart__"
+ingress_install: "yes"
+ingress_backend: "ingress-nginx"
+# traefik_chart_ver: "__traefik_chart__"
 
 
 # prometheus 自动安装
@@ -304,14 +304,14 @@ ZOOKEEPER_ADMIN_SERVER_PORT: 28080
 ############################
 # role: kafka
 ############################
-KAFKA_JAVA_OPTS: "-Xms1g -Xmx1g"
+KAFKA_JAVA_OPTS: "-Xms3g -Xmx3g"
 KAFKA_PORT: 9092
 KAFKA_JOLOKIA_MONITOR_PORT: 58778
 
 ############################
 # role: elasticsearch 7
 ############################
-ELASTICSEARCH_JVM_MEMORY: "2g"
+ELASTICSEARCH_JVM_MEMORY: "8g"
 ELASTICSEARCH_PORT: 9200
 ELASTICSEARCH_INTERNAL_PORT: 9300
 ELASTICSEARCH_USER: 'elasticsearch'
@@ -320,7 +320,7 @@ ELASTICSEARCH_PASS: 'Cbim2021'
 ############################
 # role: elasticsearch 6
 ############################
-ELASTICSEARCH6_JVM_MEMORY: "2g"
+ELASTICSEARCH6_JVM_MEMORY: "4g"
 ELASTICSEARCH6_PORT: 9200
 ELASTICSEARCH6_INTERNAL_PORT: 9300
 ELASTICSEARCH6_USER: 'elasticsearch'
@@ -329,7 +329,7 @@ ELASTICSEARCH6_PASS: 'Cbim2021'
 ############################
 # role: influxdb
 ############################
-INFLUX_CACHE_MEMORY: "2g"
+INFLUX_CACHE_MEMORY: "8g"
 INFLUX_PORT: 8086
 
 ############################
@@ -338,6 +338,8 @@ INFLUX_PORT: 8086
 OPA_JAVA_OPTS: "-Xms2g -Xmx2g"
 OPA_SERVER_PORT: 11800
 OPA_UI_PORT: 58080
+SW_ES_USER:
+SW_ES_PASSWORD:
 
 ############################
 # role: telegraf

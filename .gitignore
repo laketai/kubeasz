@@ -20,3 +20,4 @@ clusters/
 down-ext/*
 prepare/*
 .editorconfig
+.vscode

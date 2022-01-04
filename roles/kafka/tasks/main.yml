@@ -28,11 +28,6 @@
     copy: no
     src: "{{temp_path}}/{{package_filename}}"
     dest: "{{ install_path }}"
-- name: "step_3b copy the ansilbe local monitor agent package {{packages_home}}/{{package_filename_agent}} to remote {{ansible_hostname}}@{{ install_path }}/{{unarchive_folder_name}}"
-  copy:
-    src:  "{{packages_home}}/{{package_filename_agent}}"
-    dest: "{{ install_path }}/{{unarchive_folder_name}}/"
-    mode: 0755
 
 # 4.准备配置文件
 - name: "step_4a prepare the {{role}} config of {{ install_path }}/{{unarchive_folder_name}}/config/server.properties"

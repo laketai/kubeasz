@@ -3,6 +3,5 @@
     - "{{ influx_log_path }}/influx.log*"
   fields:
     format: txt
-    type: influx_server_log
+    logName: platform/cbim/middleware/influx/logs/server_log
     hostname: {{ inventory_hostname }}
-    enabled: false

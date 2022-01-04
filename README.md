@@ -1,136 +1,101 @@
-# ![kubeasz](pics/logo_kubeasz.png)
+# README
 
-项目致力于提供快速部署高可用`k8s`集群的工具, 同时也努力成为`k8s`实践、使用的参考书；基于二进制方式部署和利用`ansible-playbook`实现自动化；既提供一键安装脚本, 也可以根据`安装指南`分步执行安装各个组件。
+项目基于 https://github.com/easzlab/kubeasz 项目进行扩展，在基于 k8s 安装的基础上，扩展了 Mysql Cluster（1主2从）, Redis cluster（3 shards, 3主3从）, mongo（shard集群），rabbitmq（集群模式）, nginx + keepalived (1主1备)，nacos cluster（依赖 mysql cluster + nginx）的一键安装部署脚本。
 
-- **集群特性** `TLS`双向认证、`RBAC`授权、[多Master高可用](docs/setup/00-planning_and_overall_intro.md#ha-architecture)、支持`Network Policy`、备份恢复、[离线安装](docs/setup/offline_install.md)
-- **集群版本** kubernetes v1.19, v1.20, v1.21, v1.22
-- **操作系统** CentOS/RedHat 7, Debian 9/10, Ubuntu 16.04/18.04/20.04
-- **运行时** docker 19.03.x, 20.10.x [containerd](docs/setup/containerd.md) v1.4.4
-- **网络** [calico](docs/setup/network-plugin/calico.md), [cilium](docs/setup/network-plugin/cilium.md), [flannel](docs/setup/network-plugin/flannel.md), [kube-ovn](docs/setup/network-plugin/kube-ovn.md), [kube-router](docs/setup/network-plugin/kube-router.md)
+k8s 保留二进制方式部署，支持多个 Linux 发行版；其他中间件均基于 CentOs 7.9 版本进行部署，通过 rpm 文件安装。
 
+# 安装指南
+## 1.基础系统配置
+- 准备若干台虚机
+- 最小化安装 CentOS 7.9 Minimal
+- 配置基础网络、更新源、SSH登录等
+- 最好选用独立的一台机器做部署机，运行部署脚本文件，需要安装 ansible
+- 文档中命令默认都需要root权限运行
 
-**[news]** kubeasz 通过cncf一致性测试 [详情](https://github.com/cncf/k8s-conformance/tree/master/v1.20/kubeasz)
+<strong>注意:</strong> 确保在干净的系统上开始安装，不能使用曾经装过kubeadm或其他k8s发行版的环境
 
-**[news]** 群里大佬上新一套免费[kubernetes架构师课程](https://www.toutiao.com/c/user/token/MS4wLjABAAAA0YFomuMNm87NNysXeUsQdI0Tt3gOgz8WG_0B3MzxsmI/?tab=article)，强烈推荐！
+## 2.下载安装
+- 有网环境可以直接拷贝 cbim-deploy.zip 文件（大约 2M）到部署机器并解压到 /etc/kubeasz，确保 ezdown 和 ezctl 文件在 /etc/kubeasz 这一层级。无网环境则需要把提前下载好各个离线安装文件的脚本（合计大约 5G），再复制到 /etc/ezctl 目录
+- 在部署节点上部署好各个机器的免密码登录
 
-推荐版本对照
+```
+免密登录
+# 更安全 Ed25519 算法
+ssh-keygen -t ed25519 -N '' -f ~/.ssh/id_ed25519
+# 或者传统 RSA 算法
+ssh-keygen -t rsa -b 2048 -N '' -f ~/.ssh/id_rsa
+ 
+ssh-copy-id $IPs #$IPs为所有节点地址包括自身，按照提示输入yes 和root密码
+```
+- 下载各类安装文件（离线安装跳过这一步）
 
-<table>
-  <thead>
-    <tr>
-      <td>Kubernetes version</td>
-      <td>1.19</td>
-      <td>1.20</td>
-      <td>1.21</td>
-      <td>1.22</td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>kubeasz version</td>
-      <td>2.2.2</td>
-      <td>3.0.1</td>
-      <td>3.1.0</td>
-      <td>3.1.1</td>
-    </tr>
-  </tbody>
-</table>
+```
+离线安装文件下载
+cd /etc/kubeasz
+# 确保有执行权限
+chmod +x ./ezdown ./ezctl
+# 下载 ansible 安装文件
+./ezdown -I
+# 下载 k8s 安装文件
+./ezdown -D
+# 下载离线安装系统包
+./ezdown -P
+# 下载 harbor 离线安装包
+./ezdown -R
+# 下载中间件离线安装包
+./ezdown -T
+安装 ansible
+```
 
-## 快速指南
+- 安装 ansible
+```
+cd /etc/kubeasz
+./ezctl ansible
+```
 
-单机快速体验k8s集群的测试环境--[AllinOne部署](docs/setup/quickStart.md)
+- 创建集群配置实例
 
-- 命令行工具 [ezctl介绍](docs/setup/ezctl.md)
+```
+创建配置实例
+ezctl new cbim
+2021-01-19 10:48:23 DEBUG generate custom cluster files in /etc/kubeasz/clusters/cbim
+2021-01-19 10:48:23 DEBUG set version of common plugins
+2021-01-19 10:48:23 DEBUG cluster cbim: files successfully created.
+2021-01-19 10:48:23 INFO next steps 1: to config '/etc/kubeasz/clusters/cbim/hosts'
+2021-01-19 10:48:23 INFO next steps 2: to config '/etc/kubeasz/clusters/cbim/config.yml'
+```
+然后根据提示配置'/etc/kubeasz/clusters/cbim/hosts' 和 '/etc/kubeasz/clusters/cbim/config.yml'：根据前面节点规划修改hosts 文件和其他集群层面的主要配置选项；其他集群组件等配置项可以在config.yml 文件中修改。
 
-## 安装指南
+- 开始安装 如果你对集群安装流程不熟悉，请阅读项目首页 安装步骤 讲解后分步安装，并对 每步都进行验证 
 
-<table border="0">
-    <tr>
-        <td><a href="docs/setup/00-planning_and_overall_intro.md">00-规划集群和配置介绍</a></td>
-        <td><a href="docs/setup/02-install_etcd.md">02-安装etcd集群</a></td>
-        <td><a href="docs/setup/04-install_kube_master.md">04-安装master节点</a></td>
-        <td><a href="docs/setup/06-install_network_plugin.md">06-安装集群网络</a></td>
-    </tr>
-    <tr>
-        <td><a href="docs/setup/01-CA_and_prerequisite.md">01-创建证书和安装准备</a></td>
-        <td><a href="docs/setup/03-container_runtime.md">03-安装容器运行时</a></td>
-        <td><a href="docs/setup/05-install_kube_node.md">05-安装node节点</a></td>
-        <td><a href="docs/setup/07-install_cluster_addon.md">07-安装集群插件</a></td>
-    </tr>
-</table>
-
-## 使用指南
-
-<table border="0">
-    <tr>
-        <td><strong>常用插件</strong><a href="docs/guide/index.md">+</a></td>
-        <td><a href="docs/guide/kubedns.md">DNS</a></td>
-        <td><a href="docs/guide/dashboard.md">dashboard</a></td>
-        <td><a href="docs/guide/metrics-server.md">metrics-server</a></td>
-        <td><a href="docs/guide/prometheus.md">prometheus</a></td>
-        <td><a href="docs/guide/efk.md">efk</a></td>
-        <td><a href="docs/guide/ingress.md">ingress</a></td>
-    </tr>
-    <tr>
-        <td><strong>集群管理</strong><a href="docs/op/op-index.md">+</a></td>
-        <td><a href="docs/op/op-node.md">管理node节点</a></td>
-        <td><a href="docs/op/op-master.md">管理master节点</a></td>
-        <td><a href="docs/op/op-etcd.md">管理etcd节点</a></td>
-        <td><a href="docs/op/upgrade.md">升级集群</a></td>
-        <td><a href="docs/op/cluster_restore.md">备份恢复</a></td>
-        <td><a href=""></a></td>
-    </tr>
-    <tr>
-        <td><strong>特性实验</strong></td>
-        <td><a href="docs/guide/networkpolicy.md">NetworkPolicy</a></td>
-        <td><a href="docs/guide/rollingupdateWithZeroDowntime.md">RollingUpdate</a></td>
-        <td><a href="docs/guide/hpa.md">HPA</a></td>
-        <td><a href=""></a></td>
-        <td><a href=""></a></td>
-        <td><a href=""></a></td>
-    </tr>
-    <tr>
-        <td><strong>周边生态</strong></td>
-        <td><a href="docs/guide/harbor.md">harbor</a></td>
-        <td><a href="docs/guide/helm.md">helm</a></td>
-        <td><a href="docs/guide/jenkins.md">jenkins</a></td>
-        <td><a href="docs/guide/gitlab/readme.md">gitlab</a></td>
-        <td><a href=""></a></td>
-        <td><a href=""></a></td>
-    </tr>
-    <tr>
-        <td><strong>应用实践</strong></td>
-        <td><a href="docs/practice/go_web_app/">go web应用部署</a></td>
-        <td><a href="docs/practice/java_war_app.md">java应用部署</a></td>
-        <td><a href="docs/practice/es_cluster.md">elasticsearch集群</a></td>
-        <td><a href="docs/practice/mariadb_cluster.md">mariadb集群</a></td>
-        <td><a href=""></a></td>
-        <td><a href=""></a></td>
-    </tr>
-    <tr>
-        <td><strong>推荐工具</strong></td>
-        <td><a href="docs/guide/kuboard.md">kuboard</a></td>
-        <td><a href="https://github.com/derailed/k9s">k9s</a></td>
-        <td><a href="https://github.com/vmware-tanzu/octant">octant</a></td>
-        <td><a href="docs/guide/kubesphere.md">KubeSphere</a></td>
-        <td><a href=""></a></td>
-        <td><a href=""></a></td>
-    </tr>
-</table>
-
-## 沟通交流
-
-- 微信群：k8s&kubeasz实践, 搜索微信号`badtobone`, 请备注（城市-github用户名）, 验证通过会加入群聊。
-- 推荐阅读
-  - [kubernetes-the-hard-way](https://github.com/kelseyhightower/kubernetes-the-hard-way)
-  - [feisky-Kubernetes 指南](https://github.com/feiskyer/kubernetes-handbook/blob/master/SUMMARY.md)
-  - [rootsongjc-Kubernetes 指南](https://github.com/rootsongjc/kubernetes-handbook)
-  - [opsnull 安装教程](https://github.com/opsnull/follow-me-install-kubernetes-cluster)
-
-## 贡献&致谢
-
-请阅读[项目分支说明](docs/mixes/branch.md), 欢迎提[Issues](https://github.com/easzlab/kubeasz/issues)和[PRs](docs/mixes/HowToContribute.md)参与维护项目！感谢您的关注与支持！
-- [如何 PR](docs/mixes/HowToContribute.md)
-- [如何捐赠](docs/mixes/donate.md)
-
-Copyright 2017 gjmzj (jmgaozz@163.com) Apache License 2.0, 详情见 [LICENSE](docs/mixes/LICENSE) 文件。
+```
+# 一键安装 k8s 部分
+ezctl setup cbim all
+ 
+# 或者分步安装 k8s，具体使用 ezctl help setup 查看分步安装帮助信息
+# ezctl setup cbim 01
+# ezctl setup cbim 02
+# ezctl setup cbim 03
+# ezctl setup cbim 04
+...
+ 
+# 一键安装 mysql cluster
+ezctl setup cbim mysql
+# 一键安装 redis cluster
+ezctl setup cbim redis
+# 一键安装 mongo cluster
+ezctl setup cbim mongo
+# 一键安装 rabbitmq cluster
+ezctl setup cbim rabbitmq
+# 一键安装 minio cluster
+ezctl setup cbim minio
+# 一键安装 nginx cluster
+ezctl setup cbim nginx
+# 一键安装 nacos cluster (注意：nacos 依赖 mysql 和 nginx ！！！)
+ezctl setup cbim nacos
+# 安装 nacos 后更新 nginx 代理配置
+ezctl setup cbim update-nginx
+ 
+# 一键安装 harbor
+ezctl setup cbim harbor
+```
