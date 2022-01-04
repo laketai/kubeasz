@@ -14,16 +14,15 @@ filebeat.inputs:
   #     - {{ log_path }}/filebeat.log
   #   fields:
   #     format: txt
-  #     type: filebeat_collector
+  #     logName: platform/cbim/middleware/filebeat/logs/collector_log
   #     hostname: {{ inventory_hostname }}
-  #     enabled: false
   - type: log
     enabled: true
     paths:
       - /var/log/messages
     fields:
       format: txt
-      type: system_secure
+      logName: platform/cbim/system/system/logs/secure_log
       template: SYSTEM_SECURE
       hostname: {{ inventory_hostname }}
       enabled: true

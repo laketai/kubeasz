@@ -4,7 +4,7 @@ DB_NAMESPACE: cbim
 # final: {DB_NAMESPACE}-{TOPIC}
 KAFKA_TOPIC_OF_OPENMETRICS: 'openmetrics'
 KAFKA_TOPIC_OF_TELEGRAF: 'telegraf'
-KAFKA_TOPIC_OF_LOG: 'logging'
+KAFKA_TOPIC_OF_LOG: 'filebeat'
 
 ############################
 # role: all monitor service offline pacakges

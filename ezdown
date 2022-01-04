@@ -335,14 +335,14 @@ function get_offline_image() {
     docker pull "easzlab/kubeasz:$KUBEASZ_VER" && \
     docker save -o "$imageDir/kubeasz_$KUBEASZ_VER.tar" "easzlab/kubeasz:$KUBEASZ_VER"
   fi
-  if [[ ! -f "$imageDir/nginx-ingress-controller_0.30.0.tar" ]];then
-    docker pull "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.30.0" && \
-    docker save -o "$imageDir/nginx-ingress-controller_0.30.0.tar" "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.30.0"
+  if [[ ! -f "$imageDir/nginx-ingress-controller_0.48.1.tar" ]];then
+    docker pull "cbimplat/ingress-nginx-controller:v0.48.1" && \
+    docker save -o "$imageDir/nginx-ingress-controller_0.48.1.tar" "cbimplat/ingress-nginx-controller:v0.48.1"
   fi
 
-  if [[ ! -f "$imageDir/defaultbackend-amd64_1.5.tar" ]];then
-    docker pull "mirrorgooglecontainers/defaultbackend-amd64:1.5" && \
-    docker save -o "$imageDir/defaultbackend-amd64_1.5.tar" "mirrorgooglecontainers/defaultbackend-amd64:1.5"
+  if [[ ! -f "$imageDir/kube-webhook-certgen_amd64_1.5.1.tar" ]];then
+    docker pull "cbimplat/kube-webhook-certgen:v1.5.1" && \
+    docker save -o "$imageDir/kube-webhook-certgen_amd64_1.5.1.tar" "cbimplat/kube-webhook-certgen:v1.5.1"
   fi
 }
 

@@ -3,36 +3,32 @@
     - "{{ kafka_log_path }}/controller.log*"
   fields:
     format: txt
-    type: kafka_controller_log
+    logName: platform/cbim/middleware/kafka/logs/controller_log
     hostname: {{ inventory_hostname }}
-    enabled: false
 
 - type: log
   paths:
     - "{{ kafka_log_path }}/server.log*"
   fields:
     format: txt
-    type: kafka_server_log
+    logName: platform/cbim/middleware/kafka/logs/server_log
     hostname: {{ inventory_hostname }}
-    enabled: false
 
 - type: log
   paths:
     - "{{ kafka_log_path }}/state-change.log*"
   fields:
     format: txt
-    type: kafka_state_change_log
+    logName: platform/cbim/middleware/kafka/logs/state_change_log
     hostname: {{ inventory_hostname }}
-    enabled: false
 
 - type: log
   paths:
     - "{{ kafka_log_path }}/log-cleaner.log*"
   fields:
     format: txt
-    type: kafka_log_cleaner_log
+    logName: platform/cbim/middleware/kafka/logs/log_cleaner_log
     hostname: {{ inventory_hostname }}
-    enabled: false
 
 - type: log
   paths:
@@ -43,6 +39,5 @@
   multiline.match: after
   fields:
     format: txt
-    type: kafka_gc_log
+    logName: platform/cbim/middleware/kafka/logs/gc_log
     hostname: {{ inventory_hostname }}
-    enabled: false

@@ -3,24 +3,21 @@
     - "{{ mysql_log_path }}"
   fields:
     format: txt
-    type: mysql_server_log
+    logName: platform/cbim/middleware/mysql/logs/server_log
     hostname: {{ inventory_hostname }}
-    enabled: false
 
 - type: log
   paths:
     - "{{ mysql_log_router_path }}"
   fields:
     format: txt
-    type: mysql_router_log
+    logName: platform/cbim/middleware/mysql/logs/router_log
     hostname: {{ inventory_hostname }}
-    enabled: false
 
 - type: log
   paths:
     - "{{ mysql_log_slow_path }}"
   fields:
     format: txt
-    type: mysql_slow_log
+    logName: platform/cbim/middleware/mysql/logs/slow_log
     hostname: {{ inventory_hostname }}
-    enabled: false

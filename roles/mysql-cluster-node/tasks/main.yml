@@ -30,6 +30,11 @@
   shell: sh /opt/cbimeasz/mysql-cluster/init-config.sh
   args:
     warn: false
+- block:
+    - name: append my.cnf
+      shell: echo 'innodb_buffer_pool_size=3G\nmax_connections=1000\nmax_allowed_packet=512M' >> /etc/my.cnf
+    - name: restart mysql
+      service: name=mysqld state=started
 
 - block:
     - name: stop mysql

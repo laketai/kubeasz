@@ -3,6 +3,5 @@
     - "{{ redis_log_path }}/redis.log*"
   fields:
     format: txt
-    type: redis_server_log
+    logName: platform/cbim/middleware/redis/logs/server_log
     hostname: {{ inventory_hostname }}
-    enabled: false

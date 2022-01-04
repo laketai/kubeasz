@@ -9,11 +9,13 @@ metricsscraper_offline: "metrics-scraper_{{ dashboardMetricsScraperVer }}.tar"
 
 nfsprovisioner_offline: "nfs-provisioner_{{ nfs_provisioner_ver }}.tar"
 
-nginx_ingress_offline: "nginx-ingress-controller_0.30.0.tar"
+nginx_ingress_offline: "nginx-ingress-controller_0.48.1.tar"
 
 replica_count: "{{ groups['kube_node']|length }}"
 
 defaultbackend_amd_offline: "defaultbackend-amd64_1.5.tar"
+
+nginx_ingress_webhook_offline: "kube-webhook-certgen_amd64_1.5.1.tar"
 
 # metallb 自动安装
 #metallb_install: "no"

@@ -48,6 +48,11 @@
     backup: yes
     src: jvm.options.j2
     dest: "{{install_path}}/{{unarchive_folder_name}}/config/jvm.options"
+- name: "step_4f prepare the {{role}} config of {{install_path}}/{{unarchive_folder_name}}/config/elastic-certificates.p12"
+  copy:
+    src: elastic-certificates.p12
+    dest: "{{install_path}}/{{unarchive_folder_name}}/config/elastic-certificates.p12"      
+    mode: 0600
 
 # 5.创建启动用户
 - name: "step_5a ensure group {{es_user}} exists"
