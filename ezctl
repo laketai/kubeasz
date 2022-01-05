@@ -522,7 +522,7 @@ function kcfg-adm() {
 function install-ansible(){
     cd $BASE/prepare/pip/setuptools-44.1.1 && python setup.py install
     cd $BASE/prepare/pip/pip-20.3.4 && python setup.py install
-    cd $BASE/prepare/pip && pip install wheel-0.36.2.tar.gz --ignore-installed
+    cd $BASE/prepare/pip && pip install wheel-0.37.1-py2.py3-none-any.whl --ignore-installed
     cd $BASE && pip install prepare/ansible/* --ignore-installed
 }
 
