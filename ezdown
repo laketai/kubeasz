@@ -13,25 +13,25 @@ set -o errexit
 #set -o xtrace
 
 # default settings, can be overridden by cmd line options, see usage
-DOCKER_VER=20.10.8
-KUBEASZ_VER=3.1.1
-K8S_BIN_VER=v1.21.5
-EXT_BIN_VER=0.9.5
-SYS_PKG_VER=0.4.1
+DOCKER_VER=20.10.9
+KUBEASZ_VER=3.2.0
+K8S_BIN_VER=v1.23.1
+EXT_BIN_VER=1.0.0
+SYS_PKG_VER=0.4.2
 HARBOR_VER=v2.1.3
 REGISTRY_MIRROR=CN
 CBIM_EXT_BIN_VER=latest
 
 # images needed by k8s cluster
-calicoVer=v3.19.2
-flannelVer=v0.13.0-amd64
-dnsNodeCacheVer=1.17.0
-corednsVer=1.8.4
-dashboardVer=v2.3.1
-dashboardMetricsScraperVer=v1.0.6
-metricsVer=v0.5.0
-pauseVer=3.5
-nfsProvisionerVer=v4.0.1
+calicoVer=v3.19.3
+flannelVer=v0.15.1
+dnsNodeCacheVer=1.21.1
+corednsVer=1.8.6
+dashboardVer=v2.4.0
+dashboardMetricsScraperVer=v1.0.7
+metricsVer=v0.5.2
+pauseVer=3.6
+nfsProvisionerVer=v4.0.2
 export ciliumVer=v1.4.1
 export kubeRouterVer=v0.3.1
 export kubeOvnVer=v1.5.3
@@ -114,17 +114,7 @@ Description=Docker Application Container Engine
 Documentation=http://docs.docker.io
 [Service]
 Environment="PATH=/opt/kube/bin:/bin:/sbin:/usr/bin:/usr/sbin"
-ExecStartPre=/sbin/iptables -F
-ExecStartPre=/sbin/iptables -X
-ExecStartPre=/sbin/iptables -F -t nat
-ExecStartPre=/sbin/iptables -X -t nat
-ExecStartPre=/sbin/iptables -F -t raw
-ExecStartPre=/sbin/iptables -X -t raw
-ExecStartPre=/sbin/iptables -F -t mangle
-ExecStartPre=/sbin/iptables -X -t mangle
 ExecStart=/opt/kube/bin/dockerd
-ExecStartPost=/sbin/iptables -P INPUT ACCEPT
-ExecStartPost=/sbin/iptables -P OUTPUT ACCEPT
 ExecStartPost=/sbin/iptables -P FORWARD ACCEPT
 ExecReload=/bin/kill -s HUP \$MAINPID
 Restart=on-failure
@@ -177,6 +167,31 @@ EOF
     },
   "data-root": "/var/lib/docker"
 }
+EOF
+  fi
+
+  # docker proxy setting
+  http_proxy=${http_proxy:-}
+  HTTP_PROXY=${HTTP_PROXY:-$http_proxy}
+  https_proxy=${https_proxy:-}
+  HTTPS_PROXY=${HTTPS_PROXY:-$https_proxy}
+  USE_PROXY=0
+  CONFIG="[Service]\n"
+
+  if [[ ! -z ${HTTP_PROXY} ]]; then
+    USE_PROXY=1
+    CONFIG=${CONFIG}"Environment=HTTP_PROXY=${HTTP_PROXY}\n"
+  fi
+  if [[ ! -z ${HTTPS_PROXY} ]]; then
+    USE_PROXY=1
+    CONFIG=${CONFIG}"Environment=HTTPS_PROXY=${HTTPS_PROXY}\n"
+  fi
+  if [[ ${USE_PROXY} == 1 ]]; then
+    logger debug "generate docker service http proxy file"
+    mkdir -p /etc/systemd/system/docker.service.d
+    c=$(echo -e "$CONFIG")
+    cat > /etc/systemd/system/docker.service.d/http-proxy.conf << EOF
+${c}
 EOF
   fi
 
@@ -247,6 +262,7 @@ function get_ext_bin() {
 function get_sys_pkg() {
   [[ -f "$BASE/down/packages/chrony_xenial.tar.gz" ]] && { logger warn "system packages existed"; return 0; }
 
+  docker ps -a |grep temp_sys_pkg && { logger debug "remove existing container"; docker rm -f temp_sys_pkg; }
   logger info "downloading system packages kubeasz-sys-pkg:$SYS_PKG_VER"
   docker pull "easzlab/kubeasz-sys-pkg:$SYS_PKG_VER" && \
   logger debug "run a temporary container" && \
@@ -260,6 +276,7 @@ function get_sys_pkg() {
 function get_harbor_offline_pkg() {
   [[ -f "$BASE/down/harbor-offline-installer-$HARBOR_VER.tgz" ]] && { logger warn "harbor-offline existed"; return 0; }
 
+  docker ps -a |grep temp_harbor && { logger debug "remove existing container"; docker rm -f temp_harbor; }
   logger info "downloading harbor-offline:$HARBOR_VER"
   docker pull "easzlab/harbor-offline:$HARBOR_VER" && \
   logger debug "run a temporary container" && \
@@ -306,8 +323,8 @@ function get_offline_image() {
     docker save -o "$imageDir/metrics-server_$metricsVer.tar" "easzlab/metrics-server:$metricsVer"
   fi
   if [[ ! -f "$imageDir/pause_$pauseVer.tar" ]];then
-    docker pull "easzlab/pause-amd64:$pauseVer" && \
-    docker save -o "$imageDir/pause_$pauseVer.tar" "easzlab/pause-amd64:$pauseVer"
+    docker pull "easzlab/pause:$pauseVer" && \
+    docker save -o "$imageDir/pause_$pauseVer.tar" "easzlab/pause:$pauseVer"
     /bin/cp -u "$imageDir/pause_$pauseVer.tar" "$imageDir/pause.tar"
   fi
   if [[ ! -f "$imageDir/nfs-provisioner_$nfsProvisionerVer.tar" ]];then
@@ -422,7 +439,7 @@ function main() {
   BASE="/etc/kubeasz"
 
   # check if use bash shell
-  readlink /proc/$$/exe|grep -q "dash" && { logger error "you should use bash shell, not sh"; exit 1; }
+  readlink /proc/$$/exe|grep -q "bash" || { logger error "you should use bash shell, not sh"; exit 1; }
   # check if use with root
   [[ "$EUID" -ne 0 ]] && { logger error "you should run this script as root"; exit 1; }
 

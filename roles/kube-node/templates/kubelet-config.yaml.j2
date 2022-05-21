@@ -1,6 +1,6 @@
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
-address: {{ inventory_hostname }}
+address: 0.0.0.0
 authentication:
   anonymous:
     enabled: false
@@ -44,8 +44,8 @@ evictionHard:
 evictionPressureTransitionPeriod: 5m0s
 failSwapOn: true
 fileCheckFrequency: 40s
-hairpinMode: hairpin-veth
-healthzBindAddress: {{ inventory_hostname }}
+hairpinMode: hairpin-veth 
+healthzBindAddress: 0.0.0.0
 healthzPort: 10248
 httpCheckFrequency: 40s
 imageGCHighThresholdPercent: 85
