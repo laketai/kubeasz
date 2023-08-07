@@ -15,7 +15,7 @@ k8s 保留二进制方式部署，支持多个 Linux 发行版；其他中间件
 <strong>注意:</strong> 确保在干净的系统上开始安装，不能使用曾经装过kubeadm或其他k8s发行版的环境
 
 ## 2.下载安装
-- 有网环境可以直接拷贝 cbim-deploy.zip 文件（大约 2M）到部署机器并解压到 /etc/kubeasz，确保 ezdown 和 ezctl 文件在 /etc/kubeasz 这一层级。无网环境则需要把提前下载好各个离线安装文件的脚本（合计大约 5G），再复制到 /etc/ezctl 目录
+- 有网环境可以直接拷贝 dev-deploy.zip 文件（大约 2M）到部署机器并解压到 /etc/kubeasz，确保 ezdown 和 ezctl 文件在 /etc/kubeasz 这一层级。无网环境则需要把提前下载好各个离线安装文件的脚本（合计大约 5G），再复制到 /etc/ezctl 目录
 - 在部署节点上部署好各个机器的免密码登录
 
 ```
@@ -57,45 +57,45 @@ cd /etc/kubeasz
 
 ```
 创建配置实例
-ezctl new cbim
-2021-01-19 10:48:23 DEBUG generate custom cluster files in /etc/kubeasz/clusters/cbim
+ezctl new dev
+2021-01-19 10:48:23 DEBUG generate custom cluster files in /etc/kubeasz/clusters/dev
 2021-01-19 10:48:23 DEBUG set version of common plugins
-2021-01-19 10:48:23 DEBUG cluster cbim: files successfully created.
-2021-01-19 10:48:23 INFO next steps 1: to config '/etc/kubeasz/clusters/cbim/hosts'
-2021-01-19 10:48:23 INFO next steps 2: to config '/etc/kubeasz/clusters/cbim/config.yml'
+2021-01-19 10:48:23 DEBUG cluster dev: files successfully created.
+2021-01-19 10:48:23 INFO next steps 1: to config '/etc/kubeasz/clusters/dev/hosts'
+2021-01-19 10:48:23 INFO next steps 2: to config '/etc/kubeasz/clusters/dev/config.yml'
 ```
-然后根据提示配置'/etc/kubeasz/clusters/cbim/hosts' 和 '/etc/kubeasz/clusters/cbim/config.yml'：根据前面节点规划修改hosts 文件和其他集群层面的主要配置选项；其他集群组件等配置项可以在config.yml 文件中修改。
+然后根据提示配置'/etc/kubeasz/clusters/dev/hosts' 和 '/etc/kubeasz/clusters/dev/config.yml'：根据前面节点规划修改hosts 文件和其他集群层面的主要配置选项；其他集群组件等配置项可以在config.yml 文件中修改。
 
 - 开始安装 如果你对集群安装流程不熟悉，请阅读项目首页 安装步骤 讲解后分步安装，并对 每步都进行验证 
 
 ```
 # 一键安装 k8s 部分
-ezctl setup cbim all
+ezctl setup dev all
  
 # 或者分步安装 k8s，具体使用 ezctl help setup 查看分步安装帮助信息
-# ezctl setup cbim 01
-# ezctl setup cbim 02
-# ezctl setup cbim 03
-# ezctl setup cbim 04
+# ezctl setup dev 01
+# ezctl setup dev 02
+# ezctl setup dev 03
+# ezctl setup dev 04
 ...
  
 # 一键安装 mysql cluster
-ezctl setup cbim mysql
+ezctl setup dev mysql
 # 一键安装 redis cluster
-ezctl setup cbim redis
+ezctl setup dev redis
 # 一键安装 mongo cluster
-ezctl setup cbim mongo
+ezctl setup dev mongo
 # 一键安装 rabbitmq cluster
-ezctl setup cbim rabbitmq
+ezctl setup dev rabbitmq
 # 一键安装 minio cluster
-ezctl setup cbim minio
+ezctl setup dev minio
 # 一键安装 nginx cluster
-ezctl setup cbim nginx
+ezctl setup dev nginx
 # 一键安装 nacos cluster (注意：nacos 依赖 mysql 和 nginx ！！！)
-ezctl setup cbim nacos
+ezctl setup dev nacos
 # 安装 nacos 后更新 nginx 代理配置
-ezctl setup cbim update-nginx
+ezctl setup dev update-nginx
  
 # 一键安装 harbor
-ezctl setup cbim harbor
+ezctl setup dev harbor
 ```
